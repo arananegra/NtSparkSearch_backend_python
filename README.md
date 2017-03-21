@@ -1,3 +1,3 @@
 # README #
 
-Proyecto final de carrera de Álvaro Gómez Jáuregui
+Proyecto final de grado de Álvaro Gómez Jáuregui
