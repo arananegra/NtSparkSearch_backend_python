@@ -1,5 +1,5 @@
 class Constants(object):
-    ambiguous_dna_values = {
+    AMBIGUOUS_DNA_VALUES = {
         "A": "A",
         "C": "C",
         "G": "G",
@@ -17,6 +17,9 @@ class Constants(object):
         "X": "GATC",
         "N": "GATC",
     }
+
+    MONGODB_LOCALHOST = 'localhost'
+    MONGODB_PORT_LOCAL = 27017
 
     REG_EXP_DNA_SEQUENCE = "[ACGT]+"
 
