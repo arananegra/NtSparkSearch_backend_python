@@ -19,7 +19,7 @@ class Constants(object):
     }
 
     MONGODB_LOCALHOST = 'localhost'
-    MONGODB_PORT_LOCAL = 27017
+    MONGODB_PORT = 27017
 
     REG_EXP_DNA_SEQUENCE = "[ACGT]+"
 

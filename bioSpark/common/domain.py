@@ -34,7 +34,7 @@ class NucleotidesFromNCBI(object):
 
 class NucleotidesFromNCBIusingIdOfSequenceInMongo(object):
     # """NucleotidesFromNCBI model"""
-    def __init__(self, id ='0', sequence ='_'):
+    def __init__(self, id, sequence ='_'):
         self.id = id
         self.sequence = sequence
 
@@ -54,15 +54,8 @@ class NucleotidesFromNCBIusingIdOfSequenceInMongo(object):
             raise ValueError(Constants.MSG_ERROR_DNA_SEQUENCE)
         self._sequence = sequence
 
-    idNcbi = property(fget= get_id, fset= set_id)
+    id = property(fget= get_id, fset= set_id)
     sequence = property(fget= get_sequence, fset= set_sequence)
-
-
-
-test = NucleotidesFromNCBI(idNcbi= "01", sequence="GCATCA")
-
-print(test.idNcbi)
-
 
 
 
