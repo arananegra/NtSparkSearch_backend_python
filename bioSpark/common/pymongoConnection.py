@@ -9,12 +9,12 @@ class _DataContext(object):
         self._db = self._client[dbName]
 
     @property
-    def db(self):
+    def get_db_collection(self):
         if self._db is None:
             raise Exception('Not connected')
         return self._db
 
     def __getattr__(self, item):
-        return self.db[item]
+        return self.get_db_collection[item]
 
 dc = _DataContext()
