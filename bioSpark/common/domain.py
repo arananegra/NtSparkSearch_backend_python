@@ -1,8 +1,6 @@
 import re
 from bioSpark.common.util import Constants
 
-import mongoengine
-
 # option 1 --> using ObjectID mongo
 
 class NucleotidesFromNCBI(object):
@@ -56,7 +54,3 @@ class NucleotidesFromNCBIusingIdOfSequenceInMongo(object):
 
     id = property(fget= get_id, fset= set_id)
     sequence = property(fget= get_sequence, fset= set_sequence)
-
-
-
-
