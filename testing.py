@@ -1,10 +1,10 @@
 # script for testing
-from bioSpark.common.domain import NucleotidesFromNCBIusingIdOfSequenceInMongo
+from bioSpark.common.domain import IdAndSequenceFromNCBIforMongoId
 from bioSpark.common.pymongoConnection import dc
 import bioSpark.common.pymongoSimpleConnection as mongoConnect
 
-test = NucleotidesFromNCBIusingIdOfSequenceInMongo(id="001", sequence="ACGACT")
-test2 = NucleotidesFromNCBIusingIdOfSequenceInMongo(id="002", sequence="ACGACT")
+test = IdAndSequenceFromNCBIforMongoId(id="001", sequence="ACGACT")
+test2 = IdAndSequenceFromNCBIforMongoId(id="002", sequence="ACGACT")
 
 
 # using the 'singleton' pattern with classes --> pymongoConnection
