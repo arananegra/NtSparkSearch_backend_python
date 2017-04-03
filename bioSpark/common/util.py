@@ -18,8 +18,11 @@ class Constants(object):
         "N": "GATC",
     }
 
-    MONGODB_LOCALHOST = 'localhost'
+    MONGODB_DB_NAME = 'exactSparkF'
+    MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
+    MONGODB_COLLECTION_UNFILTERED_NCBI = 'ncbiunfiltered'
+    MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
 
     REG_EXP_DNA_SEQUENCE = "[ACGT]+"
 
