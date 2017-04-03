@@ -2,7 +2,6 @@ venv
 env
 .idea
 *.pyc
-/*.fasta
 __pycache__
 build
 dist
@@ -10,3 +9,5 @@ dist
 coverage.xml
 .coverage
 *.egg-info
+*.pickle
+bioSpark/NCBIretriever/testNCBIhelper.py
