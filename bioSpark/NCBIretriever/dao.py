@@ -1,5 +1,6 @@
 from bioSpark.common.domain import NucleotidesFromNCBI, NCBIsearcher
 from pymongo import MongoClient
+from bioSpark.common.util import Constants
 import json
 
 
@@ -25,9 +26,10 @@ class NCBIDao(object):
         #mongodbFind += "} }"
 
         collection_from_connectionInstance = self._connectionReference[
-            self._collectionName].Constants.MONGODB_COLLECTION_UNFILTERED_NCBI
+            self._collectionName][Constants.MONGODB_COLLECTION_UNFILTERED_NCBI]
 
-        collection_cursor = collection_from_connectionInstance.find({"_idNcbi": {"$eq": mongodbFind}})
+        # "$text": {"$search": "\"001\""
+        collection_cursor = collection_from_connectionInstance.find({"$text": {"$search": "\"%s\"" % mongodbFind}})
 
         for document in collection_cursor:
             single_ncbi_record = NucleotidesFromNCBI()
@@ -35,20 +37,20 @@ class NCBIDao(object):
             single_ncbi_record.idNcbi = document["_idNcbi"]
             single_ncbi_record.sequence = document["_sequence"]
 
-            list_ncbi_records.extend(single_ncbi_record)
+            list_ncbi_records.append(single_ncbi_record)
 
         if (len(list_ncbi_records) == 0):
             list_ncbi_records = None
 
         return list_ncbi_records
 
-client = MongoClient('localhost', 27017)
-db = client[str("SparkTest")]
-
-testDao = NCBIDao(db, "test01")
-
-criteria = NCBIsearcher()
-criteria.searchByNCBIidCriteria = "001"
-
-listResult = testDao.searchNCBISequence(criteria)
-
+# client = MongoClient('localhost', 27017)
+# # db = client[str("SparkTest")]
+#
+# testDao = NCBIDao(client, "SparkTest")
+#
+# criteria = NCBIsearcher()
+# criteria.searchByNCBIidCriteria = "001"
+#
+# listResult = testDao.searchNCBISequence(criteria)
+# print(listResult[0].idNcbi)

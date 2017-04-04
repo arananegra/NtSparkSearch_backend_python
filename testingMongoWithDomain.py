@@ -12,8 +12,8 @@ test2.sequence = "ACGACT"
 
 sequencesCollection = mongoConnect.getCollectionFromDb(collectionName="test01", mongoHost='localhost',
                                                        connectionPort=27017, mongoDb="SparkTest")
-sequencesCollection.insert(test.__dict__)
-sequencesCollection.insert(test2.__dict__)
+# sequencesCollection.insert(test.__dict__)
+# sequencesCollection.insert(test2.__dict__)
 
 cursor = sequencesCollection.find({})
 
