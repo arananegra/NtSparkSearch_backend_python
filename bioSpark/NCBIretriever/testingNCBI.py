@@ -33,11 +33,17 @@ def getFastaFromNCBI(intervalId, startPos, endPos, strandSense):
 # option 1 -- single function
 
 def ncbiRetriever(listOfIds):
-    try:
+
         Entrez.email = "notfunny@notanemail.org"
         mapOfIdSequence = {}
         for geneId in listOfIds:
-            handle1 = Entrez.efetch(db="gene", id=geneId, retmode="xml")
+            geneId = str(geneId)
+            geneId = geneId[:-2]
+            try:
+                handle1 = Entrez.efetch(db="gene", id=geneId, retmode="xml")
+            except Exception:
+                print("gene "+geneId + " not found")
+                continue
             record = Entrez.read(handle1)
             geneLoci = record[0]["Entrezgene_locus"]
             try:
@@ -60,12 +66,7 @@ def ncbiRetriever(listOfIds):
 
             mapOfIdSequence[geneId] = fastaOneLine
             handle2.close()
-
-    except Exception as ex:
-        template = "ATENCION: Excepcion de tipo {0} ocurrida"
-        message = template.format(type(ex).__name__, ex.args)
-        print(message)
-    return (mapOfIdSequence)
+        return mapOfIdSequence
 
 
 # gi_id, start, end, strand = getGeneLocusAndIntervalId("100128607")
