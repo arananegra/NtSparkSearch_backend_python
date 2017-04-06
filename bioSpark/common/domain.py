@@ -33,12 +33,12 @@ class NucleotidesFromNCBI(object):
 
 class NCBIsearcher(object):
     def __init__(self):
-        self._searchByNCBIidCriteria = None
+        self._search_by_NCBI_id_criteria = None
 
     def _get_NCBIIdSearchCriteria(self) -> str:
-        return self._searchByNCBIidCriteria
+        return self._search_by_NCBI_id_criteria
 
-    def _set_NCBIIdSearchCriteria(self, NCBIIdCriteria: str) -> None:
-        self._searchByNCBIidCriteria = NCBIIdCriteria
+    def _set_NCBIIdSearchCriteria(self, NCBI_id_criteria: str) -> None:
+        self._search_by_NCBI_id_criteria = NCBI_id_criteria
 
-    searchByNCBIidCriteria = property(fget=_get_NCBIIdSearchCriteria, fset=_set_NCBIIdSearchCriteria)
+    search_by_NCBI_id_criteria = property(fget=_get_NCBIIdSearchCriteria, fset=_set_NCBIIdSearchCriteria)
