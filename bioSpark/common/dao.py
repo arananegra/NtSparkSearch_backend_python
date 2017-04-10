@@ -33,7 +33,7 @@ class NCBItoMongoDAO(object):
             list_ncbi_records = []
 
             if (search_criteria.search_by_NCBI_id_criteria != None):
-                mongodbFind = search_criteria._search_by_NCBI_id_criteria
+                mongodbFind = search_criteria.search_by_NCBI_id_criteria
 
             collection_cursor = collection_from_client_reference. \
                 find({"$text": {"$search": "\"%s\"" % mongodbFind}})
