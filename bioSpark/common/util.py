@@ -18,11 +18,12 @@ class Constants(object):
         "N": "GATC",
     }
 
-    MONGODB_DB_NAME = 'exactSparkF'
+    MONGODB_DB_NAME = 'bioSpark'
     MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
-    MONGODB_COLLECTION_UNFILTERED_NCBI = 'test01'
+    # MONGODB_COLLECTION_UNFILTERED_NCBI = 'test01'
     MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
+    MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
     REG_EXP_DNA_SEQUENCE = "[ACGT]+"
 

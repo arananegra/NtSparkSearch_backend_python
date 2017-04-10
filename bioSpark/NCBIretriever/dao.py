@@ -9,7 +9,7 @@ class FileRetriverDAO(NCBItoMongoDAO):
         super(FileRetriverDAO, self).__init__(client_reference, database_name, collection_name)
         self._file_path = file_path
 
-    def obtain_list_of_genes_from_xlrd(self, sheet: str, column_name: str):
+    def obtain_list_of_genes_from_xlrd(self, sheet: int, column_name: str):
 
         try:
             excel = xlrd.open_workbook(self._file_path)
@@ -27,19 +27,19 @@ class FileRetriverDAO(NCBItoMongoDAO):
                     valor = sh.cell_value(rx, colx=col)
                     rows.append(str(valor))
 
-            for id_ncbi in rows:
+            rows_no_repeated = tuple(set(rows))
+
+            for id_ncbi in rows_no_repeated:
+                gene_id = str(id_ncbi)
+                gene_id = gene_id[:-2]
                 ncbi_record_only_id = NucleotidesFromNCBI()
-                ncbi_record_only_id.idNcbi = id_ncbi
+                ncbi_record_only_id.idNcbi = gene_id
                 list_ncbi_records.append(ncbi_record_only_id)
 
             return list_ncbi_records
 
         except Exception as error:
             print('Caught exception while reading from excel file: ' + repr(error))
-
-    # crear supers o no??
-    def insert_ncbi_documents_without_sequence_from_list(self, list_of_just_ids: list):
-        super().insert_ncbi_document_from_list_of_objects(list_of_just_ids)
 
 #    def update_record_to_add_sequence(self, id_to_updte):
 
