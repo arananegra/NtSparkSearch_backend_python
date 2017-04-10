@@ -1,15 +1,13 @@
 import xlrd
 from bioSpark.common.domain import NucleotidesFromNCBI
+from bioSpark.common.dao import NCBItoMongoDAO
+from pymongo import MongoClient
 
 
-class FileRetriverDAO(object):
-    def __init__(self):
-        self._file_path = None
-
-    def _set_file_path(self, path) -> None:
-        self._file_path = path
-
-    file_path = property(fset=_set_file_path)
+class FileRetriverDAO(NCBItoMongoDAO):
+    def __init__(self, client_reference: MongoClient, database_name: str, collection_name: str, file_path: str):
+        super(FileRetriverDAO, self).__init__(client_reference, database_name, collection_name)
+        self._file_path = file_path
 
     def obtain_list_of_genes_from_xlrd(self, sheet: str, column_name: str):
 
@@ -38,3 +36,10 @@ class FileRetriverDAO(object):
 
         except Exception as error:
             print('Caught exception while reading from excel file: ' + repr(error))
+
+    # crear supers o no??
+    def insert_ncbi_documents_without_sequence_from_list(self, list_of_just_ids: list):
+        super().insert_ncbi_document_from_list_of_objects(list_of_just_ids)
+
+#    def update_record_to_add_sequence(self, id_to_updte):
+

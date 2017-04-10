@@ -99,6 +99,33 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
+    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBI, upsert: bool):
+        collection_from_client_reference = None
+        try:
+            collection_from_client_reference = self.get_collection()
+            collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % ncbi_record.idNcbi}}, {
+                '$set': {
+                    '_idNcbi': ncbi_record.idNcbi,
+                    '_sequence': ncbi_record.sequence
+                }
+            }, upsert=upsert)
+
+        except Exception as error:
+            print('Caught exception at delete operation: ' + repr(error))
+
+    # def update_ncbi_sequence_from_id(self, id_raw: str, sequence_to_update: str, upsert: bool):
+    #     collection_from_client_reference = None
+    #     try:
+    #         collection_from_client_reference = self.get_collection()
+    #         collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % id_raw}}, {
+    #             '$set': {
+    #                 '_sequence': sequence_to_update
+    #             }
+    #         }, upsert=upsert)
+    #
+    #     except Exception as error:
+    #         print('Caught exception at delete operation: ' + repr(error))
+
     def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBI):
         collection_from_client_reference = None
         try:
@@ -129,7 +156,7 @@ class NCBItoMongoDAO(object):
 
         try:
 
-            for k,v in dict_with_ncbi_raw_data.items():
+            for k, v in dict_with_ncbi_raw_data.items():
                 ncbi_object = NucleotidesFromNCBI()
 
                 ncbi_object.idNcbi = k
@@ -139,7 +166,6 @@ class NCBItoMongoDAO(object):
 
         except Exception as error:
             print('Caught exception at insert operation: ' + repr(error))
-
 
 
 client = MongoClient('localhost', 27017)
@@ -159,7 +185,6 @@ print(listResult[0].idNcbi)
 dictResult = testDao.get_all_ncbi_objects_as_dict()
 print(dictResult)
 
-
 # Example delete_ncbi_document_by_idNcbi
 
 # testDao.delete_ncbi_document_by_idNcbi('003')
@@ -176,7 +201,7 @@ testNcbi2 = NucleotidesFromNCBI()
 testNcbi2.idNcbi = "005"
 testNcbi2.sequence = "GCTACG"
 
-#testDao.insert_ncbi_document_from_object(testNcbi1)
+# testDao.insert_ncbi_document_from_object(testNcbi1)
 
 # Example of insert_ncbi_document_from_list_of_objects
 
@@ -186,7 +211,12 @@ testNcbi2.sequence = "GCTACG"
 # Example of insert_ncbi_document_from_non_object_dict
 
 
-dict_test ={"006":"GCTAGCA","007":"ATGCTAG"}
+dict_test = {"006": "GCTAGCA", "007": "ATGCTAG"}
 
 # testDao.insert_ncbi_document_from_non_object_dict(dict_test)
 
+testNcbi3 = NucleotidesFromNCBI()
+testNcbi3.idNcbi = "013"
+testNcbi3.sequence = None
+
+testDao.update_ncbi_element_from_object(testNcbi3, upsert=True)
