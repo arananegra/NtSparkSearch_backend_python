@@ -21,7 +21,7 @@ class NCBIretrieverBS(INCBIretriever):
 
     file_path = property(fget=_get_file_path, fset=_set_file_path)
 
-    def insert_in_collection_from_excel(self, sheet: int, column_name: str):
+    def insert_in_collection_from_excel(self, sheet: int, column_name: str) -> None:
 
         try:
 
@@ -32,8 +32,8 @@ class NCBIretrieverBS(INCBIretriever):
                     Constants.MONGODB_COLLECTION_UNFILTERED,
                     self._file_path)
 
-                list_of_genes_just_ids = file_retriever_and_mongo_manager.obtain_list_of_genes_from_xlrd(sheet,
-                                                                                                         column_name)
+                list_of_genes_just_ids = file_retriever_and_mongo_manager.get_list_of_genes_from_xlrd(sheet,
+                                                                                                      column_name)
 
                 for ncbi_object_just_id in list_of_genes_just_ids:
 
@@ -48,7 +48,7 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when inserting all data from excel: ' + repr(error))
 
-    def obtain_list_of_ids_from_mongo(self):
+    def obtain_list_of_ids_from_mongo(self) -> list:
         list_of_just_ids = None
 
         try:
@@ -69,7 +69,7 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))
 
-    def update_genes_from_dict(self, dict_of_genes: dict):
+    def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
         try:
 
@@ -87,7 +87,7 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))
 
-    def download_sequences_from_list_as_dict(self, list_of_genes: list):
+    def download_sequences_from_list_as_dict(self, list_of_genes: list) -> dict:
 
         pbar = ProgressBar()
         Entrez.email = "notfunny@notanemail.org"
@@ -121,9 +121,8 @@ class NCBIretrieverBS(INCBIretriever):
             dict_id_and_sequences[geneId] = fastaOneLine
             handle2.close()
 
-        self.update_genes_from_dict(dict_id_and_sequences)
-
         return dict_id_and_sequences
+
 
 test_bs = NCBIretrieverBS()
 

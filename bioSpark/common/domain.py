@@ -2,8 +2,6 @@ import re
 from bioSpark.common.util import Constants
 
 
-# option 1 --> using ObjectID mongo
-
 class NucleotidesFromNCBI(object):
     """NucleotidesFromNCBI model"""
 

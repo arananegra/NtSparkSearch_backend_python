@@ -10,7 +10,7 @@ class NCBItoMongoDAO(object):
         self._database_name = database_name
         self._collection_name = collection_name
 
-    def get_collection(self):
+    def get_collection(self) -> Collection:
         try:
             collection = self._client_reference[
                 self._database_name][self._collection_name]
@@ -20,11 +20,11 @@ class NCBItoMongoDAO(object):
             print('Caught exception obtaining the collection: ' + repr(error))
 
     def create_text_index_in_collection(self, collection_from_client_reference: Collection, attribute_of_mongo: str,
-                                        name_of_index: str):
+                                        name_of_index: str) -> None:
         collection_from_client_reference.create_index([(attribute_of_mongo, indexText)], name=name_of_index,
                                                       default_language='english')
 
-    def search_ncbi_objects_and_return_as_list(self, search_criteria: NCBIsearcher):
+    def search_ncbi_objects_and_return_as_list(self, search_criteria: NCBIsearcher) -> list:
         collection_from_client_reference = None
         collection_cursor = None
 
@@ -63,7 +63,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception when searching by id: ' + repr(error))
 
-    def get_all_ncbi_objects_as_list(self):
+    def get_all_ncbi_objects_as_list(self) -> list:
         collection_from_client_reference = None
         list_ncbi_records = None
         single_ncbi_record = None
@@ -92,7 +92,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception when getting all elements as list: ' + repr(error))
 
-    def get_all_ncbi_objects_as_dict(self):
+    def get_all_ncbi_objects_as_dict(self) -> dict:
         collection_from_client_reference = None
         dict_ncbi_records = None
         single_ncbi_record = None
@@ -121,7 +121,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception when getting all elements as dict: ' + repr(error))
 
-    def delete_ncbi_document_by_idNcbi(self, idNcbi: str):
+    def delete_ncbi_document_by_idNcbi(self, idNcbi: str) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
@@ -137,7 +137,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBI, upsert: bool):
+    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBI, upsert: bool) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
@@ -154,30 +154,17 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    # def update_ncbi_sequence_from_id(self, id_raw: str, sequence_to_update: str, upsert: bool):
-    #     collection_from_client_reference = None
-    #     try:
-    #         collection_from_client_reference = self.get_collection()
-    #         collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % id_raw}}, {
-    #             '$set': {
-    #                 '_sequence': sequence_to_update
-    #             }
-    #         }, upsert=upsert)
-    #
-    #     except Exception as error:
-    #         print('Caught exception at delete operation: ' + repr(error))
-
-    def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBI):
+    def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBI) -> None:
         collection_from_client_reference = None
         try:
 
             collection_from_client_reference = self.get_collection()
-            collection_from_client_reference.insert(ncbi_object.__dict__)
+            collection_from_client_reference.insert_one(ncbi_object.__dict__)
 
         except Exception as error:
             print('Caught exception at insert operation: ' + repr(error))
 
-    def insert_ncbi_document_from_list_of_objects(self, list_of_ncbi_objects: list):
+    def insert_ncbi_document_from_list_of_objects(self, list_of_ncbi_objects: list) -> None:
         try:
 
             for ncbi_object in list_of_ncbi_objects:
@@ -186,7 +173,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at insert operation: ' + repr(error))
 
-    def insert_ncbi_document_from_non_object_dict(self, dict_with_ncbi_raw_data: dict):
+    def insert_ncbi_document_from_non_object_dict(self, dict_with_ncbi_raw_data: dict) -> None:
 
         try:
 
