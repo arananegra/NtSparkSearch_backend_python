@@ -4,7 +4,7 @@ from bioSpark.common.dao import NCBItoMongoDAO
 from bioSpark.common.domain import NCBIsearcher
 from bioSpark.common.domain import NucleotidesFromNCBI
 from bioSpark.common.util import Constants
-from progressbar import ProgressBar as pbar
+from progressbar import ProgressBar
 from Bio import Entrez
 from pymongo import MongoClient
 
@@ -89,6 +89,7 @@ class NCBIretrieverBS(INCBIretriever):
 
     def download_sequences_from_list_as_dict(self, list_of_genes: list):
 
+        pbar = ProgressBar()
         Entrez.email = "notfunny@notanemail.org"
         dict_id_and_sequences = {}
         for geneId in pbar(list_of_genes):
@@ -124,8 +125,10 @@ class NCBIretrieverBS(INCBIretriever):
 
         return dict_id_and_sequences
 
-# test_from_excel = NCBIretrieverBS()
+test_bs = NCBIretrieverBS()
 
-# test_from_excel.insert_in_collection_from_excel(0, "gene_id")
+# test_bs.insert_in_collection_from_excel(0, "gene_id")
 
-# list = test_from_excel.obtain_list_of_ids_from_mongo()
+# list_of_genes = test_bs.obtain_list_of_ids_from_mongo()
+#
+# test_bs.download_sequences_from_list_as_dict(list_of_genes)

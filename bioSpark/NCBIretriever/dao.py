@@ -41,5 +41,3 @@ class FileRetriverDAO(NCBItoMongoDAO):
         except Exception as error:
             print('Caught exception while reading from excel file: ' + repr(error))
 
-#    def update_record_to_add_sequence(self, id_to_updte):
-
