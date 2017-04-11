@@ -33,4 +33,5 @@ class INCBIretriever(metaclass=ABCMeta):
         From a list of genes (strings representing id's from NCBI),this method
         retrieves their sequences and creates a dictionary.
         :param list_of_genes: list with id's of genes
+        :return: A dictionary with all the gene ids and their sequences
         """

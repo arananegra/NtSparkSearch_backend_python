@@ -4,7 +4,7 @@ from bioSpark.common.dao import NCBItoMongoDAO
 from bioSpark.common.domain import NCBIsearcher
 from bioSpark.common.domain import NucleotidesFromNCBI
 from bioSpark.common.util import Constants
-from progressbar import ProgressBar
+from progressbar import ProgressBar as pbar
 from Bio import Entrez
 from pymongo import MongoClient
 
@@ -89,8 +89,40 @@ class NCBIretrieverBS(INCBIretriever):
 
     def download_sequences_from_list_as_dict(self, list_of_genes: list):
 
+        Entrez.email = "notfunny@notanemail.org"
+        dict_id_and_sequences = {}
+        for geneId in pbar(list_of_genes):
+            try:
+                handle1 = Entrez.efetch(db="gene", id=geneId, retmode="xml")
+            except Exception:
+                print("gene " + geneId + " not found")
+                continue
+            record = Entrez.read(handle1)
+            geneLoci = record[0]["Entrezgene_locus"]
+            try:
+                geneRegion = geneLoci[0]["Gene-commentary_seqs"][0]["Seq-loc_int"]["Seq-interval"]
+            except KeyError:
+                continue
+            startPos = int(geneRegion["Seq-interval_from"]) + 1
+            endPos = int(geneRegion["Seq-interval_to"]) + 1
+            intervalId = geneRegion["Seq-interval_id"]["Seq-id"]["Seq-id_gi"]
+            strandSense = geneRegion["Seq-interval_strand"]["Na-strand"].attributes["value"]
+            strandSense = 2 if strandSense.lower() == "minus" else 1
+            handle1.close()
 
-        return None
+            handle2 = Entrez.efetch(db="nucleotide", id=intervalId, rettype="fasta", retmode="text", seq_start=startPos,
+                                    seq_stop=endPos, strand=strandSense)
+            fasta = handle2.read()
+            fastaString = str(fasta)
+            fastaWithoutId = '\n'.join(fastaString.split('\n')[1:])
+            fastaOneLine = fastaWithoutId.replace('\n', '')
+
+            dict_id_and_sequences[geneId] = fastaOneLine
+            handle2.close()
+
+        self.update_genes_from_dict(dict_id_and_sequences)
+
+        return dict_id_and_sequences
 
 # test_from_excel = NCBIretrieverBS()
 
