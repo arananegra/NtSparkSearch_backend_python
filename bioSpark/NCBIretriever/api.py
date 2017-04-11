@@ -8,15 +8,29 @@ class INCBIretriever(metaclass=ABCMeta):
         """
         From an excel file, recover the genes of a certain column in a certain sheet and
         insert them in the ncbiunfiltered collection
-        :param list_of_genes: list with id's of genes
-        :return: A dictionary with the id:sequence from the list_of_genes target id's
+        :param sheet: sheet from which extract the genes
+        :param column_name: name of the column with the genes
+        """
+    @abstractmethod
+    def obtain_list_of_ids_from_mongo(self):
+        """
+        From a the unfiltered collection of mongo, extract the ids and returns a list
+        with them
+        :return: A list with the ids of the unfiltered genes
+        """
+    @abstractmethod
+    def update_genes_from_dict(self, dict_of_genes: dict):
+        """
+        From a dict of genes (strings representing id's from NCBI and sequences), this method
+        updates the mongo collection with the new information coming from the dict.
+        :param dict_of_genes: dictionary with id's and sequences to update in the collection
+        unfiltered
         """
 
     @abstractmethod
-    def download_sequences_from_list_to_dict(self, list_of_genes: list):
+    def download_sequences_from_list_as_dict(self, list_of_genes: list):
         """
         From a list of genes (strings representing id's from NCBI),this method
         retrieves their sequences and creates a dictionary.
         :param list_of_genes: list with id's of genes
-        :return: A dictionary with the id:sequence from the list_of_genes target id's
         """

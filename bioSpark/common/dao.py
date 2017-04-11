@@ -1,6 +1,7 @@
 from bioSpark.common.domain import NucleotidesFromNCBI, NCBIsearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
+from pymongo.collection import Collection
 
 
 class NCBItoMongoDAO(object):
@@ -18,6 +19,11 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception obtaining the collection: ' + repr(error))
 
+    def create_text_index_in_collection(self, collection_from_client_reference: Collection, attribute_of_mongo: str,
+                                        name_of_index: str):
+        collection_from_client_reference.create_index([(attribute_of_mongo, indexText)], name=name_of_index,
+                                                      default_language='english')
+
     def search_ncbi_objects_and_return_as_list(self, search_criteria: NCBIsearcher):
         collection_from_client_reference = None
         collection_cursor = None
@@ -33,11 +39,10 @@ class NCBItoMongoDAO(object):
 
             list_ncbi_records = []
 
-            if (search_criteria.search_by_NCBI_id_criteria != None):
+            if (search_criteria.search_by_NCBI_id_criteria is not None):
                 mongodbFind = search_criteria.search_by_NCBI_id_criteria
 
-            collection_from_client_reference.create_index([('_idNcbi', indexText)], name='_idNcbi_text',
-                                                          default_language='english')
+            self.create_text_index_in_collection(collection_from_client_reference, '_idNcbi', '_idNcbi_text')
 
             collection_cursor = collection_from_client_reference. \
                 find({"$text": {"$search": "\"%s\"" % mongodbFind}})
@@ -57,6 +62,35 @@ class NCBItoMongoDAO(object):
 
         except Exception as error:
             print('Caught exception when searching by id: ' + repr(error))
+
+    def get_all_ncbi_objects_as_list(self):
+        collection_from_client_reference = None
+        list_ncbi_records = None
+        single_ncbi_record = None
+
+        collection_from_client_reference = self.get_collection()
+
+        try:
+            collection_cursor = collection_from_client_reference. \
+                find({})
+
+            list_ncbi_records = []
+
+            for document in collection_cursor:
+                single_ncbi_record = NucleotidesFromNCBI()
+
+                single_ncbi_record.idNcbi = document["_idNcbi"]
+                single_ncbi_record.sequence = document["_sequence"]
+
+                list_ncbi_records.append(single_ncbi_record)
+
+            if len(list_ncbi_records) == 0:
+                list_ncbi_records = None
+
+            return list_ncbi_records
+
+        except Exception as error:
+            print('Caught exception when getting all elements as list: ' + repr(error))
 
     def get_all_ncbi_objects_as_dict(self):
         collection_from_client_reference = None
@@ -79,26 +113,26 @@ class NCBItoMongoDAO(object):
 
                 dict_ncbi_records[single_ncbi_record.idNcbi] = single_ncbi_record.sequence
 
-            if (len(dict_ncbi_records) == 0):
+            if len(dict_ncbi_records) == 0:
                 dict_ncbi_records = None
 
             return dict_ncbi_records
 
         except Exception as error:
-            print('Caught exception when getting all elements as list: ' + repr(error))
+            print('Caught exception when getting all elements as dict: ' + repr(error))
 
-    def delete_ncbi_document_by_idNcbi(self, idNcib: str):
+    def delete_ncbi_document_by_idNcbi(self, idNcbi: str):
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
             criteria = NCBIsearcher()
-            criteria.searchByNCBIidCriteria = idNcib
+            criteria.searchByNCBIidCriteria = idNcbi
 
             # !!!!!!!
             # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
             # de hacer esas comprobaciones
-            if self.search_ncbi_objects_and_return_as_list(criteria) != None:
-                collection_from_client_reference.delete_one({'_idNcbi': idNcib})
+            if self.search_ncbi_objects_and_return_as_list(criteria) is None:
+                collection_from_client_reference.delete_one({'_idNcbi': idNcbi})
 
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
@@ -107,6 +141,9 @@ class NCBItoMongoDAO(object):
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
+
+            self.create_text_index_in_collection(collection_from_client_reference, '_idNcbi', '_idNcbi_text')
+
             collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % ncbi_record.idNcbi}}, {
                 '$set': {
                     '_idNcbi': ncbi_record.idNcbi,
@@ -196,17 +233,17 @@ class NCBItoMongoDAO(object):
 #
 # testNcbi2.idNcbi = "005"
 # testNcbi2.sequence = "GCTACG"
-#
-# # testDao.insert_ncbi_document_from_object(testNcbi1)
-#
-# # Example of insert_ncbi_document_from_list_of_objects
-#
-# # list_of_ncbi_objects = [testNcbi1, testNcbi2]
-# # testDao.insert_ncbi_document_from_list_of_objects(list_of_ncbi_objects)
-#
-# # Example of insert_ncbi_document_from_non_object_dict
-#
-#
+
+# testDao.insert_ncbi_document_from_object(testNcbi1)
+
+# Example of insert_ncbi_document_from_list_of_objects
+
+# list_of_ncbi_objects = [testNcbi1, testNcbi2]
+# testDao.insert_ncbi_document_from_list_of_objects(list_of_ncbi_objects)
+
+# Example of insert_ncbi_document_from_non_object_dict
+
+
 # dict_test = {"006": "GCTAGCA", "007": "ATGCTAG"}
 #
 # # testDao.insert_ncbi_document_from_non_object_dict(dict_test)
