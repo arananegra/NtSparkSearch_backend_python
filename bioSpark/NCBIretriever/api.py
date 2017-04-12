@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABCMeta
-from bioSpark.common.domain import NucleotidesFromNCBI
 
 
 class INCBIretriever(metaclass=ABCMeta):
