@@ -10,9 +10,7 @@ from pymongo import MongoClient
 
 
 class NCBIretrieverBS(INCBIretriever):
-    # mover property file_path a metodo insert_collection_from_excel
-
-    def insert_in_collection_from_excel(self, sheet: int, column_name: str, file_path: str) -> None:
+    def insert_in_collection_from_excel(self, file_path: str, sheet: int, column_name: str) -> None:
 
         try:
 
@@ -114,8 +112,7 @@ class NCBIretrieverBS(INCBIretriever):
 
         return dict_id_and_sequences
 
-
-test_bs = NCBIretrieverBS()
+# test_bs = NCBIretrieverBS()
 
 # test_bs.insert_in_collection_from_excel(0, "gene_id")
 
