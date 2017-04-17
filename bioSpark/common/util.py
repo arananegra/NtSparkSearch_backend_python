@@ -19,19 +19,15 @@ class Constants(object):
     }
 
     MONGODB_DB_NAME = 'bioSpark'
-    MONGODB_HOST = 'localhost'
+    # url in docker-compose
+    MONGODB_HOST = 'database'
+    #MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     # MONGODB_COLLECTION_UNFILTERED_NCBI = 'test01'
     MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
     MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
     REG_EXP_DNA_SEQUENCE = "[ACGT]+"
-
-    # File open mode
-
-    MODE_OPEN_FILE_W = 'w'
-    MODE_OPEN_FILE_R = 'r'
-    MODE_OPEN_FILE_R_W = 'r+'
 
     # Error mssg
 

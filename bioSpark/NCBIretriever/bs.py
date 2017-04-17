@@ -10,27 +10,18 @@ from pymongo import MongoClient
 
 
 class NCBIretrieverBS(INCBIretriever):
-    def __init__(self):
-        self._file_path = None
+    # mover property file_path a metodo insert_collection_from_excel
 
-    def _get_file_path(self) -> str:
-        return self._file_path
-
-    def _set_file_path(self, file_path: str) -> None:
-        self._file_path = file_path
-
-    file_path = property(fget=_get_file_path, fset=_set_file_path)
-
-    def insert_in_collection_from_excel(self, sheet: int, column_name: str) -> None:
+    def insert_in_collection_from_excel(self, sheet: int, column_name: str, file_path: str) -> None:
 
         try:
 
-            if self.file_path is not None:
+            if file_path is not None:
                 file_retriever_and_mongo_manager = FileRetriverDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
-                    self._file_path)
+                    file_path)
 
                 list_of_genes_just_ids = file_retriever_and_mongo_manager.get_list_of_genes_from_xlrd(sheet,
                                                                                                       column_name)
