@@ -30,17 +30,16 @@ class Constants(object):
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
+
     # Commands
-    COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "--obtainUnfiltered"
+    COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
     COMMAND_DOWNLOAD_FROM_EXCEL = "--download-ncbi"
 
     # Error mssg
-
     MSG_ERROR_INPUT = "INPUT NOT VALID:"
     MSG_ERROR_UNEXPECTED = "UNEXPECTED ERROR:"
     MSG_ERROR_DNA_SEQUENCE = "The DNA sequence should only contain the symbols 'A', 'C', 'G', and 'T'"
 
     # Help
-
-    HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtaing all info from unfiltered collection" \
+    HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtaing ids unfiltered collection" \
                                                    "of sequences"

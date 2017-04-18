@@ -11,11 +11,11 @@ setup(name='Nucleotide Spark Exact Searcher',
       maintainer='Álvaro Gómez Jáuregui',
       maintainer_email='alvarogj@lcc.uma.es',
       license='GNU GENERAL PUBLIC LICENSE',
-      packages=['bioSpark', 'bioSpark.NCBIretriever', 'bioSpark.subsequenceMatcher',
-                'bioSpark.common'],
+      packages=['ntsparksearch', 'ntsparksearch.NCBIretriever', 'ntsparksearch.subsequenceMatcher',
+                'ntsparksearch.common'],
       entry_points={
           'console_scripts': [
-              'ntsparksearch = bioSpark.__main__:App.main'
+              'ntsparksearch = ntsparksearch.__main__:App.main'
           ]
       },
       )

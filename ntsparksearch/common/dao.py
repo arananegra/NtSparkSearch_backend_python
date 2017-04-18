@@ -1,4 +1,4 @@
-from bioSpark.common.domain import NucleotidesFromNCBI, NCBIsearcher
+from ntsparksearch.common.domain import NucleotidesFromNCBI, NCBIsearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection

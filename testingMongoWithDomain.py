@@ -1,6 +1,6 @@
 # script for testing
-from bioSpark.common.domain import NucleotidesFromNCBI as ncbiNucleotides
-import bioSpark.common.pymongoSimpleConnection as mongoConnect
+from ntsparksearch.common.domain import NucleotidesFromNCBI as ncbiNucleotides
+import ntsparksearch.common.pymongoSimpleConnection as mongoConnect
 
 test = ncbiNucleotides()
 test2 = ncbiNucleotides()

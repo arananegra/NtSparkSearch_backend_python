@@ -1,9 +1,9 @@
-from bioSpark.subsequenceMatcher.api import ISubSequenceSparkMatcher
-from bioSpark.common.dao import NCBItoMongoDAO
-from bioSpark.common.domain import NucleotidesFromNCBI
+from ntsparksearch.subsequenceMatcher.api import ISubSequenceSparkMatcher
+from ntsparksearch.common.dao import NCBItoMongoDAO
+from ntsparksearch.common.domain import NucleotidesFromNCBI
 from Bio import SeqUtils
 from pyspark.sql import SparkSession
-from bioSpark.common.util import Constants
+from ntsparksearch.common.util import Constants
 from pymongo import MongoClient
 
 

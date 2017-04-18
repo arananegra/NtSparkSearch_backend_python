@@ -1,6 +1,6 @@
 import xlrd
-from bioSpark.common.domain import NucleotidesFromNCBI
-from bioSpark.common.dao import NCBItoMongoDAO
+from ntsparksearch.common.domain import NucleotidesFromNCBI
+from ntsparksearch.common.dao import NCBItoMongoDAO
 from pymongo import MongoClient
 
 

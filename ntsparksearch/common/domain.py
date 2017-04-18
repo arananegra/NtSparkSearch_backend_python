@@ -1,5 +1,5 @@
 import re
-from bioSpark.common.util import Constants
+from ntsparksearch.common.util import Constants
 
 
 class NucleotidesFromNCBI(object):
