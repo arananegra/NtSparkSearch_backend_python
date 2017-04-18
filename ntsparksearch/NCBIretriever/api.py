@@ -3,7 +3,7 @@ from abc import abstractmethod, ABCMeta
 
 class INCBIretriever(metaclass=ABCMeta):
     @abstractmethod
-    def insert_in_collection_from_excel(self, file_path: str, sheet: int, column_name: str) -> None:
+    def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
         """
         From an excel file, recover the genes of a certain column in a certain sheet and
         insert them in the ncbiunfiltered collection

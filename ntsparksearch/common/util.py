@@ -20,7 +20,7 @@ class Constants(object):
 
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
-    #MONGODB_HOST = 'database'
+    # MONGODB_HOST = 'database'
     MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
@@ -33,7 +33,7 @@ class Constants(object):
 
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
-    COMMAND_DOWNLOAD_FROM_EXCEL = "--download-ncbi"
+    COMMAND_DOWNLOAD_FROM_EXCEL = "--downloadGenesFromExcel"
 
     # Error mssg
     MSG_ERROR_INPUT = "INPUT NOT VALID:"
@@ -43,3 +43,5 @@ class Constants(object):
     # Help
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtaing ids unfiltered collection" \
                                                    "of sequences"
+    HELP_COMMAND_DOWNLOAD_FROM_EXCEL = "Obtain ids from an excel file and downloads" \
+                                                   "all the sequences from the NCBI"

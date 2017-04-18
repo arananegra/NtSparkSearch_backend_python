@@ -1,3 +1,5 @@
+from wsgiref import validate
+
 from ntsparksearch.NCBIretriever.api import INCBIretriever
 from ntsparksearch.NCBIretriever.dao import FileRetriverDAO
 from ntsparksearch.common.dao import NCBItoMongoDAO
@@ -10,7 +12,7 @@ from pymongo import MongoClient
 
 
 class NCBIretrieverBS(INCBIretriever):
-    def insert_in_collection_from_excel(self, file_path: str, sheet: int, column_name: str) -> None:
+    def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
 
         try:
 
@@ -81,17 +83,17 @@ class NCBIretrieverBS(INCBIretriever):
         pbar = ProgressBar()
         Entrez.email = "notfunny@notanemail.org"
         dict_id_and_sequences = {}
-        for geneId in pbar(list_of_genes):
+        for gene_id in pbar(list_of_genes):
             try:
-                handle1 = Entrez.efetch(db="gene", id=geneId, retmode="xml")
+                handle1 = Entrez.efetch(db="gene", id=gene_id, retmode="xml", validate=False)
             except Exception:
-                print("gene " + geneId + " not found")
+                print("gene " + gene_id + " not found")
                 continue
-            record = Entrez.read(handle1)
-            geneLoci = record[0]["Entrezgene_locus"]
             try:
+                record = Entrez.read(handle1)
+                geneLoci = record[0]["Entrezgene_locus"]
                 geneRegion = geneLoci[0]["Gene-commentary_seqs"][0]["Seq-loc_int"]["Seq-interval"]
-            except KeyError:
+            except (KeyError, Exception):
                 continue
             startPos = int(geneRegion["Seq-interval_from"]) + 1
             endPos = int(geneRegion["Seq-interval_to"]) + 1
@@ -107,7 +109,7 @@ class NCBIretrieverBS(INCBIretriever):
             fastaWithoutId = '\n'.join(fastaString.split('\n')[1:])
             fastaOneLine = fastaWithoutId.replace('\n', '')
 
-            dict_id_and_sequences[geneId] = fastaOneLine
+            dict_id_and_sequences[gene_id] = fastaOneLine
             handle2.close()
 
         return dict_id_and_sequences

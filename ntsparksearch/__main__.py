@@ -16,18 +16,35 @@ class App(object):
 
             parser = argparse.ArgumentParser()
 
+            parser.add_argument(Constants.COMMAND_DOWNLOAD_FROM_EXCEL,
+                                metavar=(Constants.ARG_EXCEL_FILE_PATH,
+                                         Constants.ARG_EXCEL_SHEET_NUMBER,
+                                         Constants.ARG_EXCEL_COLUMN_NAME),
+                                nargs=3, type=str,
+                                help=Constants.HELP_COMMAND_DOWNLOAD_FROM_EXCEL)
+
             parser.add_argument(Constants.COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED,
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED)
 
-            # metavar=(Constants.ARG_EXCEL_FILE_PATH,
-            #                                  Constants.ARG_EXCEL_SHEET_NUMBER,
-            #                                  Constants.ARG_EXCEL_COLUMN_NAME)
-
             args = parser.parse_args()
+
+            if args.downloadGenesFromExcel:
+                retrieverBS = NCBIretrieverBS()
+                retrieverBS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
+                                                            args.downloadGenesFromExcel[1],
+                                                            args.downloadGenesFromExcel[2])
+
+                list_of_genes_empty = retrieverBS.obtain_list_of_ids_from_mongo()
+
+                dict_of_genes_complete = retrieverBS.download_sequences_from_list_as_dict(list_of_genes_empty)
+                retrieverBS.update_genes_from_dict(dict_of_genes_complete)
+                print("Operation finished")
+
+
             if args.obtainUnfiltered:
-                test_bs = NCBIretrieverBS()
-                list_of_genes = test_bs.obtain_list_of_ids_from_mongo()
+                retrieverBS = NCBIretrieverBS()
+                list_of_genes = retrieverBS.obtain_list_of_ids_from_mongo()
                 print(list_of_genes)
 
         except (ValueError, OSError) as err:

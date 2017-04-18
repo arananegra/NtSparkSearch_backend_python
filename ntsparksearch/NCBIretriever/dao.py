@@ -9,11 +9,11 @@ class FileRetriverDAO(NCBItoMongoDAO):
         super(FileRetriverDAO, self).__init__(client_reference, database_name, collection_name)
         self._file_path = file_path
 
-    def get_list_of_genes_from_xlrd(self, sheet: int, column_name: str) -> list:
+    def get_list_of_genes_from_xlrd(self, sheet: str, column_name: str) -> list:
 
         try:
             excel = xlrd.open_workbook(self._file_path)
-            sh = excel.sheet_by_index(sheet)
+            sh = excel.sheet_by_index(int(sheet))
             rows = []
             list_ncbi_records = []
 
