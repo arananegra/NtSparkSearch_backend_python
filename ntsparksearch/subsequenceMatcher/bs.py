@@ -1,6 +1,5 @@
 from ntsparksearch.subsequenceMatcher.api import ISubSequenceSparkMatcher
 from ntsparksearch.common.dao import NCBItoMongoDAO
-from ntsparksearch.common.domain import NucleotidesFromNCBI
 from Bio import SeqUtils
 from pyspark.sql import SparkSession
 from ntsparksearch.common.util import Constants
@@ -29,9 +28,6 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
-    def map_locator_Spark(x, subsequence):
-        return len(SeqUtils.nt_search(x[1], subsequence)) > 1
-
     def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str, spark_session: SparkSession) -> dict:
 
         def map_locator_Spark(x, subsequence):
@@ -49,7 +45,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 filter(lambda element: map_locator_Spark(element, sequence_to_filter)). \
                 collect()
 
-            dict_now_filtered = {gene_id: sequence for (gene_id, sequence) in dict_to_filter}
+            dict_now_filtered = {gene_id: sequence for (gene_id, sequence) in list_of_list_of_genes_filtered}
 
             return dict_now_filtered
 
@@ -68,3 +64,24 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception while inserting filtered sequences in mongo collection' + repr(error))
+
+    def obtain_list_of_ids_from_mongo_filtered(self) -> list:
+        list_of_just_ids = None
+
+        try:
+            list_of_just_ids = []
+
+            mongo_dao_retriever = NCBItoMongoDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            list_of_ncbi_objets = mongo_dao_retriever.get_all_ncbi_objects_as_list()
+
+            for ncbi_object in list_of_ncbi_objets:
+                ncbi_id = ncbi_object.idNcbi
+                list_of_just_ids.append(ncbi_id)
+
+            return list_of_just_ids
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))

@@ -58,7 +58,7 @@ class NCBIretrieverBS(INCBIretriever):
             return list_of_just_ids
 
         except Exception as error:
-            print('Caught exception when getting all ids from mongo as list: ' + repr(error))
+            print('Caught exception when getting all ids from mongo as list (unfiltered): ' + repr(error))
 
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 

@@ -25,3 +25,10 @@ class ISubSequenceSparkMatcher(metaclass=ABCMeta):
         Insert a filtered dictionary in the filtered collection
         :param filtered_dict: dictionary with id:sequence elements which has passed out the prune
         """
+
+    @abstractmethod
+    def obtain_list_of_ids_from_mongo_filtered(self) -> list:
+        """
+        Obtain the whole filtered collection (just the ids)
+        :return list with the ids whose sequence is an exact match with the pattern provided.
+        """
