@@ -36,7 +36,6 @@ class App(object):
                                                             args.downloadGenesFromExcel[2])
 
                 list_of_genes_empty = retrieverBS.obtain_list_of_ids_from_mongo()
-
                 dict_of_genes_complete = retrieverBS.download_sequences_from_list_as_dict(list_of_genes_empty)
                 retrieverBS.update_genes_from_dict(dict_of_genes_complete)
                 print("Operation finished")

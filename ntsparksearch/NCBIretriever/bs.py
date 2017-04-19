@@ -86,31 +86,31 @@ class NCBIretrieverBS(INCBIretriever):
         for gene_id in pbar(list_of_genes):
             try:
                 handle1 = Entrez.efetch(db="gene", id=gene_id, retmode="xml", validate=False)
-            except Exception:
-                print("gene " + gene_id + " not found")
-                continue
-            try:
                 record = Entrez.read(handle1)
-                geneLoci = record[0]["Entrezgene_locus"]
-                geneRegion = geneLoci[0]["Gene-commentary_seqs"][0]["Seq-loc_int"]["Seq-interval"]
-            except (KeyError, Exception):
+                gene_loci = record[0]["Entrezgene_locus"]
+                gene_region = gene_loci[0]["Gene-commentary_seqs"][0]["Seq-loc_int"]["Seq-interval"]
+                start_pos = int(gene_region["Seq-interval_from"]) + 1
+                end_pos = int(gene_region["Seq-interval_to"]) + 1
+                interval_id = gene_region["Seq-interval_id"]["Seq-id"]["Seq-id_gi"]
+                strand_sense = gene_region["Seq-interval_strand"]["Na-strand"].attributes["value"]
+                strand_sense = 2 if strand_sense.lower() == "minus" else 1
+                handle1.close()
+
+                handle2 = Entrez.efetch(db="nucleotide", id=interval_id, rettype="fasta", retmode="text",
+                                        seq_start=start_pos,
+                                        seq_stop=end_pos, strand=strand_sense)
+                fasta = handle2.read()
+                fasta_string = str(fasta)
+                fasta_without_id = '\n'.join(fasta_string.split('\n')[1:])
+                fasta_one_line = fasta_without_id.replace('\n', '')
+
+                dict_id_and_sequences[gene_id] = fasta_one_line
+                handle2.close()
+
+            except Exception as error:
+                print('\nCaught exception when trying to download sequence from NCBI at gene ' +
+                      gene_id + " : " + repr(error) + " This sequence will be skipped")
                 continue
-            startPos = int(geneRegion["Seq-interval_from"]) + 1
-            endPos = int(geneRegion["Seq-interval_to"]) + 1
-            intervalId = geneRegion["Seq-interval_id"]["Seq-id"]["Seq-id_gi"]
-            strandSense = geneRegion["Seq-interval_strand"]["Na-strand"].attributes["value"]
-            strandSense = 2 if strandSense.lower() == "minus" else 1
-            handle1.close()
-
-            handle2 = Entrez.efetch(db="nucleotide", id=intervalId, rettype="fasta", retmode="text", seq_start=startPos,
-                                    seq_stop=endPos, strand=strandSense)
-            fasta = handle2.read()
-            fastaString = str(fasta)
-            fastaWithoutId = '\n'.join(fastaString.split('\n')[1:])
-            fastaOneLine = fastaWithoutId.replace('\n', '')
-
-            dict_id_and_sequences[gene_id] = fastaOneLine
-            handle2.close()
 
         return dict_id_and_sequences
 
