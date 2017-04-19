@@ -1,9 +1,20 @@
 from ntsparksearch.subsequenceMatcher.api import ISubSequenceSparkMatcher
 from ntsparksearch.common.dao import NCBItoMongoDAO
 from Bio import SeqUtils
-from pyspark.sql import SparkSession
 from ntsparksearch.common.util import Constants
 from pymongo import MongoClient
+import findspark
+findspark.init("/Users/alvarogomez/spark-2.1.0")
+from pyspark.sql import SparkSession
+# import os,sys
+# os.environ['SPARK_HOME'] = "/Users/alvarogomez/spark-2.1.0"
+# sys.path.append("/Users/alvarogomez/spark-2.1.0/python")
+# sys.path.append("/Users/alvarogomez/spark-2.1.0/python/python/lib/py4j-0.10.4-src.zip")
+# try:
+#     from pyspark.sql import SparkSession
+#     print("imported spark lib")
+# except ImportError as e:
+#     print ("Error importing Spark Modules", e)
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
@@ -28,14 +39,20 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
-    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str, spark_session: SparkSession) -> dict:
+    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
 
         def map_locator_Spark(x, subsequence):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
 
-        dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
-
         try:
+            spark_session = SparkSession \
+            .builder \
+            .appName("ntsparksearch") \
+            .config("spark.driver.memory", "4g") \
+            .config("spark.driver.maxResultSize", "3g") \
+            .config("spark.executor.memory", "3g").getOrCreate()
+
+            dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
             sc = spark_session.sparkContext
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]

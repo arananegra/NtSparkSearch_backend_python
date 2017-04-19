@@ -31,7 +31,7 @@ class Constants(object):
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
-    ARG_EXCEL_SEQUENCE_TO_FETCH = "Nucleotide Sequence to fecth"
+    ARG_EXCEL_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
 
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"

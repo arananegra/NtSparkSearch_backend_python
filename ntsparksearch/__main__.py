@@ -1,9 +1,8 @@
 import argparse
-import subprocess
 from ntsparksearch.common.util import Constants
 from ntsparksearch.subsequenceMatcher.bs import SubSequenceSparkMatcherBS
-from pyspark.sql import SparkSession
 from ntsparksearch.NCBIretriever.bs import NCBIretrieverBS
+
 
 
 class App(object):
@@ -55,17 +54,10 @@ class App(object):
                 # a no ser que se indique lo contrario
 
             if args.sparkseqmatch:
-                spark = SparkSession \
-                    .builder \
-                    .appName("ntsparksearch") \
-                    .config("spark.driver.memory", "4g") \
-                    .config("spark.driver.maxResultSize", "3g") \
-                    .config("spark.executor.memory", "3g").getOrCreate()
-
                 subsequence_matcherBS = SubSequenceSparkMatcherBS()
 
                 dict_filtered_with_spark = subsequence_matcherBS. \
-                    filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0], spark)
+                    filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0])
 
                 subsequence_matcherBS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
 
