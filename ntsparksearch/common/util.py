@@ -21,14 +21,14 @@ class Constants(object):
     # Database parameters
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
-    # MONGODB_HOST = 'database'
-    MONGODB_HOST = 'localhost'
+    MONGODB_HOST = 'database'
+    #MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
     MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
     # Env variables
-    SPARK_HOME = "/Users/alvarogomez/spark-2.1.0"
+    SPARK_HOME = "/usr/spark-2.1.0"
 
     # Main args
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"

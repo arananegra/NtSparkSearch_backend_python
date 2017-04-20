@@ -5,7 +5,6 @@ from ntsparksearch.common.util import Constants
 from pymongo import MongoClient
 from copy import deepcopy
 import findspark
-import os
 findspark.init(Constants.SPARK_HOME)
 from pyspark.sql import SparkSession
 
