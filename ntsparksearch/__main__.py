@@ -60,6 +60,7 @@ class App(object):
                     filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0])
 
                 subsequence_matcherBS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
+                print("Operation finished")
 
         except (ValueError, OSError) as err:
             print(Constants.MSG_ERROR_INPUT, err)

@@ -3,18 +3,11 @@ from ntsparksearch.common.dao import NCBItoMongoDAO
 from Bio import SeqUtils
 from ntsparksearch.common.util import Constants
 from pymongo import MongoClient
+from copy import deepcopy
 import findspark
+import os
 findspark.init("/Users/alvarogomez/spark-2.1.0")
 from pyspark.sql import SparkSession
-# import os,sys
-# os.environ['SPARK_HOME'] = "/Users/alvarogomez/spark-2.1.0"
-# sys.path.append("/Users/alvarogomez/spark-2.1.0/python")
-# sys.path.append("/Users/alvarogomez/spark-2.1.0/python/python/lib/py4j-0.10.4-src.zip")
-# try:
-#     from pyspark.sql import SparkSession
-#     print("imported spark lib")
-# except ImportError as e:
-#     print ("Error importing Spark Modules", e)
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
@@ -30,8 +23,10 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             dict_with_genes = mongo_dao_retriever.get_all_ncbi_objects_as_dict()
 
-            for id_ncbi, sequence in dict_with_genes.items():
-                if sequence is (None or ""):
+            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
+
+            for id_ncbi, sequence in deep_copy_dict_with_genes.items():
+                if sequence is None:
                     del dict_with_genes[id_ncbi]
 
             return dict_with_genes
@@ -70,7 +65,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             print('Caught exception trying to filter the collection:' + repr(error))
 
     def insert_filtered_dict_in_filtered_collection(self, filtered_dict: dict) -> None:
-
+        #TODO: vigilar ejecuciones repetidas --> actualizar en vez de insertar de nuevo
         try:
 
             mongo_dao_manager = NCBItoMongoDAO(

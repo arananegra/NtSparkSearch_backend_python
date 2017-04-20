@@ -27,6 +27,9 @@ class Constants(object):
     MONGODB_COLLECTION_FILTERED = 'ncbifiltered'
     MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
+    # Env variables
+    SPARK_HOME = "SPARK_HOME"
+
     # Main args
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
@@ -44,15 +47,15 @@ class Constants(object):
     MSG_ERROR_UNEXPECTED = "UNEXPECTED ERROR:"
 
     # Help
-    HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtaing ids from unfiltered collection" \
-                                                   "of sequences"
+    HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtain ids from unfiltered collection" \
+                                                   " of sequences"
 
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED = "Obtaing ids from filtered collection" \
-                                                   "of sequences"
+                                                   " of sequences"
     HELP_COMMAND_DOWNLOAD_FROM_EXCEL = "Obtain ids from an excel file and downloads" \
-                                       "all the sequences from the NCBI"
+                                       " all the sequences from the NCBI"
 
     HELP_COMMAND_EXACT_SUB_MATCH_SPARK = "From the sequences loaded in the database," \
-                                         "performs a exact subsequence search using" \
-                                         "the provided sequence (ambiguity codes are" \
-                                         "allowed)"
+                                         " performs a exact subsequence search using" \
+                                         " the provided sequence (ambiguity codes are" \
+                                         " allowed)"
