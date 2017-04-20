@@ -28,13 +28,14 @@ class Constants(object):
     MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
     # Env variables
-    SPARK_HOME = "SPARK_HOME"
+    SPARK_HOME = "/Users/alvarogomez/spark-2.1.0"
 
     # Main args
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
-    ARG_EXCEL_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
+    ARG_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
+    ARG_REMOVE_PREVIOUS_RESULT = "<Remove all data from previous executions (y/n)>"
 
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"

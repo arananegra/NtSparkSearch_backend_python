@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from copy import deepcopy
 import findspark
 import os
-findspark.init("/Users/alvarogomez/spark-2.1.0")
+findspark.init(Constants.SPARK_HOME)
 from pyspark.sql import SparkSession
 
 
@@ -34,7 +34,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
-    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
+    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str, remove_previous_result: str) -> dict:
 
         def map_locator_Spark(x, subsequence):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
@@ -48,6 +48,10 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             .config("spark.executor.memory", "3g").getOrCreate()
 
             dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
+
+            if remove_previous_result == "y":
+                self.delete_filtered_collection()
+
             sc = spark_session.sparkContext
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]
@@ -77,17 +81,17 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         except Exception as error:
             print('Caught exception while inserting filtered sequences in mongo collection' + repr(error))
 
-    def obtain_list_of_ids_from_mongo_filtered(self) -> list:
+    def get_list_of_ids_from_mongo_filtered(self) -> list:
         list_of_just_ids = None
 
         try:
             list_of_just_ids = []
 
-            mongo_dao_retriever = NCBItoMongoDAO(
+            mongo_dao_retriever_filtered = NCBItoMongoDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
-            list_of_ncbi_objets = mongo_dao_retriever.get_all_ncbi_objects_as_list()
+            list_of_ncbi_objets = mongo_dao_retriever_filtered.get_all_ncbi_objects_as_list()
 
             for ncbi_object in list_of_ncbi_objets:
                 ncbi_id = ncbi_object.idNcbi
@@ -97,3 +101,16 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))
+
+    def delete_filtered_collection(self) -> None:
+
+        try:
+
+            mongo_dao_retriever_filtered = NCBItoMongoDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            mongo_dao_retriever_filtered.delete_collection()
+
+        except Exception as error:
+            print('Caught exception when removing filtered collection' + repr(error))

@@ -27,8 +27,9 @@ class App(object):
                                 help=Constants.HELP_COMMAND_DOWNLOAD_FROM_EXCEL)
 
             parser.add_argument(Constants.COMMAND_EXACT_SUB_MATCH_SPARK,
-                                metavar=Constants.ARG_EXCEL_SEQUENCE_TO_FETCH,
-                                nargs=1, type=str,
+                                metavar=(Constants.ARG_SEQUENCE_TO_FETCH,
+                                         Constants.ARG_REMOVE_PREVIOUS_RESULT),
+                                nargs=2, type=str,
                                 help=Constants.HELP_COMMAND_EXACT_SUB_MATCH_SPARK)
 
             args = parser.parse_args()
@@ -54,10 +55,12 @@ class App(object):
                 # a no ser que se indique lo contrario
 
             if args.sparkseqmatch:
+
+                # TODO: cuando se llama repetidamente, se vuelve a insertar sin comprobar (adiccion, no actua)
                 subsequence_matcherBS = SubSequenceSparkMatcherBS()
 
                 dict_filtered_with_spark = subsequence_matcherBS. \
-                    filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0])
+                    filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0], args.sparkseqmatch[1])
 
                 subsequence_matcherBS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
                 print("Operation finished")

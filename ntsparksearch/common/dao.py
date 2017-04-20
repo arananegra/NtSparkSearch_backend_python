@@ -141,6 +141,15 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
+    def delete_collection(self) -> None:
+
+        try:
+            collection_from_client_reference = self.get_collection()
+            collection_from_client_reference.delete_many({})
+
+        except Exception as error:
+            print('Caught exception at delete operation: ' + repr(error))
+
     def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBI, upsert: bool) -> None:
         collection_from_client_reference = None
         try:
