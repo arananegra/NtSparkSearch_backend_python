@@ -56,7 +56,6 @@ class App(object):
 
             if args.sparkseqmatch:
 
-                # TODO: cuando se llama repetidamente, se vuelve a insertar sin comprobar (adiccion, no actua)
                 subsequence_matcherBS = SubSequenceSparkMatcherBS()
 
                 dict_filtered_with_spark = subsequence_matcherBS. \

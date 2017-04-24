@@ -68,7 +68,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             print('Caught exception trying to filter the collection:' + repr(error))
 
     def insert_filtered_dict_in_filtered_collection(self, filtered_dict: dict) -> None:
-        #TODO: vigilar ejecuciones repetidas --> actualizar en vez de insertar de nuevo
+
         try:
 
             mongo_dao_manager = NCBItoMongoDAO(
