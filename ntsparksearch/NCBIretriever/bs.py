@@ -60,6 +60,28 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list (unfiltered): ' + repr(error))
 
+    def obtain_list_of_ids_from_mongo_without_sequence(self) -> list:
+        list_of_just_ids = None
+
+        try:
+            list_of_just_ids = []
+
+            mongo_dao_retriever = NCBItoMongoDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_ncbi_objets = mongo_dao_retriever.get_all_ncbi_objects_as_list()
+
+            for ncbi_object in list_of_ncbi_objets:
+                if ncbi_object.sequence is None:
+                    ncbi_id = ncbi_object.idNcbi
+                    list_of_just_ids.append(ncbi_id)
+
+            return list_of_just_ids
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(error))
+
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
         try:

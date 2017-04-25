@@ -19,6 +19,10 @@ class App(object):
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED)
 
+            parser.add_argument(Constants.COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED,
+                                action='store_true',
+                                help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED)
+
             parser.add_argument(Constants.COMMAND_DOWNLOAD_FROM_EXCEL,
                                 metavar=(Constants.ARG_EXCEL_FILE_PATH,
                                          Constants.ARG_EXCEL_SHEET_NUMBER,
@@ -39,20 +43,21 @@ class App(object):
                 list_of_genes = retrieverBS.obtain_list_of_ids_from_mongo()
                 print(list_of_genes)
 
+            if args.obtainFiltered:
+                subsequence_matcherBS = SubSequenceSparkMatcherBS()
+                list_of_genes_filtered = subsequence_matcherBS.get_list_of_ids_from_mongo_filtered()
+                print(list_of_genes_filtered)
+
             if args.downloadGenesFromExcel:
                 retrieverBS = NCBIretrieverBS()
                 retrieverBS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
                                                             args.downloadGenesFromExcel[1],
                                                             args.downloadGenesFromExcel[2])
 
-                list_of_genes_empty = retrieverBS.obtain_list_of_ids_from_mongo()
+                list_of_genes_empty = retrieverBS.obtain_list_of_ids_from_mongo_without_sequence()
                 dict_of_genes_complete = retrieverBS.download_sequences_from_list_as_dict(list_of_genes_empty)
                 retrieverBS.update_genes_from_dict(dict_of_genes_complete)
                 print("Operation finished")
-
-                # TODO: cuando se realiza la descarga de un nuevo excel, se vuelve a hacer la descarga completa
-                # a partir de la base de datos, en la proxima iteracion, descargar solo los elementos nuevos
-                # a no ser que se indique lo contrario
 
             if args.sparkseqmatch:
 
