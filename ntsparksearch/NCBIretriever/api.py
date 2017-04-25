@@ -18,6 +18,13 @@ class INCBIretriever(metaclass=ABCMeta):
         with them
         :return: A list with the ids of the unfiltered genes
         """
+    @abstractmethod
+    def obtain_list_of_ids_from_mongo_without_sequence(self) -> list:
+        """
+        From a the unfiltered collection of mongo, extract the ids and returns a list
+        with them (only if their sequence is None)
+        :return: A list with the ids of the unfiltered genes whose sequence is None
+        """
 
     @abstractmethod
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
