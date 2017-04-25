@@ -1,4 +1,4 @@
-from ntsparksearch.common.domain import NucleotidesFromNCBI, NCBIsearcher
+from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, NCBIsearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection
@@ -52,7 +52,7 @@ class NCBItoMongoDAO(object):
                 find({"$text": {"$search": "\"%s\"" % mongodb_find}})
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBI()
+                single_ncbi_record = NucleotidesFromNCBIDTO()
 
                 single_ncbi_record.idNcbi = document["_idNcbi"]
                 single_ncbi_record.sequence = document["_sequence"]
@@ -81,7 +81,7 @@ class NCBItoMongoDAO(object):
             list_ncbi_records = []
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBI()
+                single_ncbi_record = NucleotidesFromNCBIDTO()
 
                 single_ncbi_record.idNcbi = document["_idNcbi"]
                 single_ncbi_record.sequence = document["_sequence"]
@@ -110,7 +110,7 @@ class NCBItoMongoDAO(object):
             dict_ncbi_records = {}
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBI()
+                single_ncbi_record = NucleotidesFromNCBIDTO()
 
                 single_ncbi_record.idNcbi = document["_idNcbi"]
                 single_ncbi_record.sequence = document["_sequence"]
@@ -135,8 +135,8 @@ class NCBItoMongoDAO(object):
             # !!!!!!!
             # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
             # de hacer esas comprobaciones
-            if self.search_ncbi_objects_and_return_as_list(criteria) is None:
-                collection_from_client_reference.delete_one({'_idNcbi': idNcbi})
+            #if self.search_ncbi_objects_and_return_as_list(criteria) is None:
+            collection_from_client_reference.delete_one({'_idNcbi': idNcbi})
 
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
@@ -150,7 +150,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBI, upsert: bool) -> None:
+    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBIDTO, upsert: bool) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
@@ -167,7 +167,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at update operation: ' + repr(error))
 
-    def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBI) -> None:
+    def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBIDTO) -> None:
         collection_from_client_reference = None
         try:
 
@@ -191,7 +191,7 @@ class NCBItoMongoDAO(object):
         try:
 
             for k, v in dict_with_ncbi_raw_data.items():
-                ncbi_object = NucleotidesFromNCBI()
+                ncbi_object = NucleotidesFromNCBIDTO()
 
                 ncbi_object.idNcbi = k
                 ncbi_object.sequence = v
@@ -200,56 +200,3 @@ class NCBItoMongoDAO(object):
 
         except Exception as error:
             print('Caught exception at insert from dict operation: ' + repr(error))
-
-# client = MongoClient('localhost', 27017)
-#
-# testDao = NCBItoMongoDAO(client, "SparkTest", "test01")
-#
-# criteria = NCBIsearcher()
-# criteria.search_by_NCBI_id_criteria = "002"
-#
-# # Example search_ncbi_objects_and_return_as_list
-#
-# listResult = testDao.search_ncbi_objects_and_return_as_list(criteria)
-# print(listResult[0].idNcbi)
-#
-# # Example get_all_ncbi_objects_as_dict
-#
-# dictResult = testDao.get_all_ncbi_objects_as_dict()
-# print(dictResult)
-#
-# # Example delete_ncbi_document_by_idNcbi
-#
-# # testDao.delete_ncbi_document_by_idNcbi('003')
-#
-# # Example insert_ncbi_document
-#
-# testNcbi1 = NucleotidesFromNCBI()
-#
-# testNcbi1.idNcbi = "004"
-# testNcbi1.sequence = "GCTACG"
-#
-# testNcbi2 = NucleotidesFromNCBI()
-#
-# testNcbi2.idNcbi = "005"
-# testNcbi2.sequence = "GCTACG"
-
-# testDao.insert_ncbi_document_from_object(testNcbi1)
-
-# Example of insert_ncbi_document_from_list_of_objects
-
-# list_of_ncbi_objects = [testNcbi1, testNcbi2]
-# testDao.insert_ncbi_document_from_list_of_objects(list_of_ncbi_objects)
-
-# Example of insert_ncbi_document_from_non_object_dict
-
-
-# dict_test = {"006": "GCTAGCA", "007": "ATGCTAG"}
-#
-# # testDao.insert_ncbi_document_from_non_object_dict(dict_test)
-#
-# testNcbi3 = NucleotidesFromNCBI()
-# testNcbi3.idNcbi = "013"
-# testNcbi3.sequence = None
-#
-# testDao.update_ncbi_element_from_object(testNcbi3, upsert=True)

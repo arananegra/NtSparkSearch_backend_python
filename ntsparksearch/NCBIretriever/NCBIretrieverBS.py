@@ -1,11 +1,11 @@
 from wsgiref import validate
 
-from ntsparksearch.NCBIretriever.api import INCBIretriever
-from ntsparksearch.NCBIretriever.dao import FileRetriverDAO
-from ntsparksearch.common.dao import NCBItoMongoDAO
-from ntsparksearch.common.domain import NCBIsearcher
-from ntsparksearch.common.domain import NucleotidesFromNCBI
-from ntsparksearch.common.util import Constants
+from ntsparksearch.NCBIretriever.INCBIretriever import INCBIretriever
+from ntsparksearch.NCBIretriever.FileRetriverDAO import FileRetriverDAO
+from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.common.NucleotidesFromNCBIDTO import NCBIsearcher
+from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
+from ntsparksearch.common.Constants import Constants
 from progressbar import ProgressBar
 from Bio import Entrez
 from pymongo import MongoClient
@@ -92,7 +92,7 @@ class NCBIretrieverBS(INCBIretriever):
                     Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
                 for id_ncbi, sequence in dict_of_genes.items():
-                    ncbi_object_to_update = NucleotidesFromNCBI()
+                    ncbi_object_to_update = NucleotidesFromNCBIDTO()
                     ncbi_object_to_update.idNcbi = id_ncbi
                     ncbi_object_to_update.sequence = sequence
                     mongo_dao_retriever.update_ncbi_element_from_object(ncbi_object_to_update, False)

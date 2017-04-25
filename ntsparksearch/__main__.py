@@ -1,7 +1,7 @@
 import argparse
-from ntsparksearch.common.util import Constants
-from ntsparksearch.subsequenceMatcher.bs import SubSequenceSparkMatcherBS
-from ntsparksearch.NCBIretriever.bs import NCBIretrieverBS
+from ntsparksearch.common.Constants import Constants
+from ntsparksearch.subsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
+from ntsparksearch.NCBIretriever.NCBIretrieverBS import NCBIretrieverBS
 
 
 
@@ -39,34 +39,34 @@ class App(object):
             args = parser.parse_args()
 
             if args.obtainUnfiltered:
-                retrieverBS = NCBIretrieverBS()
-                list_of_genes = retrieverBS.obtain_list_of_ids_from_mongo()
+                retriever_BS = NCBIretrieverBS()
+                list_of_genes = retriever_BS.obtain_list_of_ids_from_mongo()
                 print(list_of_genes)
 
             if args.obtainFiltered:
-                subsequence_matcherBS = SubSequenceSparkMatcherBS()
-                list_of_genes_filtered = subsequence_matcherBS.get_list_of_ids_from_mongo_filtered()
+                subsequence_matcher_BS = SubSequenceSparkMatcherBS()
+                list_of_genes_filtered = subsequence_matcher_BS.get_list_of_ids_from_mongo_filtered()
                 print(list_of_genes_filtered)
 
             if args.downloadGenesFromExcel:
-                retrieverBS = NCBIretrieverBS()
-                retrieverBS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
+                retriever_BS = NCBIretrieverBS()
+                retriever_BS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
                                                             args.downloadGenesFromExcel[1],
                                                             args.downloadGenesFromExcel[2])
 
-                list_of_genes_empty = retrieverBS.obtain_list_of_ids_from_mongo_without_sequence()
-                dict_of_genes_complete = retrieverBS.download_sequences_from_list_as_dict(list_of_genes_empty)
-                retrieverBS.update_genes_from_dict(dict_of_genes_complete)
+                list_of_genes_empty = retriever_BS.obtain_list_of_ids_from_mongo_without_sequence()
+                dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict(list_of_genes_empty)
+                retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 print("Operation finished")
 
             if args.sparkseqmatch:
 
-                subsequence_matcherBS = SubSequenceSparkMatcherBS()
+                subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 
-                dict_filtered_with_spark = subsequence_matcherBS. \
+                dict_filtered_with_spark = subsequence_matcher_BS. \
                     filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0], args.sparkseqmatch[1])
 
-                subsequence_matcherBS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
+                subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
                 print("Operation finished")
 
         except (ValueError, OSError) as err:

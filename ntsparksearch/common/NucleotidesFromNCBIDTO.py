@@ -1,9 +1,5 @@
-import re
-from ntsparksearch.common.util import Constants
-
-
-class NucleotidesFromNCBI(object):
-    """NucleotidesFromNCBI model"""
+class NucleotidesFromNCBIDTO(object):
+    """NucleotidesFromNCBIDTO model"""
 
     def __init__(self):
         self._idNcbi = None
@@ -19,10 +15,6 @@ class NucleotidesFromNCBI(object):
         return self._sequence
 
     def _set_sequence(self, sequence) -> None:
-        # validate DNA sequence
-        # pattern = re.compile(Constants.REG_EXP_DNA_SEQUENCE)
-        # if not pattern.fullmatch(sequence):
-        #     raise ValueError(Constants.MSG_ERROR_DNA_SEQUENCE)
         self._sequence = sequence
 
     idNcbi = property(fget=_get_idNcbi, fset=_set_idNcbi)

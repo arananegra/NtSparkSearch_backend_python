@@ -1,6 +1,6 @@
 import xlrd
-from ntsparksearch.common.domain import NucleotidesFromNCBI
-from ntsparksearch.common.dao import NCBItoMongoDAO
+from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
+from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
 from pymongo import MongoClient
 
 
@@ -32,7 +32,7 @@ class FileRetriverDAO(NCBItoMongoDAO):
             for id_ncbi in rows_no_repeated:
                 gene_id = str(id_ncbi)
                 gene_id = gene_id[:-2]
-                ncbi_record_only_id = NucleotidesFromNCBI()
+                ncbi_record_only_id = NucleotidesFromNCBIDTO()
                 ncbi_record_only_id.idNcbi = gene_id
                 list_ncbi_records.append(ncbi_record_only_id)
 
