@@ -39,6 +39,32 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when inserting all data from excel: ' + repr(error))
 
+    def insert_in_collection_from_fasta(self, file_path: str) -> None:
+
+        try:
+
+            if file_path is not None:
+                file_retriever_and_mongo_manager = FileRetriverDAO(
+                    MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                    Constants.MONGODB_DB_NAME,
+                    Constants.MONGODB_COLLECTION_UNFILTERED,
+                    file_path)
+
+                list_of_ncbi_objects_fasta = file_retriever_and_mongo_manager.get_list_of_ncbi_objects_from_multi_fasta()
+
+                for ncbi_object in list_of_ncbi_objects_fasta:
+
+                    criteria = NCBIsearcher()
+                    criteria.search_by_NCBI_id_criteria = ncbi_object.idNcbi
+
+                    if file_retriever_and_mongo_manager.search_ncbi_objects_and_return_as_list(criteria) is None:
+                        file_retriever_and_mongo_manager.insert_ncbi_document_from_object(ncbi_object)
+            else:
+                print("No file attached to this operation")
+
+        except Exception as error:
+            print('Caught exception when inserting all data from fasta: ' + repr(error))
+
     def obtain_list_of_ids_from_mongo(self) -> list:
         list_of_just_ids = None
 
@@ -80,7 +106,8 @@ class NCBIretrieverBS(INCBIretriever):
             return list_of_just_ids
 
         except Exception as error:
-            print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(error))
+            print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(
+                error))
 
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 

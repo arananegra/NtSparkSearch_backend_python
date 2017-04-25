@@ -2,6 +2,7 @@ import xlrd
 from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
 from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
 from pymongo import MongoClient
+from Bio.SeqIO import parse
 
 
 class FileRetriverDAO(NCBItoMongoDAO):
@@ -41,3 +42,22 @@ class FileRetriverDAO(NCBItoMongoDAO):
         except Exception as error:
             print('Caught exception while reading from excel file: ' + repr(error))
 
+    def get_list_of_ncbi_objects_from_multi_fasta(self) -> list:
+
+        try:
+            list_ncbi_records = []
+
+            for record in parse(self._file_path, "fasta"):
+                gene_id = str(record.id)
+                gene_sequence = str(record.seq)
+
+                ncbi_single_record = NucleotidesFromNCBIDTO()
+                ncbi_single_record.idNcbi = gene_id
+                ncbi_single_record.sequence = gene_sequence
+
+                list_ncbi_records.append(ncbi_single_record)
+
+            return list_ncbi_records
+
+        except Exception as error:
+            print('Caught exception while reading from fasta file: ' + repr(error))

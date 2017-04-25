@@ -2,13 +2,23 @@ from abc import abstractmethod, ABCMeta
 
 
 class INCBIretriever(metaclass=ABCMeta):
+
     @abstractmethod
     def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
         """
         From an excel file, recover the genes of a certain column in a certain sheet and
         insert them in the ncbiunfiltered collection
+        :param file_path: path of the excel file
         :param sheet: sheet from which extract the genes
         :param column_name: name of the column with the genes
+        """
+
+    @abstractmethod
+    def insert_in_collection_from_fasta(self, file_path: str) -> None:
+        """
+        From an fasta file, recover the ids and sequences and
+        insert them in the ncbiunfiltered collection
+        :param file_path: path of the fasta file
         """
 
     @abstractmethod
@@ -18,6 +28,7 @@ class INCBIretriever(metaclass=ABCMeta):
         with them
         :return: A list with the ids of the unfiltered genes
         """
+
     @abstractmethod
     def obtain_list_of_ids_from_mongo_without_sequence(self) -> list:
         """

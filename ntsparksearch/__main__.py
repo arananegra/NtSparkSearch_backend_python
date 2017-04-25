@@ -4,7 +4,6 @@ from ntsparksearch.subsequenceMatcher.SubSequenceSparkMatcherBS import SubSequen
 from ntsparksearch.NCBIretriever.NCBIretrieverBS import NCBIretrieverBS
 
 
-
 class App(object):
     """App class containing the main method"""
 
@@ -30,6 +29,11 @@ class App(object):
                                 nargs=3, type=str,
                                 help=Constants.HELP_COMMAND_DOWNLOAD_FROM_EXCEL)
 
+            parser.add_argument(Constants.COMMAND_IMPORT_FROM_FASTA,
+                                metavar=Constants.ARG_FASTA_FILE_PATH,
+                                nargs=1, type=str,
+                                help=Constants.HELP_COMMAND_IMPORT_FROM_FASTA)
+
             parser.add_argument(Constants.COMMAND_EXACT_SUB_MATCH_SPARK,
                                 metavar=(Constants.ARG_SEQUENCE_TO_FETCH,
                                          Constants.ARG_REMOVE_PREVIOUS_RESULT),
@@ -51,16 +55,20 @@ class App(object):
             if args.downloadGenesFromExcel:
                 retriever_BS = NCBIretrieverBS()
                 retriever_BS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
-                                                            args.downloadGenesFromExcel[1],
-                                                            args.downloadGenesFromExcel[2])
+                                                             args.downloadGenesFromExcel[1],
+                                                             args.downloadGenesFromExcel[2])
 
                 list_of_genes_empty = retriever_BS.obtain_list_of_ids_from_mongo_without_sequence()
                 dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict(list_of_genes_empty)
                 retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 print("Operation finished")
 
-            if args.sparkseqmatch:
+            if args.retrieveFromFasta:
+                retriever_BS = NCBIretrieverBS()
+                retriever_BS.insert_in_collection_from_fasta(args.retrieveFromFasta[0])
+                print("Operation finished")
 
+            if args.sparkseqmatch:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 
                 dict_filtered_with_spark = subsequence_matcher_BS. \
