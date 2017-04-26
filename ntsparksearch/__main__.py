@@ -59,8 +59,13 @@ class App(object):
                                                              args.downloadGenesFromExcel[2])
 
                 list_of_genes_empty = retriever_BS.obtain_list_of_ids_from_mongo_without_sequence()
-                dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict(list_of_genes_empty)
-                retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+
+                if list_of_genes_empty is not None:
+                    print("Downloading the content of the unfiltered collection of genes")
+                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict(list_of_genes_empty)
+                    retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+                else:
+                    print("WARNING: The unfiltered collection is empty")
                 print("Operation finished")
 
             if args.retrieveFromFasta:

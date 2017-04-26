@@ -1,5 +1,3 @@
-from wsgiref import validate
-
 from ntsparksearch.NCBIretriever.INCBIretriever import INCBIretriever
 from ntsparksearch.NCBIretriever.FileRetriverDAO import FileRetriverDAO
 from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
@@ -7,6 +5,7 @@ from ntsparksearch.common.NucleotidesFromNCBIDTO import NCBIsearcher
 from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
 from ntsparksearch.common.Constants import Constants
 from progressbar import ProgressBar
+import os.path
 from Bio import Entrez
 from pymongo import MongoClient
 
@@ -16,7 +15,7 @@ class NCBIretrieverBS(INCBIretriever):
 
         try:
 
-            if file_path is not None:
+            if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = FileRetriverDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
@@ -34,7 +33,7 @@ class NCBIretrieverBS(INCBIretriever):
                     if file_retriever_and_mongo_manager.search_ncbi_objects_and_return_as_list(criteria) is None:
                         file_retriever_and_mongo_manager.insert_ncbi_document_from_object(ncbi_object_just_id)
             else:
-                print("No file attached to this operation")
+                raise OSError('The file does not exists')
 
         except Exception as error:
             print('Caught exception when inserting all data from excel: ' + repr(error))
@@ -43,7 +42,7 @@ class NCBIretrieverBS(INCBIretriever):
 
         try:
 
-            if file_path is not None:
+            if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = FileRetriverDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
@@ -60,7 +59,7 @@ class NCBIretrieverBS(INCBIretriever):
                     if file_retriever_and_mongo_manager.search_ncbi_objects_and_return_as_list(criteria) is None:
                         file_retriever_and_mongo_manager.insert_ncbi_document_from_object(ncbi_object)
             else:
-                print("No file attached to this operation")
+                raise OSError('The file does not exists')
 
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
