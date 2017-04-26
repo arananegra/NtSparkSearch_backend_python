@@ -1,22 +1,22 @@
-from ntsparksearch.NCBIretriever.INCBIretriever import INCBIretriever
-from ntsparksearch.NCBIretriever.FileRetriverDAO import FileRetriverDAO
-from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
-from ntsparksearch.common.NucleotidesFromNCBIDTO import NCBIsearcher
-from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
-from ntsparksearch.common.Constants import Constants
+from ntsparksearch.GeneRetriever.IGeneRetriever import IGeneRetriever
+from ntsparksearch.GeneRetriever.GeneRetrieverDAO import GeneRetrieverDAO
+from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import NCBIsearcher
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
+from ntsparksearch.Common.Constants import Constants
 from progressbar import ProgressBar
 import os.path
 from Bio import Entrez
 from pymongo import MongoClient
 
 
-class NCBIretrieverBS(INCBIretriever):
+class GeneRetrieverBS(IGeneRetriever):
     def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
 
         try:
 
             if os.path.isfile(file_path) is True:
-                file_retriever_and_mongo_manager = FileRetriverDAO(
+                file_retriever_and_mongo_manager = GeneRetrieverDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
@@ -43,7 +43,7 @@ class NCBIretrieverBS(INCBIretriever):
         try:
 
             if os.path.isfile(file_path) is True:
-                file_retriever_and_mongo_manager = FileRetriverDAO(
+                file_retriever_and_mongo_manager = GeneRetrieverDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
@@ -126,7 +126,7 @@ class NCBIretrieverBS(INCBIretriever):
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))
 
-    def download_sequences_from_list_as_dict(self, list_of_genes: list) -> dict:
+    def download_sequences_from_list_as_dict_from_NCBI(self, list_of_genes: list) -> dict:
 
         pbar = ProgressBar()
         Entrez.email = "notfunny@notanemail.org"

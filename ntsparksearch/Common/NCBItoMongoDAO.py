@@ -1,4 +1,4 @@
-from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, NCBIsearcher
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, NCBIsearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection

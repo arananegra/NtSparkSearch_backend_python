@@ -1,7 +1,7 @@
-from ntsparksearch.subsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
-from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
+from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
 from Bio import SeqUtils
-from ntsparksearch.common.Constants import Constants
+from ntsparksearch.Common.Constants import Constants
 from pymongo import MongoClient
 from copy import deepcopy
 import findspark

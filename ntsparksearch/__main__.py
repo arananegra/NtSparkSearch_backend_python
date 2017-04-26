@@ -1,7 +1,7 @@
 import argparse
-from ntsparksearch.common.Constants import Constants
-from ntsparksearch.subsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
-from ntsparksearch.NCBIretriever.NCBIretrieverBS import NCBIretrieverBS
+from ntsparksearch.Common.Constants import Constants
+from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
+from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 
 
 class App(object):
@@ -43,7 +43,7 @@ class App(object):
             args = parser.parse_args()
 
             if args.obtainUnfiltered:
-                retriever_BS = NCBIretrieverBS()
+                retriever_BS = GeneRetrieverBS()
                 list_of_genes = retriever_BS.obtain_list_of_ids_from_mongo()
 
                 if list_of_genes is None:
@@ -63,7 +63,7 @@ class App(object):
                     print(list_of_genes_filtered)
 
             if args.downloadGenesFromExcel:
-                retriever_BS = NCBIretrieverBS()
+                retriever_BS = GeneRetrieverBS()
                 retriever_BS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
                                                              args.downloadGenesFromExcel[1],
                                                              args.downloadGenesFromExcel[2])
@@ -72,14 +72,14 @@ class App(object):
 
                 if list_of_genes_empty is not None:
                     print("Downloading the content of the unfiltered collection of genes")
-                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict(list_of_genes_empty)
+                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(list_of_genes_empty)
                     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 else:
                     print("WARNING: The unfiltered collection is empty")
                 print("Operation finished")
 
             if args.retrieveFromFasta:
-                retriever_BS = NCBIretrieverBS()
+                retriever_BS = GeneRetrieverBS()
                 retriever_BS.insert_in_collection_from_fasta(args.retrieveFromFasta[0])
                 print("Operation finished")
 

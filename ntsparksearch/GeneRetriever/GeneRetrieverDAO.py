@@ -1,13 +1,13 @@
 import xlrd
-from ntsparksearch.common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
-from ntsparksearch.common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
+from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
 from pymongo import MongoClient
 from Bio.SeqIO import parse
 
 
-class FileRetriverDAO(NCBItoMongoDAO):
+class GeneRetrieverDAO(NCBItoMongoDAO):
     def __init__(self, client_reference: MongoClient, database_name: str, collection_name: str, file_path: str):
-        super(FileRetriverDAO, self).__init__(client_reference, database_name, collection_name)
+        super(GeneRetrieverDAO, self).__init__(client_reference, database_name, collection_name)
         self._file_path = file_path
 
     def get_list_of_genes_from_xlrd(self, sheet: str, column_name: str) -> list:

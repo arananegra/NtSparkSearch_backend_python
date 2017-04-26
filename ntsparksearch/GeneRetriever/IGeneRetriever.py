@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
 
-class INCBIretriever(metaclass=ABCMeta):
+class IGeneRetriever(metaclass=ABCMeta):
 
     @abstractmethod
     def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
@@ -47,7 +47,7 @@ class INCBIretriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def download_sequences_from_list_as_dict(self, list_of_genes: list) -> dict:
+    def download_sequences_from_list_as_dict_from_NCBI(self, list_of_genes: list) -> dict:
         """
         From a list of genes (strings representing id's from NCBI),this method
         retrieves their sequences and creates a dictionary (ids:sequences)
