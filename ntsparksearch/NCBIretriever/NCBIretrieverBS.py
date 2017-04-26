@@ -162,11 +162,3 @@ class NCBIretrieverBS(INCBIretriever):
                 continue
 
         return dict_id_and_sequences
-
-# test_bs = NCBIretrieverBS()
-
-# test_bs.insert_in_collection_from_excel(0, "gene_id")
-
-# list_of_genes = test_bs.obtain_list_of_ids_from_mongo()
-#
-# test_bs.download_sequences_from_list_as_dict(list_of_genes)
