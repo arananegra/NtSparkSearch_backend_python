@@ -45,12 +45,22 @@ class App(object):
             if args.obtainUnfiltered:
                 retriever_BS = NCBIretrieverBS()
                 list_of_genes = retriever_BS.obtain_list_of_ids_from_mongo()
-                print(list_of_genes)
+
+                if list_of_genes is None:
+                    print("The unfiltered collection is empty")
+
+                else:
+                    print(list_of_genes)
 
             if args.obtainFiltered:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
                 list_of_genes_filtered = subsequence_matcher_BS.get_list_of_ids_from_mongo_filtered()
-                print(list_of_genes_filtered)
+
+                if list_of_genes_filtered is None:
+                    print("The filtered collection is empty")
+
+                else:
+                    print(list_of_genes_filtered)
 
             if args.downloadGenesFromExcel:
                 retriever_BS = NCBIretrieverBS()

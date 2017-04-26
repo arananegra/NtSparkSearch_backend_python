@@ -1,3 +1,5 @@
+import os
+
 class Constants(object):
     AMBIGUOUS_DNA_VALUES = {
         "A": "A",
@@ -28,7 +30,7 @@ class Constants(object):
     MONGODB_COLLECTION_UNFILTERED = 'ncbiunfiltered'
 
     # Env variables
-    SPARK_HOME = "/usr/spark-2.1.0"
+    SPARK_HOME = os.environ['SPARK_HOME']
 
     # Main args
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
