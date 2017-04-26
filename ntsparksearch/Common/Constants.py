@@ -26,6 +26,8 @@ class Constants(object):
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
     COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED = "--obtainFiltered"
+    COMMAND_REMOVE_UNFILTERED_COLLECTION = "--removeUnfiltered"
+    COMMAND_REMOVE_FILTERED_COLLECTION = "--removeFiltered"
     COMMAND_DOWNLOAD_FROM_EXCEL = "--downloadGenesFromExcel"
     COMMAND_IMPORT_FROM_FASTA = "--retrieveFromFasta"
     COMMAND_EXACT_SUB_MATCH_SPARK = "--sparkseqmatch"
@@ -40,6 +42,11 @@ class Constants(object):
 
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED = "Obtaing ids from filtered collection" \
                                                  " of sequences"
+
+    HELP_COMMAND_REMOVE_UNFILTERED = "Removes the whole unfiltered collection of genes"
+
+    HELP_COMMAND_REMOVE_FILTERED = "Removes the whole filtered collection of genes"
+
     HELP_COMMAND_DOWNLOAD_FROM_EXCEL = "Obtain ids from an excel file and downloads" \
                                        " all the sequences from the NCBI"
 

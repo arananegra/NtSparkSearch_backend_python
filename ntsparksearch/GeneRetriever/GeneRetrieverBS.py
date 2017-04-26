@@ -64,7 +64,7 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
 
-    def obtain_list_of_ids_from_mongo(self) -> list:
+    def get_list_of_ids_from_mongo(self) -> list:
         list_of_just_ids = None
 
         try:
@@ -85,7 +85,7 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list (unfiltered): ' + repr(error))
 
-    def obtain_list_of_ids_from_mongo_without_sequence(self) -> list:
+    def get_list_of_ids_from_mongo_without_sequence(self) -> list:
         list_of_just_ids = None
 
         try:
@@ -125,6 +125,19 @@ class GeneRetrieverBS(IGeneRetriever):
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))
+
+    def delete_unfiltered_collection(self) -> None:
+
+        try:
+
+            mongo_dao_retriever_unfiltered = NCBItoMongoDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            mongo_dao_retriever_unfiltered.delete_collection()
+
+        except Exception as error:
+            print('Caught exception when removing filtered collection' + repr(error))
 
     def download_sequences_from_list_as_dict_from_NCBI(self, list_of_genes: list) -> dict:
 

@@ -52,6 +52,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 self.delete_filtered_collection()
 
             sc = spark_session.sparkContext
+            sc.setLogLevel("ERROR")
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]
             list_of_list_of_genes_rdd = sc.parallelize(list_of_list_of_genes)

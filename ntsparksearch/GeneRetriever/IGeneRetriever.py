@@ -22,7 +22,7 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def obtain_list_of_ids_from_mongo(self) -> list:
+    def get_list_of_ids_from_mongo(self) -> list:
         """
         From a the unfiltered collection of mongo, extract the ids and returns a list
         with them
@@ -30,7 +30,7 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def obtain_list_of_ids_from_mongo_without_sequence(self) -> list:
+    def get_list_of_ids_from_mongo_without_sequence(self) -> list:
         """
         From a the unfiltered collection of mongo, extract the ids and returns a list
         with them (only if their sequence is None)
