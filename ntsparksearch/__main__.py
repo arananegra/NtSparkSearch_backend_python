@@ -90,7 +90,8 @@ class App(object):
 
                 if list_of_genes_empty is not None:
                     print("Downloading the content of the unfiltered collection of genes")
-                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(list_of_genes_empty)
+                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+                        list_of_genes_empty)
                     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 else:
                     print("WARNING: The unfiltered collection is empty")
@@ -101,11 +102,11 @@ class App(object):
                 retriever_BS.insert_in_collection_from_fasta(args.retrieveFromFasta[0])
                 print("Operation finished")
 
-            if args.sparkseqmatch:
+            if args.sparkSeqMatch:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 
                 dict_filtered_with_spark = subsequence_matcher_BS. \
-                    filter_sequences_by_sequence_string_to_dict(args.sparkseqmatch[0], args.sparkseqmatch[1])
+                    filter_sequences_by_sequence_string_to_dict(args.sparkSeqMatch[0], args.sparkSeqMatch[1])
 
                 subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
                 print("Operation finished")

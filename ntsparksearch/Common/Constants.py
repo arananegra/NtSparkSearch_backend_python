@@ -30,7 +30,7 @@ class Constants(object):
     COMMAND_REMOVE_FILTERED_COLLECTION = "--removeFiltered"
     COMMAND_DOWNLOAD_FROM_EXCEL = "--downloadGenesFromExcel"
     COMMAND_IMPORT_FROM_FASTA = "--retrieveFromFasta"
-    COMMAND_EXACT_SUB_MATCH_SPARK = "--sparkseqmatch"
+    COMMAND_EXACT_SUB_MATCH_SPARK = "--sparkSeqMatch"
 
     # Error mssg
     MSG_ERROR_INPUT = "INPUT NOT VALID:"
