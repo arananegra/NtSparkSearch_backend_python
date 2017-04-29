@@ -1,7 +1,7 @@
 from ntsparksearch.GeneRetriever.IGeneRetriever import IGeneRetriever
 from ntsparksearch.GeneRetriever.GeneRetrieverDAO import GeneRetrieverDAO
 from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import NCBIsearcher
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import GeneSearcher
 from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
 from ntsparksearch.Common.Constants import Constants
 from progressbar import ProgressBar
@@ -27,11 +27,11 @@ class GeneRetrieverBS(IGeneRetriever):
 
                 for ncbi_object_just_id in list_of_genes_just_ids:
 
-                    criteria = NCBIsearcher()
-                    criteria.search_by_NCBI_id_criteria = ncbi_object_just_id.idNcbi
+                    criteria = GeneSearcher()
+                    criteria.search_by_gene_id_criteria = ncbi_object_just_id.gene_id
 
-                    if file_retriever_and_mongo_manager.search_ncbi_objects_and_return_as_list(criteria) is None:
-                        file_retriever_and_mongo_manager.insert_ncbi_document_from_object(ncbi_object_just_id)
+                    if file_retriever_and_mongo_manager.search_gene_objects_and_return_as_list(criteria) is None:
+                        file_retriever_and_mongo_manager.insert_gene_document_from_object(ncbi_object_just_id)
             else:
                 raise OSError('The file does not exists')
 
@@ -49,15 +49,15 @@ class GeneRetrieverBS(IGeneRetriever):
                     Constants.MONGODB_COLLECTION_UNFILTERED,
                     file_path)
 
-                list_of_ncbi_objects_fasta = file_retriever_and_mongo_manager.get_list_of_ncbi_objects_from_multi_fasta()
+                list_of_gene_objects_fasta = file_retriever_and_mongo_manager.get_list_of_gene_objects_from_multi_fasta()
 
-                for ncbi_object in list_of_ncbi_objects_fasta:
+                for gene_object in list_of_gene_objects_fasta:
 
-                    criteria = NCBIsearcher()
-                    criteria.search_by_NCBI_id_criteria = ncbi_object.idNcbi
+                    criteria = GeneSearcher()
+                    criteria.search_by_gene_id_criteria = gene_object.gene_id
 
-                    if file_retriever_and_mongo_manager.search_ncbi_objects_and_return_as_list(criteria) is None:
-                        file_retriever_and_mongo_manager.insert_ncbi_document_from_object(ncbi_object)
+                    if file_retriever_and_mongo_manager.search_gene_objects_and_return_as_list(criteria) is None:
+                        file_retriever_and_mongo_manager.insert_gene_document_from_object(gene_object)
             else:
                 raise OSError('The file does not exists')
 
@@ -74,11 +74,11 @@ class GeneRetrieverBS(IGeneRetriever):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
-            list_of_ncbi_objets = mongo_dao_retriever.get_all_ncbi_objects_as_list()
+            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
-            for ncbi_object in list_of_ncbi_objets:
-                ncbi_id = ncbi_object.idNcbi
-                list_of_just_ids.append(ncbi_id)
+            for gene_object in list_of_gene_objets:
+                gene_id = gene_object.gene_id
+                list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -95,12 +95,12 @@ class GeneRetrieverBS(IGeneRetriever):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
-            list_of_ncbi_objets = mongo_dao_retriever.get_all_ncbi_objects_as_list()
+            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
-            for ncbi_object in list_of_ncbi_objets:
-                if ncbi_object.sequence is None:
-                    ncbi_id = ncbi_object.idNcbi
-                    list_of_just_ids.append(ncbi_id)
+            for gene_object in list_of_gene_objets:
+                if gene_object.sequence is None:
+                    gene_id = gene_object.gene_id
+                    list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -119,9 +119,9 @@ class GeneRetrieverBS(IGeneRetriever):
 
                 for id_ncbi, sequence in dict_of_genes.items():
                     ncbi_object_to_update = NucleotidesFromNCBIDTO()
-                    ncbi_object_to_update.idNcbi = id_ncbi
+                    ncbi_object_to_update.gene_id = id_ncbi
                     ncbi_object_to_update.sequence = sequence
-                    mongo_dao_retriever.update_ncbi_element_from_object(ncbi_object_to_update, False)
+                    mongo_dao_retriever.update_gene_element_from_object(ncbi_object_to_update, False)
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))

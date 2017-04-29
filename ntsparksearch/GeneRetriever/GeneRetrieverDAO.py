@@ -34,7 +34,7 @@ class GeneRetrieverDAO(NCBItoMongoDAO):
                 gene_id = str(id_ncbi)
                 gene_id = gene_id[:-2]
                 ncbi_record_only_id = NucleotidesFromNCBIDTO()
-                ncbi_record_only_id.idNcbi = gene_id
+                ncbi_record_only_id.gene_id = gene_id
                 list_ncbi_records.append(ncbi_record_only_id)
 
             return list_ncbi_records
@@ -42,22 +42,22 @@ class GeneRetrieverDAO(NCBItoMongoDAO):
         except Exception as error:
             print('Caught exception while reading from excel file: ' + repr(error))
 
-    def get_list_of_ncbi_objects_from_multi_fasta(self) -> list:
+    def get_list_of_gene_objects_from_multi_fasta(self) -> list:
 
         try:
-            list_ncbi_records = []
+            list_gene_records = []
 
             for record in parse(self._file_path, "fasta"):
                 gene_id = str(record.id)
                 gene_sequence = str(record.seq)
 
-                ncbi_single_record = NucleotidesFromNCBIDTO()
-                ncbi_single_record.idNcbi = gene_id
-                ncbi_single_record.sequence = gene_sequence
+                gene_single_record = NucleotidesFromNCBIDTO()
+                gene_single_record.gene_id = gene_id
+                gene_single_record.sequence = gene_sequence
 
-                list_ncbi_records.append(ncbi_single_record)
+                list_gene_records.append(gene_single_record)
 
-            return list_ncbi_records
+            return list_gene_records
 
         except Exception as error:
             print('Caught exception while reading from fasta file: ' + repr(error))

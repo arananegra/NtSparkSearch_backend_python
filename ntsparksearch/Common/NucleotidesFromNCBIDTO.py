@@ -2,14 +2,14 @@ class NucleotidesFromNCBIDTO(object):
     """NucleotidesFromNCBIDTO model"""
 
     def __init__(self):
-        self._idNcbi = None
+        self._gene_id = None
         self._sequence = None
 
-    def _get_idNcbi(self) -> str:
-        return self._idNcbi
+    def _get_gene_id(self) -> str:
+        return self._gene_id
 
-    def _set_idNcbi(self, id) -> None:
-        self._idNcbi = id
+    def _set_gene_id(self, id) -> None:
+        self._gene_id = id
 
     def _get_sequence(self) -> str:
         return self._sequence
@@ -17,18 +17,18 @@ class NucleotidesFromNCBIDTO(object):
     def _set_sequence(self, sequence) -> None:
         self._sequence = sequence
 
-    idNcbi = property(fget=_get_idNcbi, fset=_set_idNcbi)
+    gene_id = property(fget=_get_gene_id, fset=_set_gene_id)
     sequence = property(fget=_get_sequence, fset=_set_sequence)
 
 
-class NCBIsearcher(object):
+class GeneSearcher(object):
     def __init__(self):
-        self._search_by_NCBI_id_criteria = None
+        self._search_by_gene_id_criteria = None
 
-    def _get_NCBIIdSearchCriteria(self) -> str:
-        return self._search_by_NCBI_id_criteria
+    def _get_gene_id_search_criteria(self) -> str:
+        return self._search_by_gene_id_criteria
 
-    def _set_NCBIIdSearchCriteria(self, NCBI_id_criteria: str) -> None:
-        self._search_by_NCBI_id_criteria = NCBI_id_criteria
+    def _set_gene_id_search_criteria(self, NCBI_id_criteria: str) -> None:
+        self._search_by_gene_id_criteria = NCBI_id_criteria
 
-    search_by_NCBI_id_criteria = property(fget=_get_NCBIIdSearchCriteria, fset=_set_NCBIIdSearchCriteria)
+    search_by_gene_id_criteria = property(fget=_get_gene_id_search_criteria, fset=_set_gene_id_search_criteria)

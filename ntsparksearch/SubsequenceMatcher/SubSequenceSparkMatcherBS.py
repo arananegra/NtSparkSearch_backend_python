@@ -20,13 +20,13 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
-            dict_with_genes = mongo_dao_retriever.get_all_ncbi_objects_as_dict()
+            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
 
             deep_copy_dict_with_genes = deepcopy(dict_with_genes)
 
-            for id_ncbi, sequence in deep_copy_dict_with_genes.items():
+            for id_gene, sequence in deep_copy_dict_with_genes.items():
                 if sequence is None:
-                    del dict_with_genes[id_ncbi]
+                    del dict_with_genes[id_gene]
 
             return dict_with_genes
 
@@ -76,7 +76,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
-            mongo_dao_manager.insert_ncbi_document_from_non_object_dict(filtered_dict)
+            mongo_dao_manager.insert_gene_document_from_non_object_dict(filtered_dict)
 
         except Exception as error:
             print('Caught exception while inserting filtered sequences in mongo collection' + repr(error))
@@ -91,11 +91,11 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
-            list_of_ncbi_objets = mongo_dao_retriever_filtered.get_all_ncbi_objects_as_list()
+            list_of_gene_objets = mongo_dao_retriever_filtered.get_all_gene_objects_as_list()
 
-            for ncbi_object in list_of_ncbi_objets:
-                ncbi_id = ncbi_object.idNcbi
-                list_of_just_ids.append(ncbi_id)
+            for gene_object in list_of_gene_objets:
+                gene_id = gene_object.gene_id
+                list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 

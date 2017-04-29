@@ -1,7 +1,8 @@
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, NCBIsearcher
+from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, GeneSearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection
+from ntsparksearch.Common.Constants import Constants
 
 
 class NCBItoMongoDAO(object):
@@ -28,12 +29,12 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception creating the index at collection: ' + repr(error))
 
-    def search_ncbi_objects_and_return_as_list(self, search_criteria: NCBIsearcher) -> list:
+    def search_gene_objects_and_return_as_list(self, search_criteria: GeneSearcher) -> list:
         collection_from_client_reference = None
         collection_cursor = None
 
-        single_ncbi_record = None
-        list_ncbi_records = None
+        single_gene_record = None
+        list_gene_records = None
 
         mongodb_find = None
 
@@ -41,36 +42,36 @@ class NCBItoMongoDAO(object):
 
         try:
 
-            list_ncbi_records = []
+            list_gene_records = []
 
-            if (search_criteria.search_by_NCBI_id_criteria is not None):
-                mongodb_find = search_criteria.search_by_NCBI_id_criteria
+            if (search_criteria.search_by_gene_id_criteria is not None):
+                mongodb_find = search_criteria.search_by_gene_id_criteria
 
-            self.create_text_index_in_collection(collection_from_client_reference, '_idNcbi', '_idNcbi_text')
+            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id, '_gene_id_text')
 
             collection_cursor = collection_from_client_reference. \
                 find({"$text": {"$search": "\"%s\"" % mongodb_find}})
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBIDTO()
+                single_gene_record = NucleotidesFromNCBIDTO()
 
-                single_ncbi_record.idNcbi = document["_idNcbi"]
-                single_ncbi_record.sequence = document["_sequence"]
+                single_gene_record.gene_id = document[Constants.gene_id]
+                single_gene_record.sequence = document[Constants.sequence]
 
-                list_ncbi_records.append(single_ncbi_record)
+                list_gene_records.append(single_gene_record)
 
-            if (len(list_ncbi_records) == 0):
-                list_ncbi_records = None
+            if (len(list_gene_records) == 0):
+                list_gene_records = None
 
-            return list_ncbi_records
+            return list_gene_records
 
         except Exception as error:
             print('Caught exception searching by id: ' + repr(error))
 
-    def get_all_ncbi_objects_as_list(self) -> list:
+    def get_all_gene_objects_as_list(self) -> list:
         collection_from_client_reference = None
-        list_ncbi_records = None
-        single_ncbi_record = None
+        list_gene_records = None
+        single_gene_record = None
 
         collection_from_client_reference = self.get_collection()
 
@@ -78,28 +79,28 @@ class NCBItoMongoDAO(object):
             collection_cursor = collection_from_client_reference. \
                 find({})
 
-            list_ncbi_records = []
+            list_gene_records = []
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBIDTO()
+                single_gene_record = NucleotidesFromNCBIDTO()
 
-                single_ncbi_record.idNcbi = document["_idNcbi"]
-                single_ncbi_record.sequence = document["_sequence"]
+                single_gene_record.gene_id = document[Constants.gene_id]
+                single_gene_record.sequence = document[Constants.sequence]
 
-                list_ncbi_records.append(single_ncbi_record)
+                list_gene_records.append(single_gene_record)
 
-            if len(list_ncbi_records) == 0:
-                list_ncbi_records = None
+            if len(list_gene_records) == 0:
+                list_gene_records = None
 
-            return list_ncbi_records
+            return list_gene_records
 
         except Exception as error:
             print('Caught exception getting all elements as list: ' + repr(error))
 
-    def get_all_ncbi_objects_as_dict(self) -> dict:
+    def get_all_gene_objects_as_dict(self) -> dict:
         collection_from_client_reference = None
-        dict_ncbi_records = None
-        single_ncbi_record = None
+        dict_gene_records = None
+        single_gene_record = None
 
         collection_from_client_reference = self.get_collection()
 
@@ -107,36 +108,36 @@ class NCBItoMongoDAO(object):
             collection_cursor = collection_from_client_reference. \
                 find({})
 
-            dict_ncbi_records = {}
+            dict_gene_records = {}
 
             for document in collection_cursor:
-                single_ncbi_record = NucleotidesFromNCBIDTO()
+                single_gene_record = NucleotidesFromNCBIDTO()
 
-                single_ncbi_record.idNcbi = document["_idNcbi"]
-                single_ncbi_record.sequence = document["_sequence"]
+                single_gene_record.gene_id = document[Constants.gene_id]
+                single_gene_record.sequence = document[Constants.sequence]
 
-                dict_ncbi_records[single_ncbi_record.idNcbi] = single_ncbi_record.sequence
+                dict_gene_records[single_gene_record.gene_id] = single_gene_record.sequence
 
-            if len(dict_ncbi_records) == 0:
-                dict_ncbi_records = None
+            if len(dict_gene_records) == 0:
+                dict_gene_records = None
 
-            return dict_ncbi_records
+            return dict_gene_records
 
         except Exception as error:
             print('Caught exception getting all elements as dict: ' + repr(error))
 
-    def delete_ncbi_document_by_idNcbi(self, idNcbi: str) -> None:
+    def delete_gene_document_by_gene_id(self, gene_id: str) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
-            criteria = NCBIsearcher()
-            criteria.searchByNCBIidCriteria = idNcbi
+            criteria = GeneSearcher()
+            criteria.search_by_gene_id_criteria = gene_id
 
             # !!!!!!!
             # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
             # de hacer esas comprobaciones
-            #if self.search_ncbi_objects_and_return_as_list(criteria) is None:
-            collection_from_client_reference.delete_one({'_idNcbi': idNcbi})
+            #if self.search_gene_objects_and_return_as_list(criteria) is None:
+            collection_from_client_reference.delete_one({Constants.gene_id: gene_id})
 
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
@@ -150,53 +151,53 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    def update_ncbi_element_from_object(self, ncbi_record: NucleotidesFromNCBIDTO, upsert: bool) -> None:
+    def update_gene_element_from_object(self, gene_record: NucleotidesFromNCBIDTO, upsert: bool) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
 
-            self.create_text_index_in_collection(collection_from_client_reference, '_idNcbi', '_idNcbi_text')
+            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id, Constants.gene_id_index)
 
-            collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % ncbi_record.idNcbi}}, {
+            collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % gene_record.gene_id}}, {
                 '$set': {
-                    '_idNcbi': ncbi_record.idNcbi,
-                    '_sequence': ncbi_record.sequence
+                    Constants.gene_id: gene_record.gene_id,
+                    Constants.sequence: gene_record.sequence
                 }
             }, upsert=upsert)
 
         except Exception as error:
             print('Caught exception at update operation: ' + repr(error))
 
-    def insert_ncbi_document_from_object(self, ncbi_object: NucleotidesFromNCBIDTO) -> None:
+    def insert_gene_document_from_object(self, gene_object: NucleotidesFromNCBIDTO) -> None:
         collection_from_client_reference = None
         try:
 
             collection_from_client_reference = self.get_collection()
-            collection_from_client_reference.insert_one(ncbi_object.__dict__)
+            collection_from_client_reference.insert_one(gene_object.__dict__)
 
         except Exception as error:
             print('Caught exception at insert from object operation: ' + repr(error))
 
-    def insert_ncbi_document_from_list_of_objects(self, list_of_ncbi_objects: list) -> None:
+    def insert_gene_document_from_list_of_objects(self, list_of_gene_objects: list) -> None:
         try:
 
-            for ncbi_object in list_of_ncbi_objects:
-                self.insert_ncbi_document_from_object(ncbi_object)
+            for gene_object in list_of_gene_objects:
+                self.insert_gene_document_from_object(gene_object)
 
         except Exception as error:
             print('Caught exception at insert from list operation: ' + repr(error))
 
-    def insert_ncbi_document_from_non_object_dict(self, dict_with_ncbi_raw_data: dict) -> None:
+    def insert_gene_document_from_non_object_dict(self, dict_with_gene_raw_data: dict) -> None:
 
         try:
 
-            for k, v in dict_with_ncbi_raw_data.items():
-                ncbi_object = NucleotidesFromNCBIDTO()
+            for k, v in dict_with_gene_raw_data.items():
+                gene_object = NucleotidesFromNCBIDTO()
 
-                ncbi_object.idNcbi = k
-                ncbi_object.sequence = v
+                gene_object.gene_id = k
+                gene_object.sequence = v
 
-                self.insert_ncbi_document_from_object(ncbi_object)
+                self.insert_gene_document_from_object(gene_object)
 
         except Exception as error:
             print('Caught exception at insert from dict operation: ' + repr(error))
