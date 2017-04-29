@@ -13,7 +13,6 @@ class Constants(object):
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
 
     # Collection field names
-
     gene_id = "_gene_id"
     sequence = "_sequence"
 
@@ -22,8 +21,6 @@ class Constants(object):
 
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']
-
-    #SPARK_HOME = "/Users/alvarogomez/spark-2.1.0"
 
     # Main args
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"

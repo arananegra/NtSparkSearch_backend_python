@@ -1,11 +1,11 @@
 import xlrd
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
-from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.Common.GeneDTO import GeneDTO
+from ntsparksearch.Common.GeneDAO import GeneDAO
 from pymongo import MongoClient
 from Bio.SeqIO import parse
 
 
-class GeneRetrieverDAO(NCBItoMongoDAO):
+class GeneRetrieverDAO(GeneDAO):
     def __init__(self, client_reference: MongoClient, database_name: str, collection_name: str, file_path: str):
         super(GeneRetrieverDAO, self).__init__(client_reference, database_name, collection_name)
         self._file_path = file_path
@@ -33,7 +33,7 @@ class GeneRetrieverDAO(NCBItoMongoDAO):
             for id_ncbi in rows_no_repeated:
                 gene_id = str(id_ncbi)
                 gene_id = gene_id[:-2]
-                ncbi_record_only_id = NucleotidesFromNCBIDTO()
+                ncbi_record_only_id = GeneDTO()
                 ncbi_record_only_id.gene_id = gene_id
                 list_ncbi_records.append(ncbi_record_only_id)
 
@@ -51,7 +51,7 @@ class GeneRetrieverDAO(NCBItoMongoDAO):
                 gene_id = str(record.id)
                 gene_sequence = str(record.seq)
 
-                gene_single_record = NucleotidesFromNCBIDTO()
+                gene_single_record = GeneDTO()
                 gene_single_record.gene_id = gene_id
                 gene_single_record.sequence = gene_sequence
 

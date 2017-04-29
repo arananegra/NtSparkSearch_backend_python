@@ -1,8 +1,8 @@
 from ntsparksearch.GeneRetriever.IGeneRetriever import IGeneRetriever
 from ntsparksearch.GeneRetriever.GeneRetrieverDAO import GeneRetrieverDAO
-from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import GeneSearcher
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO
+from ntsparksearch.Common.GeneDAO import GeneDAO
+from ntsparksearch.Common.GeneDTO import GeneSearcher
+from ntsparksearch.Common.GeneDTO import GeneDTO
 from ntsparksearch.Common.Constants import Constants
 from progressbar import ProgressBar
 import os.path
@@ -70,7 +70,7 @@ class GeneRetrieverBS(IGeneRetriever):
         try:
             list_of_just_ids = []
 
-            mongo_dao_retriever = NCBItoMongoDAO(
+            mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
@@ -91,7 +91,7 @@ class GeneRetrieverBS(IGeneRetriever):
         try:
             list_of_just_ids = []
 
-            mongo_dao_retriever = NCBItoMongoDAO(
+            mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
@@ -113,12 +113,12 @@ class GeneRetrieverBS(IGeneRetriever):
         try:
 
             if dict_of_genes is not None:
-                mongo_dao_retriever = NCBItoMongoDAO(
+                mongo_dao_retriever = GeneDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
                 for id_ncbi, sequence in dict_of_genes.items():
-                    ncbi_object_to_update = NucleotidesFromNCBIDTO()
+                    ncbi_object_to_update = GeneDTO()
                     ncbi_object_to_update.gene_id = id_ncbi
                     ncbi_object_to_update.sequence = sequence
                     mongo_dao_retriever.update_gene_element_from_object(ncbi_object_to_update, False)
@@ -130,7 +130,7 @@ class GeneRetrieverBS(IGeneRetriever):
 
         try:
 
-            mongo_dao_retriever_unfiltered = NCBItoMongoDAO(
+            mongo_dao_retriever_unfiltered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 

@@ -1,11 +1,11 @@
-from ntsparksearch.Common.NucleotidesFromNCBIDTO import NucleotidesFromNCBIDTO, GeneSearcher
+from ntsparksearch.Common.GeneDTO import GeneDTO, GeneSearcher
 from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection
 from ntsparksearch.Common.Constants import Constants
 
 
-class NCBItoMongoDAO(object):
+class GeneDAO(object):
     def __init__(self, client_reference: MongoClient, database_name: str, collection_name: str):
         self._client_reference = client_reference
         self._database_name = database_name
@@ -53,7 +53,7 @@ class NCBItoMongoDAO(object):
                 find({"$text": {"$search": "\"%s\"" % mongodb_find}})
 
             for document in collection_cursor:
-                single_gene_record = NucleotidesFromNCBIDTO()
+                single_gene_record = GeneDTO()
 
                 single_gene_record.gene_id = document[Constants.gene_id]
                 single_gene_record.sequence = document[Constants.sequence]
@@ -82,7 +82,7 @@ class NCBItoMongoDAO(object):
             list_gene_records = []
 
             for document in collection_cursor:
-                single_gene_record = NucleotidesFromNCBIDTO()
+                single_gene_record = GeneDTO()
 
                 single_gene_record.gene_id = document[Constants.gene_id]
                 single_gene_record.sequence = document[Constants.sequence]
@@ -111,7 +111,7 @@ class NCBItoMongoDAO(object):
             dict_gene_records = {}
 
             for document in collection_cursor:
-                single_gene_record = NucleotidesFromNCBIDTO()
+                single_gene_record = GeneDTO()
 
                 single_gene_record.gene_id = document[Constants.gene_id]
                 single_gene_record.sequence = document[Constants.sequence]
@@ -151,7 +151,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    def update_gene_element_from_object(self, gene_record: NucleotidesFromNCBIDTO, upsert: bool) -> None:
+    def update_gene_element_from_object(self, gene_record: GeneDTO, upsert: bool) -> None:
         collection_from_client_reference = None
         try:
             collection_from_client_reference = self.get_collection()
@@ -168,7 +168,7 @@ class NCBItoMongoDAO(object):
         except Exception as error:
             print('Caught exception at update operation: ' + repr(error))
 
-    def insert_gene_document_from_object(self, gene_object: NucleotidesFromNCBIDTO) -> None:
+    def insert_gene_document_from_object(self, gene_object: GeneDTO) -> None:
         collection_from_client_reference = None
         try:
 
@@ -192,7 +192,7 @@ class NCBItoMongoDAO(object):
         try:
 
             for k, v in dict_with_gene_raw_data.items():
-                gene_object = NucleotidesFromNCBIDTO()
+                gene_object = GeneDTO()
 
                 gene_object.gene_id = k
                 gene_object.sequence = v

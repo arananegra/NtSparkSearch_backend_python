@@ -1,5 +1,5 @@
-class NucleotidesFromNCBIDTO(object):
-    """NucleotidesFromNCBIDTO model"""
+class GeneDTO(object):
+    """GeneDTO model"""
 
     def __init__(self):
         self._gene_id = None

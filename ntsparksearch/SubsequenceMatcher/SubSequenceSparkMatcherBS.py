@@ -1,5 +1,5 @@
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
-from ntsparksearch.Common.NCBItoMongoDAO import NCBItoMongoDAO
+from ntsparksearch.Common.GeneDAO import GeneDAO
 from Bio import SeqUtils
 from ntsparksearch.Common.Constants import Constants
 from pymongo import MongoClient
@@ -16,7 +16,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             dict_with_genes = {}
 
-            mongo_dao_retriever = NCBItoMongoDAO(
+            mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
@@ -72,7 +72,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         try:
 
-            mongo_dao_manager = NCBItoMongoDAO(
+            mongo_dao_manager = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
@@ -87,7 +87,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         try:
             list_of_just_ids = []
 
-            mongo_dao_retriever_filtered = NCBItoMongoDAO(
+            mongo_dao_retriever_filtered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
@@ -106,7 +106,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         try:
 
-            mongo_dao_retriever_filtered = NCBItoMongoDAO(
+            mongo_dao_retriever_filtered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
