@@ -13,11 +13,14 @@ class Constants(object):
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
 
     # Collection field names
-    gene_id = "_gene_id"
-    sequence = "_sequence"
+    GENE_ID = "_gene_id"
+    SEQUENCE = "_sequence"
 
     # indexes
-    gene_id_index = "_gene_id_text"
+    GENE_ID_INDEX = "_gene_id_text"
+
+    # file paths
+    OUTPUT_FOLDER= "output/"
 
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']
@@ -26,20 +29,24 @@ class Constants(object):
     ARG_EXCEL_FILE_PATH = "<EXCEL file path>"
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
-    ARG_FASTA_FILE_PATH = "<FASTA file path>"
-    ARG_FASTA_FILE_NAME = "<FASTA file name>"
+    ARG_FASTA_FILE_EXPORT = "<FASTA file name to export>"
+    ARG_FASTA_FILE_NAME = "<FASTA file name to import>"
     ARG_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
     ARG_REMOVE_PREVIOUS_RESULT = "<Remove all data from previous executions (y/n)>"
 
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
-    COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "--exportUnfiltered"
+    COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "--exportUnfilteredFasta"
     COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED = "--obtainFiltered"
     COMMAND_REMOVE_UNFILTERED_COLLECTION = "--removeUnfiltered"
     COMMAND_REMOVE_FILTERED_COLLECTION = "--removeFiltered"
     COMMAND_DOWNLOAD_FROM_EXCEL = "--downloadGenesFromExcel"
     COMMAND_IMPORT_FROM_FASTA = "--retrieveFromFasta"
     COMMAND_EXACT_SUB_MATCH_SPARK = "--sparkSeqMatch"
+
+    # Output mssg
+    MSG_PROCESS_FINISHED = "Operation finished"
+
 
     # Error mssg
     MSG_ERROR_INPUT = "INPUT NOT VALID:"

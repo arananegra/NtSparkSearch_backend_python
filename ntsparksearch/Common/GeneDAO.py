@@ -50,7 +50,7 @@ class GeneDAO(object):
             if (search_criteria.search_by_gene_id_criteria is not None):
                 mongodb_find = search_criteria.search_by_gene_id_criteria
 
-            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id, '_gene_id_text')
+            self.create_text_index_in_collection(collection_from_client_reference, Constants.GENE_ID, '_gene_id_text')
 
             collection_cursor = collection_from_client_reference. \
                 find({"$text": {"$search": "\"%s\"" % mongodb_find}})
@@ -58,8 +58,8 @@ class GeneDAO(object):
             for document in collection_cursor:
                 single_gene_record = GeneDTO()
 
-                single_gene_record.gene_id = document[Constants.gene_id]
-                single_gene_record.sequence = document[Constants.sequence]
+                single_gene_record.gene_id = document[Constants.GENE_ID]
+                single_gene_record.sequence = document[Constants.SEQUENCE]
 
                 list_gene_records.append(single_gene_record)
 
@@ -87,8 +87,8 @@ class GeneDAO(object):
             for document in collection_cursor:
                 single_gene_record = GeneDTO()
 
-                single_gene_record.gene_id = document[Constants.gene_id]
-                single_gene_record.sequence = document[Constants.sequence]
+                single_gene_record.gene_id = document[Constants.GENE_ID]
+                single_gene_record.sequence = document[Constants.SEQUENCE]
 
                 if single_gene_record.sequence is None:
                     continue
@@ -122,8 +122,8 @@ class GeneDAO(object):
             for document in collection_cursor:
                 single_gene_record = GeneDTO()
 
-                single_gene_record.gene_id = document[Constants.gene_id]
-                single_gene_record.sequence = document[Constants.sequence]
+                single_gene_record.gene_id = document[Constants.GENE_ID]
+                single_gene_record.sequence = document[Constants.SEQUENCE]
 
                 list_gene_records.append(single_gene_record)
 
@@ -151,8 +151,8 @@ class GeneDAO(object):
             for document in collection_cursor:
                 single_gene_record = GeneDTO()
 
-                single_gene_record.gene_id = document[Constants.gene_id]
-                single_gene_record.sequence = document[Constants.sequence]
+                single_gene_record.gene_id = document[Constants.GENE_ID]
+                single_gene_record.sequence = document[Constants.SEQUENCE]
 
                 dict_gene_records[single_gene_record.gene_id] = single_gene_record.sequence
 
@@ -175,7 +175,7 @@ class GeneDAO(object):
             # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
             # de hacer esas comprobaciones
             # if self.search_gene_objects_and_return_as_list(criteria) is None:
-            collection_from_client_reference.delete_one({Constants.gene_id: gene_id})
+            collection_from_client_reference.delete_one({Constants.GENE_ID: gene_id})
 
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
@@ -194,13 +194,13 @@ class GeneDAO(object):
         try:
             collection_from_client_reference = self.get_collection()
 
-            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id,
-                                                 Constants.gene_id_index)
+            self.create_text_index_in_collection(collection_from_client_reference, Constants.GENE_ID,
+                                                 Constants.GENE_ID_INDEX)
 
             collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % gene_record.gene_id}}, {
                 '$set': {
-                    Constants.gene_id: gene_record.gene_id,
-                    Constants.sequence: gene_record.sequence
+                    Constants.GENE_ID: gene_record.gene_id,
+                    Constants.SEQUENCE: gene_record.sequence
                 }
             }, upsert=upsert)
 
