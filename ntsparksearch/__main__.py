@@ -87,7 +87,7 @@ class App(object):
 
             if args.downloadGenesFromExcel:
                 retriever_BS = GeneRetrieverBS()
-                retriever_BS.insert_in_collection_from_excel(args.downloadGenesFromExcel[0],
+                retriever_BS.insert_in_collection_from_excel(Constants.INPUT_FOLDER + args.downloadGenesFromExcel[0],
                                                              args.downloadGenesFromExcel[1],
                                                              args.downloadGenesFromExcel[2])
 
@@ -104,12 +104,13 @@ class App(object):
 
             if args.retrieveFromFasta:
                 retriever_BS = GeneRetrieverBS()
-                retriever_BS.insert_in_collection_from_fasta(args.retrieveFromFasta[0])
+                retriever_BS.insert_in_collection_from_fasta(Constants.INPUT_FOLDER + args.retrieveFromFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.exportUnfilteredFasta:
                 retriever_BS = GeneRetrieverBS()
-                retriever_BS.export_unfiltered_genes_collection_to_fasta(args.exportUnfilteredFasta[0])
+                retriever_BS.export_unfiltered_genes_collection_to_fasta(
+                    Constants.OUTPUT_FOLDER + args.exportUnfilteredFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.sparkSeqMatch:

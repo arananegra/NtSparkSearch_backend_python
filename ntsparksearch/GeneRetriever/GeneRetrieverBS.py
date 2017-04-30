@@ -75,7 +75,7 @@ class GeneRetrieverBS(IGeneRetriever):
 
             list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
 
-            SeqIO.write(list_of_seqrecords, Constants.OUTPUT_FOLDER + fasta_name + ".fasta", "fasta")
+            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
 
         except Exception as error:
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))

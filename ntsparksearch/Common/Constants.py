@@ -2,12 +2,11 @@ import os
 
 
 class Constants(object):
-
     # Database parameters
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
     MONGODB_HOST = 'database'
-    #MONGODB_HOST = 'localhost'
+    # MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
@@ -20,7 +19,8 @@ class Constants(object):
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
-    OUTPUT_FOLDER= "output/"
+    OUTPUT_FOLDER = "output/"
+    INPUT_FOLDER = "input/"
 
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']
@@ -46,7 +46,6 @@ class Constants(object):
 
     # Output mssg
     MSG_PROCESS_FINISHED = "Operation finished"
-
 
     # Error mssg
     MSG_ERROR_INPUT = "INPUT NOT VALID:"
