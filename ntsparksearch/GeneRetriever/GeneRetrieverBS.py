@@ -7,6 +7,7 @@ from ntsparksearch.Common.Constants import Constants
 from progressbar import ProgressBar
 import os.path
 from Bio import Entrez
+from Bio import SeqIO
 from pymongo import MongoClient
 
 
@@ -63,6 +64,21 @@ class GeneRetrieverBS(IGeneRetriever):
 
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
+
+    def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
+
+        try:
+
+            mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                                          Constants.MONGODB_DB_NAME,
+                                          Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
+
+            SeqIO.write(list_of_seqrecords, fasta_name+".fasta", "fasta")
+
+        except Exception as error:
+            print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
 
     def get_list_of_ids_from_mongo(self) -> list:
         list_of_just_ids = None

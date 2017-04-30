@@ -20,6 +20,12 @@ class IGeneRetriever(metaclass=ABCMeta):
         insert them in the ncbiunfiltered collection
         :param file_path: path of the fasta file
         """
+    @abstractmethod
+    def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
+        """
+        Creates a fasta file with the whole unfiltered collection of genes
+        :param fasta_name: name of the fasta file that will be created
+        """
 
     @abstractmethod
     def get_list_of_ids_from_mongo(self) -> list:
@@ -44,6 +50,12 @@ class IGeneRetriever(metaclass=ABCMeta):
         updates the mongo collection with the new information coming from the dict.
         :param dict_of_genes: dictionary with id's and sequences to update in the collection
         unfiltered
+        """
+
+    @abstractmethod
+    def delete_unfiltered_collection(self) -> None:
+        """
+        Removes the whole unfiltered collection of genes
         """
 
     @abstractmethod

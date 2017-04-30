@@ -18,6 +18,11 @@ class App(object):
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED)
 
+            parser.add_argument(Constants.COMMAND_EXPORT_FASTA_FROM_UNFILTERED,
+                                metavar=Constants.ARG_FASTA_FILE_NAME,
+                                nargs=1,
+                                help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED)
+
             parser.add_argument(Constants.COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED,
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED)
@@ -59,6 +64,11 @@ class App(object):
 
                 else:
                     print(list_of_genes)
+
+            if args.exportUnfiltered:
+                retriever_BS = GeneRetrieverBS()
+                retriever_BS.export_unfiltered_genes_collection_to_fasta(args.exportUnfiltered[0])
+                print("Operation finished")
 
             if args.obtainFiltered:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()

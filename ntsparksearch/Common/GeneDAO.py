@@ -3,6 +3,9 @@ from pymongo import MongoClient
 from pymongo import TEXT as indexText
 from pymongo.collection import Collection
 from ntsparksearch.Common.Constants import Constants
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+from Bio.Alphabet import DNAAlphabet
 
 
 class GeneDAO(object):
@@ -67,6 +70,41 @@ class GeneDAO(object):
 
         except Exception as error:
             print('Caught exception searching by id: ' + repr(error))
+
+    def get_list_of_seqrecords_from_collection(self) -> list:
+        collection_from_client_reference = None
+        list_of_seq_records_from_collection = None
+        single_gene_record = None
+
+        collection_from_client_reference = self.get_collection()
+
+        try:
+            collection_cursor = collection_from_client_reference. \
+                find({})
+
+            list_of_seq_records_from_collection = []
+
+            for document in collection_cursor:
+                single_gene_record = GeneDTO()
+
+                single_gene_record.gene_id = document[Constants.gene_id]
+                single_gene_record.sequence = document[Constants.sequence]
+
+                if single_gene_record.sequence is None:
+                    continue
+
+                record = SeqRecord(Seq(single_gene_record.sequence, DNAAlphabet()),
+                                   id=single_gene_record.gene_id)
+
+                list_of_seq_records_from_collection.append(record)
+
+            if len(list_of_seq_records_from_collection) == 0:
+                list_of_seq_records_from_collection = None
+
+            return list_of_seq_records_from_collection
+
+        except Exception as error:
+            print('Caught exception getting all elements of collection as SeqRecords list: ' + repr(error))
 
     def get_all_gene_objects_as_list(self) -> list:
         collection_from_client_reference = None
@@ -136,7 +174,7 @@ class GeneDAO(object):
             # !!!!!!!
             # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
             # de hacer esas comprobaciones
-            #if self.search_gene_objects_and_return_as_list(criteria) is None:
+            # if self.search_gene_objects_and_return_as_list(criteria) is None:
             collection_from_client_reference.delete_one({Constants.gene_id: gene_id})
 
         except Exception as error:
@@ -156,7 +194,8 @@ class GeneDAO(object):
         try:
             collection_from_client_reference = self.get_collection()
 
-            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id, Constants.gene_id_index)
+            self.create_text_index_in_collection(collection_from_client_reference, Constants.gene_id,
+                                                 Constants.gene_id_index)
 
             collection_from_client_reference.update_one({"$text": {"$search": "\"%s\"" % gene_record.gene_id}}, {
                 '$set': {

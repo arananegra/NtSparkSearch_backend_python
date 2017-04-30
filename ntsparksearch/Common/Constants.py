@@ -27,11 +27,13 @@ class Constants(object):
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
     ARG_FASTA_FILE_PATH = "<FASTA file path>"
+    ARG_FASTA_FILE_NAME = "<FASTA file name>"
     ARG_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
     ARG_REMOVE_PREVIOUS_RESULT = "<Remove all data from previous executions (y/n)>"
 
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
+    COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "--exportUnfiltered"
     COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED = "--obtainFiltered"
     COMMAND_REMOVE_UNFILTERED_COLLECTION = "--removeUnfiltered"
     COMMAND_REMOVE_FILTERED_COLLECTION = "--removeFiltered"
@@ -46,6 +48,8 @@ class Constants(object):
     # Help
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED = "Obtain ids from unfiltered collection" \
                                                    " of sequences"
+
+    HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "Export a fasta file from the unfiltered collection"
 
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED = "Obtaing ids from filtered collection" \
                                                  " of sequences"
