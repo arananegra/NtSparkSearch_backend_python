@@ -20,6 +20,14 @@ class IGeneRetriever(metaclass=ABCMeta):
         insert them in the ncbiunfiltered collection
         :param file_path: path of the fasta file
         """
+
+    @abstractmethod
+    def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+         """
+        Creates a text file with the whole unfiltered collection of genes (just ids)
+        :param file_name: name of the text file that will be created
+        """
+
     @abstractmethod
     def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
         """

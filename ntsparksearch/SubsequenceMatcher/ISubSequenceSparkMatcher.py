@@ -34,6 +34,12 @@ class ISubSequenceSparkMatcher(metaclass=ABCMeta):
         Obtain the whole filtered collection (just the ids)
         :return list with the ids whose sequence is an exact match with the pattern provided.
         """
+    @abstractmethod
+    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+         """
+        Creates a text file with the whole filtered collection of genes (just ids)
+        :param file_name: name of the text file that will be created
+        """
 
     @abstractmethod
     def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:

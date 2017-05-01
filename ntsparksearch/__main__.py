@@ -23,6 +23,11 @@ class App(object):
                                 nargs=1,
                                 help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED)
 
+            parser.add_argument(Constants.COMMAND_EXPORT_TEXTFILE_ID_FROM_UNFILTERED,
+                                metavar=Constants.ARG_TEXT_FILE_WITH_IDS_EXPORT,
+                                nargs=1,
+                                help=Constants.HELP_COMMAND_EXPORT_TEXTFILE_ID_FROM_UNFILTERED)
+
             parser.add_argument(Constants.COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED,
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED)
@@ -31,6 +36,11 @@ class App(object):
                                 metavar=Constants.ARG_FASTA_FILE_EXPORT,
                                 nargs=1,
                                 help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_FILTERED)
+
+            parser.add_argument(Constants.COMMAND_EXPORT_TEXTFILE_ID_FROM_FILTERED,
+                                metavar=Constants.ARG_TEXT_FILE_WITH_IDS_EXPORT,
+                                nargs=1,
+                                help=Constants.HELP_COMMAND_EXPORT_TEXTFILE_ID_FROM_FILTERED)
 
             parser.add_argument(Constants.COMMAND_REMOVE_UNFILTERED_COLLECTION,
                                 action='store_true',
@@ -76,6 +86,12 @@ class App(object):
                     Constants.OUTPUT_FOLDER + args.exportUnfilteredFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
+            if args.exportUnfilteredId:
+                retriever_BS = GeneRetrieverBS()
+                retriever_BS.export_unfiltered_genes_collection_to_file_with_just_ids(
+                    Constants.OUTPUT_FOLDER + args.exportUnfilteredId[0])
+                print(Constants.MSG_PROCESS_FINISHED)
+
             if args.obtainFiltered:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
                 list_of_genes_filtered = subsequence_matcher_BS.get_list_of_ids_from_mongo_filtered()
@@ -90,6 +106,12 @@ class App(object):
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
                 subsequence_matcher_BS.export_filtered_genes_collection_to_fasta(
                     Constants.OUTPUT_FOLDER + args.exportFilteredFasta[0])
+                print(Constants.MSG_PROCESS_FINISHED)
+
+            if args.exportFilteredId:
+                subsequence_matcher_BS = SubSequenceSparkMatcherBS()
+                subsequence_matcher_BS.export_filtered_genes_collection_to_file_with_just_ids(
+                    Constants.OUTPUT_FOLDER + args.exportFilteredId[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.removeUnfiltered:

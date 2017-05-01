@@ -65,6 +65,24 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
 
+    def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+
+        try:
+
+            list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo()
+
+            if list_of_unfiltered_genes_ids is None:
+                print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
+                raise Exception
+
+            file_with_ids = open(file_name + '.txt', 'w')
+
+            for id in list_of_unfiltered_genes_ids:
+                file_with_ids.write("%s\n" % id)
+
+        except Exception as error:
+            print('Caught exception when exporting all ids to file from unfiltered collection: ' + repr(error))
+
     def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:

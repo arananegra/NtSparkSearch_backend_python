@@ -30,6 +30,7 @@ class Constants(object):
     ARG_EXCEL_SHEET_NUMBER = "<EXCEL sheet number>"
     ARG_EXCEL_COLUMN_NAME = "<EXCEL column name>"
     ARG_FASTA_FILE_EXPORT = "<FASTA file name to export>"
+    ARG_TEXT_FILE_WITH_IDS_EXPORT = "<Text file name with ids to export>"
     ARG_FASTA_FILE_IMPORT = "<FASTA file name to import>"
     ARG_SEQUENCE_TO_FETCH = "<Nucleotide Sequence to fecth>"
     ARG_REMOVE_PREVIOUS_RESULT = "<Remove all data from previous executions (y/n)>"
@@ -37,8 +38,10 @@ class Constants(object):
     # Commands
     COMMAND_OBTAIN_ALL_IDS_FROM_UNFILTERED = "--obtainUnfiltered"
     COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "--exportUnfilteredFasta"
+    COMMAND_EXPORT_TEXTFILE_ID_FROM_UNFILTERED = "--exportUnfilteredId"
     COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED = "--obtainFiltered"
     COMMAND_EXPORT_FASTA_FROM_FILTERED = "--exportFilteredFasta"
+    COMMAND_EXPORT_TEXTFILE_ID_FROM_FILTERED = "--exportFilteredId"
     COMMAND_REMOVE_UNFILTERED_COLLECTION = "--removeUnfiltered"
     COMMAND_REMOVE_FILTERED_COLLECTION = "--removeFiltered"
     COMMAND_DOWNLOAD_FROM_EXCEL = "--downloadGenesFromExcel"
@@ -47,7 +50,7 @@ class Constants(object):
 
     # Process mssg
     MSG_PROCESS_FINISHED = "Operation finished"
-    MSG_PROCESS_DOWNLOADING_GENES ="Downloading the content of the unfiltered collection of genes"
+    MSG_PROCESS_DOWNLOADING_GENES = "Downloading the content of the unfiltered collection of genes"
 
     # Error mssg
     MSG_ERROR_INPUT = "INPUT NOT VALID:"
@@ -63,10 +66,16 @@ class Constants(object):
 
     HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED = "Export a fasta file from the unfiltered collection"
 
+    HELP_COMMAND_EXPORT_TEXTFILE_ID_FROM_UNFILTERED = "Export a text file from the unfiltered collection" \
+                                                      " with just the ids"
+
     HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED = "Obtaing ids from filtered collection" \
                                                  " of sequences"
 
     HELP_COMMAND_EXPORT_FASTA_FROM_FILTERED = "Export a fasta file from the filtered collection"
+
+    HELP_COMMAND_EXPORT_TEXTFILE_ID_FROM_FILTERED = "Export a text file from the filtered collection" \
+                                                      " with just the ids"
 
     HELP_COMMAND_REMOVE_UNFILTERED = "Removes the whole unfiltered collection of genes"
 

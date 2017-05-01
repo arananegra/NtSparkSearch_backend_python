@@ -6,6 +6,7 @@ from ntsparksearch.Common.Constants import Constants
 from pymongo import MongoClient
 from copy import deepcopy
 import findspark
+
 findspark.init(Constants.SPARK_HOME)
 from pyspark.sql import SparkSession
 
@@ -41,11 +42,11 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         try:
             spark_session = SparkSession \
-            .builder \
-            .appName("ntsparksearch") \
-            .config("spark.driver.memory", "4g") \
-            .config("spark.driver.maxResultSize", "3g") \
-            .config("spark.executor.memory", "3g").getOrCreate()
+                .builder \
+                .appName("ntsparksearch") \
+                .config("spark.driver.memory", "4g") \
+                .config("spark.driver.maxResultSize", "3g") \
+                .config("spark.executor.memory", "3g").getOrCreate()
 
             dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
 
@@ -102,6 +103,24 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))
+
+    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+
+        try:
+
+            list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
+
+            if list_of_filtered_genes_ids is None:
+                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
+                raise Exception
+
+            file_with_ids = open(file_name + '.txt', 'w')
+
+            for id in list_of_filtered_genes_ids:
+                file_with_ids.write("%s\n" % id)
+
+        except Exception as error:
+            print('Caught exception when exporting all ids to file from filtered collection: ' + repr(error))
 
     def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
