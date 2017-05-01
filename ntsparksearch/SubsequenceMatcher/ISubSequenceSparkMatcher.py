@@ -36,6 +36,13 @@ class ISubSequenceSparkMatcher(metaclass=ABCMeta):
         """
 
     @abstractmethod
+    def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
+        """
+        Creates a fasta file with the whole filtered collection of genes
+        :param fasta_name: name of the fasta file that will be created
+        """
+
+    @abstractmethod
     def delete_filtered_collection(self) -> None:
         """
         Removes the entire filtered collection

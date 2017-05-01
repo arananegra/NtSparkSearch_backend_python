@@ -18,9 +18,19 @@ class App(object):
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_UNFILTERED)
 
+            parser.add_argument(Constants.COMMAND_EXPORT_FASTA_FROM_UNFILTERED,
+                                metavar=Constants.ARG_FASTA_FILE_EXPORT,
+                                nargs=1,
+                                help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED)
+
             parser.add_argument(Constants.COMMAND_OBTAIN_ALL_IDS_FROM_FILTERED,
                                 action='store_true',
                                 help=Constants.HELP_COMMAND_OBTAIN_ALL_SEQUENCES_FILTERED)
+
+            parser.add_argument(Constants.COMMAND_EXPORT_FASTA_FROM_FILTERED,
+                                metavar=Constants.ARG_FASTA_FILE_EXPORT,
+                                nargs=1,
+                                help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_FILTERED)
 
             parser.add_argument(Constants.COMMAND_REMOVE_UNFILTERED_COLLECTION,
                                 action='store_true',
@@ -38,14 +48,9 @@ class App(object):
                                 help=Constants.HELP_COMMAND_DOWNLOAD_FROM_EXCEL)
 
             parser.add_argument(Constants.COMMAND_IMPORT_FROM_FASTA,
-                                metavar=Constants.ARG_FASTA_FILE_EXPORT,
+                                metavar=Constants.ARG_FASTA_FILE_IMPORT,
                                 nargs=1, type=str,
                                 help=Constants.HELP_COMMAND_IMPORT_FROM_FASTA)
-
-            parser.add_argument(Constants.COMMAND_EXPORT_FASTA_FROM_UNFILTERED,
-                                metavar=Constants.ARG_FASTA_FILE_NAME,
-                                nargs=1,
-                                help=Constants.HELP_COMMAND_EXPORT_FASTA_FROM_UNFILTERED)
 
             parser.add_argument(Constants.COMMAND_EXACT_SUB_MATCH_SPARK,
                                 metavar=(Constants.ARG_SEQUENCE_TO_FETCH,
@@ -60,20 +65,32 @@ class App(object):
                 list_of_genes = retriever_BS.get_list_of_ids_from_mongo()
 
                 if list_of_genes is None:
-                    print("The unfiltered collection of genes is empty")
+                    print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
 
                 else:
                     print(list_of_genes)
+
+            if args.exportUnfilteredFasta:
+                retriever_BS = GeneRetrieverBS()
+                retriever_BS.export_unfiltered_genes_collection_to_fasta(
+                    Constants.OUTPUT_FOLDER + args.exportUnfilteredFasta[0])
+                print(Constants.MSG_PROCESS_FINISHED)
 
             if args.obtainFiltered:
                 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
                 list_of_genes_filtered = subsequence_matcher_BS.get_list_of_ids_from_mongo_filtered()
 
                 if list_of_genes_filtered is None:
-                    print("The filtered collection of genes is empty")
+                    print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
 
                 else:
                     print(list_of_genes_filtered)
+
+            if args.exportFilteredFasta:
+                subsequence_matcher_BS = SubSequenceSparkMatcherBS()
+                subsequence_matcher_BS.export_filtered_genes_collection_to_fasta(
+                    Constants.OUTPUT_FOLDER + args.exportFilteredFasta[0])
+                print(Constants.MSG_PROCESS_FINISHED)
 
             if args.removeUnfiltered:
                 retriever_BS = GeneRetrieverBS()
@@ -94,23 +111,17 @@ class App(object):
                 list_of_genes_empty = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
                 if list_of_genes_empty is not None:
-                    print("Downloading the content of the unfiltered collection of genes")
+                    print(Constants.MSG_PROCESS_DOWNLOADING_GENES)
                     dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
                         list_of_genes_empty)
                     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 else:
-                    print("WARNING: The unfiltered collection is empty")
+                    print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.retrieveFromFasta:
                 retriever_BS = GeneRetrieverBS()
                 retriever_BS.insert_in_collection_from_fasta(Constants.INPUT_FOLDER + args.retrieveFromFasta[0])
-                print(Constants.MSG_PROCESS_FINISHED)
-
-            if args.exportUnfilteredFasta:
-                retriever_BS = GeneRetrieverBS()
-                retriever_BS.export_unfiltered_genes_collection_to_fasta(
-                    Constants.OUTPUT_FOLDER + args.exportUnfilteredFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.sparkSeqMatch:

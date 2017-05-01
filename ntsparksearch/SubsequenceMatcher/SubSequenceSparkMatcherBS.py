@@ -1,6 +1,7 @@
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
 from ntsparksearch.Common.GeneDAO import GeneDAO
 from Bio import SeqUtils
+from Bio import SeqIO
 from ntsparksearch.Common.Constants import Constants
 from pymongo import MongoClient
 from copy import deepcopy
@@ -101,6 +102,25 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))
+
+    def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
+
+        try:
+
+            mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                                          Constants.MONGODB_DB_NAME,
+                                          Constants.MONGODB_COLLECTION_FILTERED)
+
+            list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
+
+            if list_of_seqrecords is None:
+                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
+                raise Exception
+
+            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
+
+        except Exception as error:
+            print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))
 
     def delete_filtered_collection(self) -> None:
 

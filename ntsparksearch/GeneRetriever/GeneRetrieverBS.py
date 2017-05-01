@@ -75,6 +75,10 @@ class GeneRetrieverBS(IGeneRetriever):
 
             list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
 
+            if list_of_seqrecords is None:
+                print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
+                raise Exception
+
             SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
 
         except Exception as error:
