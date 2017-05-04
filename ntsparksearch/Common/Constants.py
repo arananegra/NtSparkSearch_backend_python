@@ -5,8 +5,8 @@ class Constants(object):
     # Database parameters
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
-    MONGODB_HOST = 'database'
-    # MONGODB_HOST = 'localhost'
+    #MONGODB_HOST = 'database'
+    MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
@@ -91,3 +91,6 @@ class Constants(object):
                                          " performs an exact subsequence search using" \
                                          " the provided sequence (ambiguity codes are" \
                                          " allowed)"
+
+    UPLOAD_FOLDER = '/Users/alvarogomez/Desktop/uploads'
+    ALLOWED_EXTENSIONS = {'txt','jpg', 'fasta'}
