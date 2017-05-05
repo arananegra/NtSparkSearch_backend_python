@@ -226,6 +226,22 @@ class GeneDAO(object):
         except Exception as error:
             print('Caught exception at insert from list operation: ' + repr(error))
 
+    def insert_gene_document_from_list_just_ids(self, list_of_gene_ids: list) -> None:
+        collection_from_client_reference = None
+        try:
+
+            collection_from_client_reference = self.get_collection()
+            list_of_geneDTOs_just_id = []
+
+            for id in list_of_gene_ids:
+                gene = GeneDTO()
+                gene.gene_id = id
+
+            self.insert_gene_document_from_list_of_objects(list_of_geneDTOs_just_id)
+
+        except Exception as error:
+            print('Caught exception at insert from list of just gene ids: ' + repr(error))
+
     def insert_gene_document_from_non_object_dict(self, dict_with_gene_raw_data: dict) -> None:
 
         try:

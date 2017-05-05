@@ -12,7 +12,7 @@ from pymongo import MongoClient
 
 
 class GeneRetrieverBS(IGeneRetriever):
-    def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
+    def insert_in_collection_from_excel(self, file_path: str, sheet="0", column_name="gene_id") -> None:
 
         try:
 
@@ -64,6 +64,29 @@ class GeneRetrieverBS(IGeneRetriever):
 
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
+
+    def insert_in_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
+
+        try:
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME,
+                Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            for single_id in list_of_gene_ids:
+
+                criteria = GeneSearcher()
+                criteria.search_by_gene_id_criteria = single_id
+
+                gene = GeneDTO()
+                gene.gene_id = single_id
+
+                if mongo_dao_retriever.search_gene_objects_and_return_as_list(criteria) is None:
+                    mongo_dao_retriever.insert_gene_document_from_object(gene)
+
+        except Exception as error:
+            print('Caught exception when inserting all data from list of ids: ' + repr(error))
 
     def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
 
@@ -183,6 +206,7 @@ class GeneRetrieverBS(IGeneRetriever):
         Entrez.email = "notfunny@notanemail.org"
         dict_id_and_sequences = {}
         for gene_id in pbar(list_of_genes):
+
             try:
                 handle1 = Entrez.efetch(db="gene", id=gene_id, retmode="xml", validate=False)
                 record = Entrez.read(handle1)

@@ -11,8 +11,7 @@ class ISubSequenceSparkMatcher(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str,
-                                                    remove_previous_result: str) -> dict:
+    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
         """
         From the get_dict_from_unfiltered_with_sequences method, this method prune the
         dictionary following the parameter pattern

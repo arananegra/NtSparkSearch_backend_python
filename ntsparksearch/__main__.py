@@ -130,12 +130,12 @@ class App(object):
                                                              args.downloadGenesFromExcel[1],
                                                              args.downloadGenesFromExcel[2])
 
-                list_of_genes_empty = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
+                list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
-                if list_of_genes_empty is not None:
+                if list_of_genes_without_sequence is not None:
                     print(Constants.MSG_PROCESS_DOWNLOADING_GENES)
                     dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-                        list_of_genes_empty)
+                        list_of_genes_without_sequence)
                     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
                 else:
                     print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)

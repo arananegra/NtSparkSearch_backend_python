@@ -20,6 +20,13 @@ class IGeneRetriever(metaclass=ABCMeta):
         insert them in the ncbiunfiltered collection
         :param file_path: path of the fasta file
         """
+    @abstractmethod
+    def insert_in_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
+        """
+        From a list of gene ids, insert them into the unfiltered collection only if
+        that record did not previously exists
+        :param list_of_gene_ids: list of gene ids
+        """
 
     @abstractmethod
     def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:

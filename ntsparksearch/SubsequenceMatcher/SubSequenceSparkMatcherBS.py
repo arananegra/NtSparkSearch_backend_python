@@ -35,7 +35,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
-    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str, remove_previous_result: str) -> dict:
+    def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
 
         def map_locator_Spark(x, subsequence):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
@@ -50,8 +50,8 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
 
-            if remove_previous_result == "y":
-                self.delete_filtered_collection()
+
+            self.delete_filtered_collection()
 
             sc = spark_session.sparkContext
             sc.setLogLevel("ERROR")

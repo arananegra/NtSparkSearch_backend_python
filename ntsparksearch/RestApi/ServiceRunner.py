@@ -6,7 +6,7 @@ from ntsparksearch.RestApi.SubSequenceMatcherService import *
 app = Flask(__name__)
 
 app.register_blueprint(GeneRetrieverService_endpoints, url_prefix='/generetriever')
-app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/sparkmatcher')
+app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
 
 @app.route("/")
 def hello():
