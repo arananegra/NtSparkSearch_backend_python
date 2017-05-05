@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, Response, jsonify, request
+from flask import Blueprint, abort, Response, current_app, request
 import redis
 import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
@@ -7,12 +7,12 @@ from ntsparksearch.Common.Constants import Constants
 from celery import Celery
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
-#REDIS_URL = "redis://:password@localhost:6379/0"
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+REDIS_URL = "redis://localhost:6379/0"
+#CELERY_BROKER_URL = 'amqp://localhost'
+#CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
-celery = Celery(SubSequenceMatcherService_endpoints.name,
-                broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
+celery = Celery('SubSequenceMatcherService',
+                broker=REDIS_URL)
 
 # celery.conf.update(
 #     CELERY_BROKER_URL=CELERY_BROKER_URL,
@@ -23,16 +23,12 @@ subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 retriever_BS = GeneRetrieverBS()
 
 
-@SubSequenceMatcherService_endpoints.route("/failed")
-def test():
-    return abort(401)
-
-
-@celery.task()
-def some_long_task(list_of_genes_without_sequence):
+@celery.task(bind=True)
+def some_long_task(self, list_of_genes_without_sequence):
     dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
         list_of_genes_without_sequence)
     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+    return Response(), Constants.POST_CREATED
 
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
@@ -49,7 +45,7 @@ def spark_matcher():
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
-        some_long_task.delay(list_of_genes_without_sequence)
+        some_long_task.apply_async(list_of_genes_without_sequence)
         #dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
         #    list_of_genes_without_sequence)
 
