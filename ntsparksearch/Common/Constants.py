@@ -36,6 +36,7 @@ class Constants(object):
 
     # Service responses
     POST_CREATED = 201
+    POST_WAIT = 202
 
     # Mail messages
     MAIL_SENDER = "arananegrayeye@gmail.com"

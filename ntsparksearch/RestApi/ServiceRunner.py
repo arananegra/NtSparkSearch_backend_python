@@ -1,5 +1,4 @@
 from flask import Flask
-
 from ntsparksearch.RestApi.GeneRetrieverService import *
 from ntsparksearch.RestApi.SubSequenceMatcherService import *
 

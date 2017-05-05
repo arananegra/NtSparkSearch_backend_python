@@ -1,21 +1,42 @@
 from flask import Blueprint, abort, Response, jsonify, request
+import redis
 import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from ntsparksearch.Common.Constants import Constants
+from celery import Celery
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
+#REDIS_URL = "redis://:password@localhost:6379/0"
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+celery = Celery(SubSequenceMatcherService_endpoints.name,
+                broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
+
+# celery.conf.update(
+#     CELERY_BROKER_URL=CELERY_BROKER_URL,
+#     CELERY_RESULT_BACKEND=CELERY_RESULT_BACKEND
+# )
+
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 retriever_BS = GeneRetrieverBS()
+
 
 @SubSequenceMatcherService_endpoints.route("/failed")
 def test():
     return abort(401)
 
 
+@celery.task()
+def some_long_task(list_of_genes_without_sequence):
+    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        list_of_genes_without_sequence)
+    retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+
+
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
 def spark_matcher():
-
     json_with_gene_ids_and_sequence_to_filter = request.get_json()
     list_of_ids = json_with_gene_ids_and_sequence_to_filter["geneIds"]
     sequence_to_filter = json_with_gene_ids_and_sequence_to_filter["sequence"]
@@ -25,15 +46,21 @@ def spark_matcher():
     list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
     if list_of_genes_without_sequence is not None:
-                    # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
-                    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-                        list_of_genes_without_sequence)
+        # inicio de proceso asincrono
+        # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
-                    # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
-                    retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+        some_long_task.delay(list_of_genes_without_sequence)
+        #dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        #    list_of_genes_without_sequence)
 
-    dict_filtered_with_spark = subsequence_matcher_BS. \
-        filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
-    subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
-    dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
-    return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'),Constants.POST_CREATED
+        # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
+        #retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+        return Response(), Constants.POST_WAIT
+
+    else:
+
+        dict_filtered_with_spark = subsequence_matcher_BS. \
+            filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
+        subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
+        dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
+        return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.POST_CREATED
