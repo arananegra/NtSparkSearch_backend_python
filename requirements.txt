@@ -6,4 +6,4 @@ xlrd >= 1.0.0
 flask >= 0.12.1
 celery >= 4.0.2
 redis >= 2.10.5
-rq >= 0.7.1
+Flask-Mail >= 0.9.1
