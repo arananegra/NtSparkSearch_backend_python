@@ -11,10 +11,16 @@ class Constants(object):
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
     MONGODB_COLLECTION_QUEUE = 'queueGenes'
+    MONGODB_COLLECTION_ASCENDING_ORDER = 1
 
-    # Collection field names
+
+    # Gene collection field names
     GENE_ID = "_gene_id"
     SEQUENCE = "_sequence"
+
+    # Queue collection field names
+    QUEUE_ENTRY_DATE = "_entry_date_in_collection"
+    QUEUE_LIST_OF_GENES = "_gene_id_list_to_download"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"

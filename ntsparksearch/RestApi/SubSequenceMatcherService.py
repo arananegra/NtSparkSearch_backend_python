@@ -2,7 +2,7 @@ from flask import Blueprint, abort, Response, current_app, request
 import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
-from ntsparksearch.DownloadScheduler.DownloadServiceScheduler import DownloadServiceScheduler
+from ntsparksearch.DownloadScheduler.DownloadServiceScheduler import downloader_schedulirazed
 from ntsparksearch.Common.Constants import Constants
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
@@ -24,12 +24,14 @@ def spark_matcher():
     if list_of_genes_without_sequence is not None:
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
+        #
+        # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        #     list_of_genes_without_sequence)
 
-        dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-            list_of_genes_without_sequence)
+        downloader_schedulirazed()
 
         # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
-        retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+        # retriever_BS.update_genes_from_dict(dict_of_genes_complete)
         return Response(), Constants.POST_WAIT
 
     else:
