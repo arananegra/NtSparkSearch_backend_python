@@ -3,29 +3,37 @@ import smtplib
 
 
 class EmailSender(object):
+    """Email model"""
+
     def __init__(self, receivers: list):
         self._receivers = receivers
 
+    def _get_receivers(self):
+        return self._receivers
 
-    def send_email_download_initialize(self):
-        msg = "\r\n".join([
-            "From: alvarogj@lcc.uma.es",
-            "To: "+ self._receivers[0],
-            "Subject: Just a message",
-            "",
-            "Why, oh why"
-        ])
-        try:
-            server = smtplib.SMTP(host='sol10.lcc.uma.es:587')
-            server.ehlo()
-            server.starttls()
-            server.login('alvarogj', 'al.j.44')
-            server.sendmail(Constants.MAIL_SENDER, self._receivers, msg)
-            print("Successfully sent email")
-        except Exception as error:
-            print("error" + repr(error))
+    def mail_sender(self, msg):
+        server = smtplib.SMTP(host=Constants.MAIL_HOST)
+        server.ehlo()
+        server.starttls()
+        server.login(Constants.MAIL_USER, Constants.MAIL_PASS)
+        server.sendmail(Constants.MAIL_SENDER, self._receivers, msg)
 
+    def send_email_download_initialize(self, list_of_genes_to_download: list):
+        myString = "\n".join(list_of_genes_to_download)
 
-testEmail = EmailSender(["arananegrayeye@gmail.com"])
+        if list_of_genes_to_download is not None:
+            message_download = Constants.MSG_DOWNLOAD_INITIALIZE + myString
+            try:
+                self.mail_sender(message_download)
+            except Exception as error:
+                print("error" + repr(error))
 
-testEmail.send_email_download_initialize()
+    def send_email_download_finished(self, list_of_genes_to_download_finished: list):
+        myString = "\n".join(list_of_genes_to_download_finished)
+
+        if list_of_genes_to_download_finished is not None:
+            message_download = Constants.MSG_DOWNLOAD_FINISHED + myString
+            try:
+                self.mail_sender(message_download)
+            except Exception as error:
+                print("error" + repr(error))

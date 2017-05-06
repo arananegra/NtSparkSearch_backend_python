@@ -39,11 +39,17 @@ class Constants(object):
     POST_WAIT = 202
 
     # Mail messages
-    MAIL_SENDER = "arananegrayeye@gmail.com"
+    MAIL_SENDER = "ntsparksearch@gmail.com"
+    MAIL_HOST = 'smtp.gmail.com:587'
+    MAIL_USER = "ntsparksearcher"
+    MAIL_PASS = 'ntsparksearcher1234'
 
-    MESSAGE_DOWNLOAD_INITIALIZE = """From: <from@fromdomain.com>
-        To: To Person <to@todomain.com>
-        Subject: SMTP e-mail test
+    MSG_DOWNLOAD_INITIALIZE = "\r\n".join([
+        "Subject: Your download request has been accepted",
+        "",
+        "This is the list of genes required: When the download process is finished you will receive another email\n"])
 
-        This is a test e-mail message.
-        """
+    MSG_DOWNLOAD_FINISHED = "\r\n".join([
+        "Subject: Your download is already finished",
+        "",
+        "This is the list of required genes that are already downloaded: \n"])
