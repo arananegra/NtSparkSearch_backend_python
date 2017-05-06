@@ -1,8 +1,8 @@
 from flask import Blueprint, abort, Response, current_app, request
-import redis
 import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.DownloadScheduler.DownloadServiceScheduler import DownloadServiceScheduler
 from ntsparksearch.Common.Constants import Constants
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
