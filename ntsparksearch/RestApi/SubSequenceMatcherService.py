@@ -4,31 +4,11 @@ import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from ntsparksearch.Common.Constants import Constants
-from celery import Celery
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
-REDIS_URL = "redis://localhost:6379/0"
-#CELERY_BROKER_URL = 'amqp://localhost'
-#CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
-celery = Celery('SubSequenceMatcherService',
-                broker=REDIS_URL)
-
-# celery.conf.update(
-#     CELERY_BROKER_URL=CELERY_BROKER_URL,
-#     CELERY_RESULT_BACKEND=CELERY_RESULT_BACKEND
-# )
 
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 retriever_BS = GeneRetrieverBS()
-
-
-@celery.task(bind=True)
-def some_long_task(self, list_of_genes_without_sequence):
-    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-        list_of_genes_without_sequence)
-    retriever_BS.update_genes_from_dict(dict_of_genes_complete)
-    return Response(), Constants.POST_CREATED
 
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
@@ -45,12 +25,11 @@ def spark_matcher():
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
-        some_long_task.apply_async(list_of_genes_without_sequence)
-        #dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-        #    list_of_genes_without_sequence)
+        dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+            list_of_genes_without_sequence)
 
         # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
-        #retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+        retriever_BS.update_genes_from_dict(dict_of_genes_complete)
         return Response(), Constants.POST_WAIT
 
     else:

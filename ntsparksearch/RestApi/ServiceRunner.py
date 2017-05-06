@@ -1,8 +1,6 @@
 from flask import Flask
 from ntsparksearch.RestApi.GeneRetrieverService import *
 from ntsparksearch.RestApi.SubSequenceMatcherService import *
-from celery import current_app
-from celery.bin import worker
 
 app = Flask(__name__)
 
