@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, Response, current_app, request
-import redis
 import json
+from flask_rq2 import RQ
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from ntsparksearch.Common.Constants import Constants
@@ -10,6 +10,18 @@ SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __n
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 retriever_BS = GeneRetrieverBS()
 
+rq = RQ()
+
+@rq.job
+def some_long_task(list_of_genes_without_sequence):
+    dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        list_of_genes_without_sequence)
+    retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+
+
+@rq.job
+def add(x, y):
+    return x + y
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
 def spark_matcher():
@@ -25,11 +37,15 @@ def spark_matcher():
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
-        dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-            list_of_genes_without_sequence)
+        job = add.queue(1, 2)
+
+        #print(job)
+
+        # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        #     list_of_genes_without_sequence)
 
         # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
-        retriever_BS.update_genes_from_dict(dict_of_genes_complete)
+        # retriever_BS.update_genes_from_dict(dict_of_genes_complete)
         return Response(), Constants.POST_WAIT
 
     else:

@@ -2,10 +2,17 @@ from flask import Flask
 from ntsparksearch.RestApi.GeneRetrieverService import *
 from ntsparksearch.RestApi.SubSequenceMatcherService import *
 
-app = Flask(__name__)
 
-app.register_blueprint(GeneRetrieverService_endpoints, url_prefix='/generetriever')
-app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
+
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(GeneRetrieverService_endpoints, url_prefix='/generetriever')
+    app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
+    from ntsparksearch.RestApi.SubSequenceMatcherService import rq
+    rq.init_app(app)
+    return app
+
+app = create_app()
 
 @app.route("/")
 def hello():
