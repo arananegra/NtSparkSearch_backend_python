@@ -54,7 +54,7 @@ class Constants(object):
     MSG_DOWNLOAD_INITIALIZE = "\r\n".join([
         "Subject: Your download request has been accepted",
         "",
-        "This is the list of genes required: When the download process is finished you will receive another email\n"])
+        "When the download process is finished you will receive another email. This is the list of genes required:\n\n"])
 
     MSG_DOWNLOAD_FINISHED = "\r\n".join([
         "Subject: Your download is already finished",

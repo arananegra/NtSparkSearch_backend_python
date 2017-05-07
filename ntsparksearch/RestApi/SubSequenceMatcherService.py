@@ -1,24 +1,26 @@
-from flask import Blueprint, abort, Response, current_app, request
+from flask import Blueprint, Response, request
 import json
 from flask_rq2 import RQ
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from ntsparksearch.Common.Constants import Constants
+from ntsparksearch.EmailProcess.EmailSender import EmailSender
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
 
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 retriever_BS = GeneRetrieverBS()
-
+email_manager = EmailSender()
 rq = RQ()
 
 
 @rq.job
-def some_long_task(list_of_genes_without_sequence):
+def gene_downloader_async(list_of_genes_without_sequence, email_receiver):
     dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
         list_of_genes_without_sequence)
     retriever_BS.update_genes_from_dict(dict_of_genes_complete)
-
+    email_manager.receivers = email_receiver
+    email_manager.send_email_download_finished(list_of_genes_without_sequence)
 
 @rq.job
 def add(x, y):
@@ -27,27 +29,21 @@ def add(x, y):
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
 def spark_matcher():
-    json_with_gene_ids_and_sequence_to_filter = request.get_json()
-    list_of_ids = json_with_gene_ids_and_sequence_to_filter["geneIds"]
-    sequence_to_filter = json_with_gene_ids_and_sequence_to_filter["sequence"]
+    json_with_gene_ids_sequence_to_filter_and_mail = request.get_json()
+    list_of_ids = json_with_gene_ids_sequence_to_filter_and_mail["geneIds"]
+    sequence_to_filter = json_with_gene_ids_sequence_to_filter_and_mail["sequence"]
+    email_receiver = json_with_gene_ids_sequence_to_filter_and_mail["email"]
 
     retriever_BS.insert_in_collection_from_list_of_ids(list_of_ids)
 
     list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
     if len(list_of_genes_without_sequence) != 0:
-        # inicio de proceso asincrono
-        # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
-        #
-        # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-        #     list_of_genes_without_sequence)
-        some_long_task.queue(list_of_genes_without_sequence)
+        email_manager.receivers = email_receiver
+        email_manager.send_email_download_initialize(list_of_genes_without_sequence)
 
-        # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-        #     list_of_genes_without_sequence)
+        gene_downloader_async.queue(list_of_genes_without_sequence, email_receiver)
 
-        # TODO: lanzar mensaje de FIN de descarga --> se han encontrado genes que hay que descargar
-        # retriever_BS.update_genes_from_dict(dict_of_genes_complete)
         return Response(), Constants.POST_WAIT
 
     else:

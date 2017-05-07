@@ -5,11 +5,14 @@ import smtplib
 class EmailSender(object):
     """Email model"""
 
-    def __init__(self, receivers: list):
-        self._receivers = receivers
+    def __init__(self):
+        self._receivers = None
 
-    def _get_receivers(self):
+    def _get_receivers(self) -> list:
         return self._receivers
+
+    def _set_receivers(self, receivers: list) -> None:
+        self._receivers = receivers
 
     def mail_sender(self, msg):
         server = smtplib.SMTP(host=Constants.MAIL_HOST)
@@ -36,4 +39,6 @@ class EmailSender(object):
             try:
                 self.mail_sender(message_download)
             except Exception as error:
-                print("error" + repr(error))
+                print("Exception caught at sending email operation" + repr(error))
+
+    receivers = property(fget=_get_receivers, fset=_set_receivers)
