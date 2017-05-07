@@ -29,6 +29,13 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
+    def delete_gene_document_by_gene_id(self, gene_id: str) -> None:
+        """
+        From gene ids, finds and removes that document in the database
+        :param gene_id: gene_id to remove
+        """
+
+    @abstractmethod
     def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
          """
         Creates a text file with the whole unfiltered collection of genes (just ids)

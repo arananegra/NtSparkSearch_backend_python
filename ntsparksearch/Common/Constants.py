@@ -10,8 +10,6 @@ class Constants(object):
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
-    MONGODB_COLLECTION_QUEUE = 'queueGenes'
-    MONGODB_COLLECTION_ASCENDING_ORDER = 1
 
 
     # Gene collection field names

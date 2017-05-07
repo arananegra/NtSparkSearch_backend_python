@@ -22,10 +22,6 @@ def gene_downloader_async(list_of_genes_without_sequence, email_receiver):
     email_manager.receivers = email_receiver
     email_manager.send_email_download_finished(list_of_genes_without_sequence)
 
-@rq.job
-def add(x, y):
-    return x + y
-
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
 def spark_matcher():
@@ -34,11 +30,12 @@ def spark_matcher():
     sequence_to_filter = json_with_gene_ids_sequence_to_filter_and_mail["sequence"]
     email_receiver = json_with_gene_ids_sequence_to_filter_and_mail["email"]
 
-    retriever_BS.insert_in_collection_from_list_of_ids(list_of_ids)
-
     list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
-    if len(list_of_genes_without_sequence) != 0:
+    if list_of_genes_without_sequence is None:
+        retriever_BS.insert_in_collection_from_list_of_ids(list_of_ids)
+
+    if len(list_of_genes_without_sequence) != 0 or list_of_genes_without_sequence is None:
         email_manager.receivers = email_receiver
         email_manager.send_email_download_initialize(list_of_genes_without_sequence)
 

@@ -88,6 +88,22 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when inserting all data from list of ids: ' + repr(error))
 
+    def delete_gene_document_by_gene_id(self, gene_id: str) -> None:
+        try:
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME,
+                Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            criteria = GeneSearcher()
+            criteria.search_by_gene_id_criteria = gene_id
+
+            if mongo_dao_retriever.search_gene_objects_and_return_as_list(criteria) is not None:
+                mongo_dao_retriever.delete_gene_document_by_gene_id(gene_id)
+
+        except Exception as error:
+            print('Caught exception at delete operation: ' + repr(error))
+
     def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
 
         try:
@@ -232,7 +248,10 @@ class GeneRetrieverBS(IGeneRetriever):
 
             except Exception as error:
                 print('\nCaught exception when trying to download sequence from NCBI at gene ' +
-                      gene_id + " : " + repr(error) + " This sequence will be skipped")
+                      gene_id + " : " + repr(error) + " This sequence will be removed from results")
+
+                retriever_bs = GeneRetrieverBS()
+                retriever_bs.delete_gene_document_by_gene_id(gene_id)
                 continue
 
         return dict_id_and_sequences

@@ -22,4 +22,4 @@ def hello():
 
 if __name__ == "__main__":
     app.run(use_reloader=False,
-            threaded=True)
+            threaded=True, host='0.0.0.0')
