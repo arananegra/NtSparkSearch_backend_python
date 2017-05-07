@@ -12,6 +12,7 @@ retriever_BS = GeneRetrieverBS()
 
 rq = RQ()
 
+
 @rq.job
 def some_long_task(list_of_genes_without_sequence):
     dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
@@ -37,9 +38,7 @@ def spark_matcher():
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
-        job = add.queue(1, 2)
-
-        #print(job)
+        some_long_task.queue(list_of_genes_without_sequence)
 
         # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
         #     list_of_genes_without_sequence)

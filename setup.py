@@ -12,5 +12,5 @@ setup(name='Nucleotide Spark Exact Searcher',
       maintainer_email='alvarogj@lcc.uma.es',
       license='GNU GENERAL PUBLIC LICENSE',
       packages=['ntsparksearch', 'ntsparksearch.GeneRetriever', 'ntsparksearch.SubsequenceMatcher',
-                'ntsparksearch.Common']
+                'ntsparksearch.Common', 'ntsparksearch.RestApi']
       )
