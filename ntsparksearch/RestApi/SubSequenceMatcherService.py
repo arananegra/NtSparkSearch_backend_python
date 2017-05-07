@@ -24,6 +24,7 @@ def some_long_task(list_of_genes_without_sequence):
 def add(x, y):
     return x + y
 
+
 @SubSequenceMatcherService_endpoints.route('/sparkmatch', methods=["POST"])
 def spark_matcher():
     json_with_gene_ids_and_sequence_to_filter = request.get_json()
@@ -34,7 +35,7 @@ def spark_matcher():
 
     list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
 
-    if list_of_genes_without_sequence is not None:
+    if len(list_of_genes_without_sequence) != 0:
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
 
