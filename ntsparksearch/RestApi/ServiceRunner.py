@@ -3,7 +3,6 @@ from ntsparksearch.RestApi.GeneRetrieverService import *
 from ntsparksearch.RestApi.SubSequenceMatcherService import *
 
 
-
 def create_app():
     app = Flask(__name__)
     app.register_blueprint(GeneRetrieverService_endpoints, url_prefix='/generetriever')
@@ -12,11 +11,15 @@ def create_app():
     rq.init_app(app)
     return app
 
+
 app = create_app()
+
 
 @app.route("/")
 def hello():
     return "Hello World!"
 
+
 if __name__ == "__main__":
-    app.run()
+    app.run(use_reloader=False,
+            threaded=True)

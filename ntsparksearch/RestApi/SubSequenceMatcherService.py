@@ -38,7 +38,9 @@ def spark_matcher():
     if len(list_of_genes_without_sequence) != 0:
         # inicio de proceso asincrono
         # TODO: lanzar mensaje de COMIENZO de descarga --> se han encontrado genes que hay que descargar
-
+        #
+        # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
+        #     list_of_genes_without_sequence)
         some_long_task.queue(list_of_genes_without_sequence)
 
         # dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(

@@ -1,6 +1,6 @@
 from ntsparksearch.Common.GeneDTO import GeneDTO, GeneSearcher
 from pymongo import MongoClient
-from pymongo import TEXT as indexText
+from pymongo import TEXT as index_text
 from pymongo.collection import Collection
 from ntsparksearch.Common.Constants import Constants
 from Bio.SeqRecord import SeqRecord
@@ -27,7 +27,7 @@ class GeneDAO(object):
     def create_text_index_in_collection(collection_from_client_reference: Collection, attribute_of_mongo: str,
                                         name_of_index: str) -> None:
         try:
-            collection_from_client_reference.create_index([(attribute_of_mongo, indexText)], name=name_of_index,
+            collection_from_client_reference.create_index([(attribute_of_mongo, index_text)], name=name_of_index,
                                                           default_language='english')
         except Exception as error:
             print('Caught exception creating the index at collection: ' + repr(error))
