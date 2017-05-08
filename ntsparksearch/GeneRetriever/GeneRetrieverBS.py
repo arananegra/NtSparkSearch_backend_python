@@ -5,6 +5,7 @@ from ntsparksearch.Common.GeneDTO import GeneSearcher
 from ntsparksearch.Common.GeneDTO import GeneDTO
 from ntsparksearch.Common.Constants import Constants
 from progressbar import ProgressBar
+from copy import deepcopy
 import os.path
 from Bio import Entrez
 from Bio import SeqIO
@@ -141,6 +142,29 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
 
+    def get_dict_from_unfiltered_with_sequences(self) -> dict:
+
+        try:
+
+            dict_with_genes = {}
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
+
+            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
+
+            for id_gene, sequence in deep_copy_dict_with_genes.items():
+                if sequence is None:
+                    del dict_with_genes[id_gene]
+
+            return dict_with_genes
+
+        except Exception as error:
+            print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
+
     def get_list_of_ids_from_mongo(self) -> list:
         list_of_just_ids = None
 
@@ -185,6 +209,29 @@ class GeneRetrieverBS(IGeneRetriever):
             print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(
                 error))
 
+    def get_list_of_ids_from_mongo_with_sequence(self) -> list:
+        list_of_just_ids_of_genes_with_sequence = None
+
+        try:
+            list_of_just_ids_of_genes_with_sequence = []
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
+
+            for gene_object in list_of_gene_objets:
+                if gene_object.sequence is not None:
+                    gene_id = gene_object.gene_id
+                    list_of_just_ids_of_genes_with_sequence.append(gene_id)
+
+            return list_of_just_ids_of_genes_with_sequence
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list with sequence (unfiltered): ' + repr(
+                error))
+
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
         try:
@@ -216,10 +263,32 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when removing filtered collection' + repr(error))
 
+    def check_gene_id_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
+
+        pbar = ProgressBar()
+        Entrez.email = Constants.MAIL_SENDER
+        list_of_available_genes = []
+        print("Checking if all genes are available")
+        for gene_id in pbar(list_of_genes):
+
+            try:
+                handle1 = Entrez.efetch(db="gene", id=gene_id, retmode="xml", validate=False)
+                handle1.close()
+
+                list_of_available_genes.append(gene_id)
+
+            except Exception as error:
+                print('\nGene ' +
+                      gene_id + ' does not exists on NCBI : ' +
+                      repr(error))
+                continue
+
+        return list_of_available_genes
+
     def download_sequences_from_list_as_dict_from_NCBI(self, list_of_genes: list) -> dict:
 
         pbar = ProgressBar()
-        Entrez.email = "notfunny@notanemail.org"
+        Entrez.email = Constants.MAIL_SENDER
         dict_id_and_sequences = {}
         for gene_id in pbar(list_of_genes):
 

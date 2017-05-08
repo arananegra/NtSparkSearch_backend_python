@@ -50,6 +50,14 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
+    def get_dict_from_unfiltered_with_sequences(self) -> dict:
+        """
+        From the unfiltered collection, obtain all data in dict format (only if
+        the sequence field is not empty).
+        :return dictionary with id:sequence
+        """
+
+    @abstractmethod
     def get_list_of_ids_from_mongo(self) -> list:
         """
         From a the unfiltered collection of mongo, extract the ids and returns a list
@@ -66,6 +74,14 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
+    def get_list_of_ids_from_mongo_with_sequence(self) -> list:
+        """
+        From a the unfiltered collection of mongo, extract the ids and returns a list
+        with them (only if their sequence is NOT None)
+        :return: A list with the ids of the unfiltered genes whose sequence is NOT None
+        """
+
+    @abstractmethod
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
         """
         From a dict of genes (strings representing id's from NCBI and sequences), this method
@@ -78,6 +94,15 @@ class IGeneRetriever(metaclass=ABCMeta):
     def delete_unfiltered_collection(self) -> None:
         """
         Removes the whole unfiltered collection of genes
+        """
+
+    @abstractmethod
+    def check_gene_id_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
+        """
+        From a list of genes (strings representing id's from NCBI),this method
+        checks if the gene exists on the NCBI
+        :param list_of_genes: list with id's of genes
+        :return: A list with genes which exists from the original param list
         """
 
     @abstractmethod

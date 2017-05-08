@@ -1,5 +1,6 @@
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
 from ntsparksearch.Common.GeneDAO import GeneDAO
+from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from Bio import SeqUtils
 from Bio import SeqIO
 from ntsparksearch.Common.Constants import Constants
@@ -12,7 +13,8 @@ from pyspark.sql import SparkSession
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
-    def get_dict_from_unfiltered_with_sequences(self) -> dict:
+
+    def get_dict_from_filtered_with_sequences(self) -> dict:
 
         try:
 
@@ -20,7 +22,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
 
             dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
 
@@ -33,7 +35,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             return dict_with_genes
 
         except Exception as error:
-            print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
+            print('Caught exception getting filtered sequences (to dict):' + repr(error))
 
     def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
 
@@ -48,8 +50,9 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 .config("spark.driver.maxResultSize", "3g") \
                 .config("spark.executor.memory", "3g").getOrCreate()
 
-            dict_to_filter = self.get_dict_from_unfiltered_with_sequences()
+            gene_retrieverBS = GeneRetrieverBS()
 
+            dict_to_filter = gene_retrieverBS.get_dict_from_unfiltered_with_sequences()
 
             self.delete_filtered_collection()
 

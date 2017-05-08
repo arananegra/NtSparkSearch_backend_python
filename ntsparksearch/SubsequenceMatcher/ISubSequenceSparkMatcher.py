@@ -2,10 +2,11 @@ from abc import abstractmethod, ABCMeta
 
 
 class ISubSequenceSparkMatcher(metaclass=ABCMeta):
+
     @abstractmethod
-    def get_dict_from_unfiltered_with_sequences(self) -> dict:
+    def get_dict_from_filtered_with_sequences(self) -> dict:
         """
-        From the unfiltered collection, obtain all data in dict format (only if
+        From the filtered collection, obtain all data in dict format (only if
         the sequence field is not empty).
         :return dictionary with id:sequence
         """

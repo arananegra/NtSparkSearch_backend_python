@@ -40,8 +40,10 @@ class Constants(object):
     FASTA_EXTENSION = "fasta"
 
     # Service responses
+    GET_OK = 200
     POST_CREATED = 201
     POST_WAIT = 202
+    POST_BAD_REQUEST = 202
 
     # Mail messages
     MAIL_SENDER = "ntsparksearch@gmail.com"
