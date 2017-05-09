@@ -143,6 +143,7 @@ class GeneRetrieverBS(IGeneRetriever):
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
 
     def get_dict_from_unfiltered_with_sequences(self) -> dict:
+        dict_with_genes = None
 
         try:
 
@@ -156,9 +157,11 @@ class GeneRetrieverBS(IGeneRetriever):
 
             deep_copy_dict_with_genes = deepcopy(dict_with_genes)
 
-            for id_gene, sequence in deep_copy_dict_with_genes.items():
-                if sequence is None:
-                    del dict_with_genes[id_gene]
+            if dict_with_genes is not None:
+
+                for id_gene, sequence in deep_copy_dict_with_genes.items():
+                    if sequence is None:
+                        del dict_with_genes[id_gene]
 
             return dict_with_genes
 
@@ -177,9 +180,10 @@ class GeneRetrieverBS(IGeneRetriever):
 
             list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
-            for gene_object in list_of_gene_objets:
-                gene_id = gene_object.gene_id
-                list_of_just_ids.append(gene_id)
+            if list_of_gene_objets is not None:
+                for gene_object in list_of_gene_objets:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -198,10 +202,12 @@ class GeneRetrieverBS(IGeneRetriever):
 
             list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
-            for gene_object in list_of_gene_objets:
-                if gene_object.sequence is None:
-                    gene_id = gene_object.gene_id
-                    list_of_just_ids.append(gene_id)
+            if list_of_gene_objets is not None:
+
+                for gene_object in list_of_gene_objets:
+                    if gene_object.sequence is None:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -221,10 +227,12 @@ class GeneRetrieverBS(IGeneRetriever):
 
             list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
-            for gene_object in list_of_gene_objets:
-                if gene_object.sequence is not None:
-                    gene_id = gene_object.gene_id
-                    list_of_just_ids_of_genes_with_sequence.append(gene_id)
+            if list_of_gene_objets is not None:
+
+                for gene_object in list_of_gene_objets:
+                    if gene_object.sequence is not None:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids_of_genes_with_sequence.append(gene_id)
 
             return list_of_just_ids_of_genes_with_sequence
 
@@ -245,7 +253,7 @@ class GeneRetrieverBS(IGeneRetriever):
                     ncbi_object_to_update = GeneDTO()
                     ncbi_object_to_update.gene_id = id_ncbi
                     ncbi_object_to_update.sequence = sequence
-                    mongo_dao_retriever.update_gene_element_from_object(ncbi_object_to_update, False)
+                    mongo_dao_retriever.update_gene_element_from_object(ncbi_object_to_update, True)
 
         except Exception as error:
             print('Caught exception when getting all ids from mongo as list: ' + repr(error))
@@ -261,9 +269,33 @@ class GeneRetrieverBS(IGeneRetriever):
             mongo_dao_retriever_unfiltered.delete_collection()
 
         except Exception as error:
-            print('Caught exception when removing filtered collection' + repr(error))
+            print('Caught exception when removing unfiltered collection' + repr(error))
 
-    def check_gene_id_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
+    def check_gene_id_list_existance_on_unfiltered_from_list(self, list_of_genes: list) -> list:
+
+        try:
+
+            mongo_dao_retriever_unfiltered = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_unfiltered_genes_from_mongo = self.get_list_of_ids_from_mongo()
+
+            if list_of_unfiltered_genes_from_mongo is None:
+                list_of_unfiltered_genes_from_mongo = []
+
+            list_of_genes_not_in_unfiltered = []
+
+            for gene in list_of_genes:
+                if gene not in list_of_unfiltered_genes_from_mongo:
+                    list_of_genes_not_in_unfiltered.append(gene)
+
+            return list_of_genes_not_in_unfiltered
+
+        except Exception as error:
+            print('Caught exception at checking existence of genes from unfiltered collection ' + repr(error))
+
+    def check_gene_id_list_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
 
         pbar = ProgressBar()
         Entrez.email = Constants.MAIL_SENDER
@@ -319,8 +351,8 @@ class GeneRetrieverBS(IGeneRetriever):
                 print('\nCaught exception when trying to download sequence from NCBI at gene ' +
                       gene_id + " : " + repr(error) + " This sequence will be removed from results")
 
-                retriever_bs = GeneRetrieverBS()
-                retriever_bs.delete_gene_document_by_gene_id(gene_id)
+                # retriever_bs = GeneRetrieverBS()
+                # retriever_bs.delete_gene_document_by_gene_id(gene_id)
                 continue
 
         return dict_id_and_sequences

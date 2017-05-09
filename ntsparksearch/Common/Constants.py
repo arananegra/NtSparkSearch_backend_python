@@ -40,9 +40,10 @@ class Constants(object):
     FASTA_EXTENSION = "fasta"
 
     # Service responses
-    GET_OK = 200
+    OK = 200
+    SERVER_ERROR = 500
     POST_CREATED = 201
-    POST_WAIT = 202
+    OK_WAIT = 202
     POST_BAD_REQUEST = 202
 
     # Mail messages

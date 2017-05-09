@@ -1,7 +1,7 @@
 import os
 import json
 from flask import Blueprint, request, Response, redirect, url_for, send_from_directory, jsonify
-from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async
+from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 from werkzeug.utils import secure_filename
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
 from ntsparksearch.Common.Constants import Constants
@@ -48,9 +48,9 @@ def upload_excel_file_and_download_genes():
                     email_manager.receivers = email_receiver
                     email_manager.send_email_download_initialize(list_of_genes_without_sequence)
 
-                gene_downloader_async.queue(list_of_genes_without_sequence, email_receiver)
+                gene_downloader_async_from_list.queue(list_of_genes_without_sequence, email_receiver)
 
-        return Response(), Constants.POST_WAIT
+        return Response(), Constants.OK_WAIT
 
     return '''
     <!doctype html>

@@ -97,7 +97,7 @@ class IGeneRetriever(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def check_gene_id_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
+    def check_gene_id_list_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
         """
         From a list of genes (strings representing id's from NCBI),this method
         checks if the gene exists on the NCBI
