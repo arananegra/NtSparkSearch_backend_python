@@ -1,6 +1,6 @@
 from flask import Flask
-from ntsparksearch.RestApi.GeneRetrieverService import *
-from ntsparksearch.RestApi.SubSequenceMatcherService import *
+from ntsparksearch.RestApi.GeneRetrieverService import GeneRetrieverService_endpoints
+from ntsparksearch.RestApi.SubSequenceMatcherService import SubSequenceMatcherService_endpoints
 
 
 def create_app():
