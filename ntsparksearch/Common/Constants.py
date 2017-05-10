@@ -5,8 +5,8 @@ class Constants(object):
     # Database parameters
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
-    # MONGODB_HOST = 'database'
-    MONGODB_HOST = 'localhost'
+    MONGODB_HOST = 'database'
+    #MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
@@ -17,14 +17,13 @@ class Constants(object):
     SEQUENCE = "_sequence"
 
     # Queue collection field names
-    QUEUE_ENTRY_DATE = "_entry_date_in_collection"
-    QUEUE_LIST_OF_GENES = "_gene_id_list_to_download"
+    REDIS_SERVER = "redis-server"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
-    OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
+    OUTPUT_FOLDER = "output/"
     INPUT_FOLDER = "input/"
 
     # Env variables

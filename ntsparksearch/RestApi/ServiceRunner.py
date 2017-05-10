@@ -1,4 +1,5 @@
 from flask import Flask
+from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi.GeneRetrieverService import GeneRetrieverService_endpoints
 from ntsparksearch.RestApi.SubSequenceMatcherService import SubSequenceMatcherService_endpoints
 
@@ -7,6 +8,7 @@ def create_app():
     app = Flask(__name__)
     app.register_blueprint(GeneRetrieverService_endpoints, url_prefix='/generetriever')
     app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
+    app.config['RQ_REDIS_URL'] = 'redis://' + Constants.REDIS_SERVER + ':6379'
     from ntsparksearch.RestApi.AsyncDownloader import rq
     rq.init_app(app)
     return app
