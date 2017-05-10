@@ -17,6 +17,7 @@ email_manager = EmailSender()
 def spark_matcher():
     json_with_gene_ids_sequence_to_filter_and_mail = request.get_json()
     sequence_to_filter = json_with_gene_ids_sequence_to_filter_and_mail["sequence"]
+    # TODO : cambiar recepcion de json a url args
 
     dict_filtered_with_spark = subsequence_matcher_BS. \
         filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
@@ -64,7 +65,7 @@ def genes_in_unfiltered_checker():
 def genes_downloader():
     try:
         list_of_ids_from_request = request.args.getlist("geneIds")
-        email_receiver = request.args.get("emails")
+        email_receiver = request.args.getlist("emails")
 
         list_of_genes_not_in_unfiltered = retriever_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)

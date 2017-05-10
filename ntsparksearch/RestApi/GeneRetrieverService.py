@@ -27,8 +27,7 @@ def obtainUnfiltered():
 def upload_excel_file_and_download_genes():
 
     try:
-        json_with_gene_ids_sequence_to_filter_and_mail = request.get_json()
-        email_receiver = json_with_gene_ids_sequence_to_filter_and_mail["email"]
+        email_receiver = request.args.getlist("email")
 
     except Exception:
         print("Warning: Email account not set")
@@ -61,20 +60,6 @@ def upload_excel_file_and_download_genes():
          <input type=submit value=Upload>
     </form>
     '''
-
-
-# @GeneRetrieverService_endpoints.route('/download-list', methods=['POST'])
-# def upload_excel_file():
-#     if request.method == 'POST':
-#         # insertar lista en unfiltered y obtener de las que no tenga secuencias
-#         list_of_gene_ids = request.get_json()
-#
-#         dict_of_genes_complete = retriever_BS.download_sequences_from_list_as_dict_from_NCBI(
-#             list_of_genes_without_sequence)
-#
-#
-
-
 
 @GeneRetrieverService_endpoints.route('/upload-fasta', methods=['POST', 'GET'])
 def upload_fasta_file():

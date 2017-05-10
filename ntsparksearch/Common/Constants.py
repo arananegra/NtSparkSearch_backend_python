@@ -11,19 +11,20 @@ class Constants(object):
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
 
-
     # Gene collection field names
     GENE_ID = "_gene_id"
     SEQUENCE = "_sequence"
 
     # Queue collection field names
     REDIS_SERVER = "redis-server"
+    #REDIS_SERVER = "localhost"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
     OUTPUT_FOLDER = "output/"
+    #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
     INPUT_FOLDER = "input/"
 
     # Env variables
@@ -59,4 +60,4 @@ class Constants(object):
     MSG_DOWNLOAD_FINISHED = "\r\n".join([
         "Subject: Your download is already finished",
         "",
-        "This is the list of required genes that are already downloaded: \n"])
+        "You can now check subsequences about these genes: \n\n"])

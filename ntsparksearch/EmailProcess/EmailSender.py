@@ -22,20 +22,20 @@ class EmailSender(object):
         server.sendmail(Constants.MAIL_SENDER, self._receivers, msg)
 
     def send_email_download_initialize(self, list_of_genes_to_download: list):
-        myString = "\n".join(list_of_genes_to_download)
+        string_of_gene_ids = "\n".join(list_of_genes_to_download)
 
         if list_of_genes_to_download is not None:
-            message_download = Constants.MSG_DOWNLOAD_INITIALIZE + myString
+            message_download = Constants.MSG_DOWNLOAD_INITIALIZE + string_of_gene_ids
             try:
                 self.mail_sender(message_download)
             except Exception as error:
                 print("error" + repr(error))
 
     def send_email_download_finished(self, list_of_genes_to_download_finished: list):
-        myString = "\n".join(list_of_genes_to_download_finished)
+        string_of_gene_ids = "\n".join(list_of_genes_to_download_finished)
 
         if list_of_genes_to_download_finished is not None:
-            message_download = Constants.MSG_DOWNLOAD_FINISHED + myString
+            message_download = Constants.MSG_DOWNLOAD_FINISHED + string_of_gene_ids
             try:
                 self.mail_sender(message_download)
             except Exception as error:
