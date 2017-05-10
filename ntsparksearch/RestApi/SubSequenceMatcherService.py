@@ -23,6 +23,7 @@ def spark_matcher():
 
     subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
     dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
+
     return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
 
 
@@ -40,6 +41,15 @@ def genes_in_unfiltered_checker():
                 filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
             subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
             dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
+
+            list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
+
+            list_of_unfiltered_ids_from_mongo = retriever_BS.get_list_of_ids_from_mongo()
+
+            for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
+                if gene_unfiltered_id not in list_of_genes_pass_filter:
+                    dict_filtered_with_ones[gene_unfiltered_id] = 0
+
             return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
 
         else:
