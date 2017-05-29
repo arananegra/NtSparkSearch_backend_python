@@ -9,7 +9,6 @@ from ntsparksearch.EmailProcess.EmailSender import EmailSender
 
 GeneHandlerService_endpoints = Blueprint('GeneHandlerService', __name__)
 gene_handler_BS = GeneHandlerBS()
-
 email_manager = EmailSender()
 
 

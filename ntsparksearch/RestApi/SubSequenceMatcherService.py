@@ -9,21 +9,25 @@ from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_lis
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
 
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
-retriever_BS = GeneHandlerBS()
+gene_handler_BS = GeneHandlerBS()
 email_manager = EmailSender()
 
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatchall', methods=["GET"])
 def spark_matcher():
-    json_with_gene_ids_sequence_to_filter_and_mail = request.get_json()
-    sequence_to_filter = json_with_gene_ids_sequence_to_filter_and_mail["sequence"]
-    # TODO : cambiar recepcion de json a url args
-
+    sequence_to_filter = request.args.get("sequence")
     dict_filtered_with_spark = subsequence_matcher_BS. \
         filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
-
     subsequence_matcher_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
     dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
+
+    list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
+
+    list_of_unfiltered_ids_from_mongo = gene_handler_BS.get_list_of_ids_from_mongo()
+
+    for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
+        if gene_unfiltered_id not in list_of_genes_pass_filter:
+            dict_filtered_with_ones[gene_unfiltered_id] = 0
 
     return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
 
@@ -34,7 +38,7 @@ def genes_in_unfiltered_checker():
         list_of_ids_from_request = request.args.getlist("geneIds")
         sequence_to_filter = request.args.get("sequence")
 
-        list_of_genes_not_in_unfiltered = retriever_BS.check_gene_id_list_existance_on_unfiltered_from_list(
+        list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)
 
         if len(list_of_genes_not_in_unfiltered) == 0:
@@ -45,7 +49,7 @@ def genes_in_unfiltered_checker():
 
             list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
 
-            list_of_unfiltered_ids_from_mongo = retriever_BS.get_list_of_ids_from_mongo()
+            list_of_unfiltered_ids_from_mongo = gene_handler_BS.get_list_of_ids_from_mongo()
 
             for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
                 if gene_unfiltered_id not in list_of_genes_pass_filter:
@@ -65,9 +69,9 @@ def genes_in_unfiltered_checker():
 def genes_downloader():
     try:
         list_of_ids_from_request = request.args.getlist("geneIds")
-        email_receiver = request.args.getlist("emails")
+        email_receiver = request.args.getlist("email")
 
-        list_of_genes_not_in_unfiltered = retriever_BS.check_gene_id_list_existance_on_unfiltered_from_list(
+        list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)
 
         if list_of_genes_not_in_unfiltered != 0:
