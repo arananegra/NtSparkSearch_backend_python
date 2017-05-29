@@ -1,6 +1,6 @@
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
 from ntsparksearch.Common.GeneDAO import GeneDAO
-from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from Bio import SeqUtils
 from Bio import SeqIO
 from ntsparksearch.Common.Constants import Constants
@@ -13,11 +13,9 @@ from pyspark.sql import SparkSession
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
-
     def get_dict_from_filtered_with_sequences(self) -> dict:
 
         try:
-
             dict_with_genes = {}
 
             mongo_dao_retriever = GeneDAO(
@@ -50,11 +48,11 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 .config("spark.driver.maxResultSize", "3g") \
                 .config("spark.executor.memory", "3g").getOrCreate()
 
-            gene_retrieverBS = GeneRetrieverBS()
+            gene_handlerBS = GeneHandlerBS()
 
-            dict_to_filter = gene_retrieverBS.get_dict_from_unfiltered_with_sequences()
+            dict_to_filter = gene_handlerBS.get_dict_from_unfiltered_with_sequences()
 
-            self.delete_filtered_collection()
+            gene_handlerBS.delete_filtered_collection()
 
             sc = spark_session.sparkContext
             sc.setLogLevel("ERROR")
@@ -143,16 +141,3 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))
-
-    def delete_filtered_collection(self) -> None:
-
-        try:
-
-            mongo_dao_retriever_filtered = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
-
-            mongo_dao_retriever_filtered.delete_collection()
-
-        except Exception as error:
-            print('Caught exception when removing filtered collection' + repr(error))

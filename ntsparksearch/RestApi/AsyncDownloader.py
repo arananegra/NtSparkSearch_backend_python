@@ -1,8 +1,8 @@
 from flask_rq2 import RQ
-from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
 
-retriever_BS = GeneRetrieverBS()
+retriever_BS = GeneHandlerBS()
 email_manager = EmailSender()
 rq = RQ()
 

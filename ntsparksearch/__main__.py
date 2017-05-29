@@ -1,7 +1,7 @@
 import argparse
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
-from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 
 
 class App(object):
@@ -71,7 +71,7 @@ class App(object):
             args = parser.parse_args()
 
             if args.obtainUnfiltered:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 list_of_genes = retriever_BS.get_list_of_ids_from_mongo()
 
                 if list_of_genes is None:
@@ -81,13 +81,13 @@ class App(object):
                     print(list_of_genes)
 
             if args.exportUnfilteredFasta:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 retriever_BS.export_unfiltered_genes_collection_to_fasta(
                     Constants.OUTPUT_FOLDER + args.exportUnfilteredFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.exportUnfilteredId:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 retriever_BS.export_unfiltered_genes_collection_to_file_with_just_ids(
                     Constants.OUTPUT_FOLDER + args.exportUnfilteredId[0])
                 print(Constants.MSG_PROCESS_FINISHED)
@@ -115,7 +115,7 @@ class App(object):
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.removeUnfiltered:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 retriever_BS.delete_unfiltered_collection()
                 print(Constants.MSG_PROCESS_FINISHED)
 
@@ -125,7 +125,7 @@ class App(object):
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.downloadGenesFromExcel:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 retriever_BS.insert_in_collection_from_excel(Constants.INPUT_FOLDER + args.downloadGenesFromExcel[0],
                                                              args.downloadGenesFromExcel[1],
                                                              args.downloadGenesFromExcel[2])
@@ -142,7 +142,7 @@ class App(object):
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.retrieveFromFasta:
-                retriever_BS = GeneRetrieverBS()
+                retriever_BS = GeneHandlerBS()
                 retriever_BS.insert_in_collection_from_fasta(Constants.INPUT_FOLDER + args.retrieveFromFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 

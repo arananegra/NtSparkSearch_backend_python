@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
 
-class IGeneRetriever(metaclass=ABCMeta):
+class IGeneHandler(metaclass=ABCMeta):
 
     @abstractmethod
     def insert_in_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
@@ -92,6 +92,12 @@ class IGeneRetriever(metaclass=ABCMeta):
 
     @abstractmethod
     def delete_unfiltered_collection(self) -> None:
+        """
+        Removes the whole unfiltered collection of genes
+        """
+
+    @abstractmethod
+    def delete_filtered_collection(self) -> None:
         """
         Removes the whole unfiltered collection of genes
         """

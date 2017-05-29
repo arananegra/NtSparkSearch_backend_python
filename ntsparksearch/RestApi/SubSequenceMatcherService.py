@@ -1,7 +1,7 @@
 from flask import Blueprint, Response, request
 import json
 from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
-from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
 from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
@@ -9,7 +9,7 @@ from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_lis
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
 
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
-retriever_BS = GeneRetrieverBS()
+retriever_BS = GeneHandlerBS()
 email_manager = EmailSender()
 
 

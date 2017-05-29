@@ -1,5 +1,5 @@
-from ntsparksearch.GeneRetriever.IGeneRetriever import IGeneRetriever
-from ntsparksearch.GeneRetriever.GeneRetrieverDAO import GeneRetrieverDAO
+from ntsparksearch.GeneHandler.IGeneHandler import IGeneHandler
+from ntsparksearch.GeneHandler.GeneRetrieverDAO import GeneRetrieverDAO
 from ntsparksearch.Common.GeneDAO import GeneDAO
 from ntsparksearch.Common.GeneDTO import GeneSearcher
 from ntsparksearch.Common.GeneDTO import GeneDTO
@@ -12,7 +12,7 @@ from Bio import SeqIO
 from pymongo import MongoClient
 
 
-class GeneRetrieverBS(IGeneRetriever):
+class GeneHandlerBS(IGeneHandler):
     def insert_in_collection_from_excel(self, file_path: str, sheet="0", column_name="gene_id") -> None:
 
         try:
@@ -271,6 +271,19 @@ class GeneRetrieverBS(IGeneRetriever):
         except Exception as error:
             print('Caught exception when removing unfiltered collection' + repr(error))
 
+    def delete_filtered_collection(self) -> None:
+
+        try:
+
+            mongo_dao_retriever_filtered = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            mongo_dao_retriever_filtered.delete_collection()
+
+        except Exception as error:
+            print('Caught exception when removing filtered collection' + repr(error))
+
     def check_gene_id_list_existance_on_unfiltered_from_list(self, list_of_genes: list) -> list:
 
         try:
@@ -351,7 +364,7 @@ class GeneRetrieverBS(IGeneRetriever):
                 print('\nCaught exception when trying to download sequence from NCBI at gene ' +
                       gene_id + " : " + repr(error) + " This sequence will be removed from results")
 
-                # retriever_bs = GeneRetrieverBS()
+                # retriever_bs = GeneHandlerBS()
                 # retriever_bs.delete_gene_document_by_gene_id(gene_id)
                 continue
 
