@@ -4,13 +4,16 @@ from flask import Blueprint, request, Response, redirect, url_for, send_from_dir
 from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 from werkzeug.utils import secure_filename
 from ntsparksearch.GeneRetriever.GeneRetrieverBS import GeneRetrieverBS
+from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
 
 GeneRetrieverService_endpoints = Blueprint('GeneRetrieverService', __name__)
 retriever_BS = GeneRetrieverBS()
+subsequence_matcher_BS = SubSequenceSparkMatcherBS()
 
 email_manager = EmailSender()
+
 
 def allowed_file(filename, extension):
     return '.' in filename and \
@@ -18,7 +21,7 @@ def allowed_file(filename, extension):
 
 
 @GeneRetrieverService_endpoints.route('/unfiltered', methods=['GET'])
-def obtainUnfiltered():
+def obtain_unfiltered():
     list_of_genes = retriever_BS.get_list_of_ids_from_mongo()
     return Response(json.dumps(list_of_genes), mimetype='application/json')
 
@@ -61,6 +64,7 @@ def upload_excel_file_and_download_genes():
     </form>
     '''
 
+
 @GeneRetrieverService_endpoints.route('/upload-fasta', methods=['POST', 'GET'])
 def upload_fasta_file():
     if request.method == 'POST':
@@ -81,8 +85,20 @@ def upload_fasta_file():
     </form>
     '''
 
-# para recuperar un archivo
+
 @GeneRetrieverService_endpoints.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(Constants.UPLOAD_FOLDER,
                                filename)
+
+
+@GeneRetrieverService_endpoints.route('/delete-unfiltered', methods=['DELETE'])
+def delete_unfiltered_collection():
+    retriever_BS.delete_unfiltered_collection()
+    return Response(), Constants.OK_WAIT
+
+
+@GeneRetrieverService_endpoints.route('/delete-filtered', methods=['DELETE'])
+def delete_unfiltered_collection():
+    subsequence_matcher_BS.delete_filtered_collection()
+    return Response(), Constants.OK_WAIT
