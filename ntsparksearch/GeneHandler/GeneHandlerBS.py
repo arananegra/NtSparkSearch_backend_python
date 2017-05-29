@@ -1,5 +1,5 @@
 from ntsparksearch.GeneHandler.IGeneHandler import IGeneHandler
-from ntsparksearch.GeneHandler.GeneRetrieverDAO import GeneRetrieverDAO
+from ntsparksearch.GeneHandler.GeneHandlerDAO import GeneHandlerDAO
 from ntsparksearch.Common.GeneDAO import GeneDAO
 from ntsparksearch.Common.GeneDTO import GeneSearcher
 from ntsparksearch.Common.GeneDTO import GeneDTO
@@ -18,7 +18,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
 
             if os.path.isfile(file_path) is True:
-                file_retriever_and_mongo_manager = GeneRetrieverDAO(
+                file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
@@ -45,7 +45,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
 
             if os.path.isfile(file_path) is True:
-                file_retriever_and_mongo_manager = GeneRetrieverDAO(
+                file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                     Constants.MONGODB_DB_NAME,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
@@ -364,8 +364,6 @@ class GeneHandlerBS(IGeneHandler):
                 print('\nCaught exception when trying to download sequence from NCBI at gene ' +
                       gene_id + " : " + repr(error) + " This sequence will be removed from results")
 
-                # retriever_bs = GeneHandlerBS()
-                # retriever_bs.delete_gene_document_by_gene_id(gene_id)
                 continue
 
         return dict_id_and_sequences
