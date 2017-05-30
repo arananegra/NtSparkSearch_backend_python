@@ -27,20 +27,15 @@ class Constants(object):
     #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
     INPUT_FOLDER = "usr/spark-2.1.0/input/"
 
-    # file names
-    FASTA_FILE_UNFILTERED = "unfiltered_sequences"
-    FASTA_FILE_FILTERED = "filtered_sequences"
-
-    # file names
-    IDS_FILE_UNFILTERED = "unfiltered_ids"
-    IDS_FILE_FILTERED = "filtered_ids"
-
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']
 
     # Warning mssg
     MSG_WARNING_UNFILTERED_COLLECTION_EMPTY = "WARNING: The unfiltered collection is empty"
     MSG_WARNING_FILTERED_COLLECTION_EMPTY = "WARNING: The filtered collection is empty"
+
+    #File mssg
+    MSG_FILE_NUMBER_OF_ELEMENTS = "The number of item(s) in this file is"
 
     # Services extensions
     UPLOAD_FOLDER = OUTPUT_FOLDER

@@ -297,9 +297,12 @@ class GeneHandlerBS(IGeneHandler):
 
             if list_of_unfiltered_genes_ids is None:
                 print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
-                raise Exception
+                list_of_unfiltered_genes_ids = []
 
             file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
+
+            file_with_ids.write(
+                Constants.MSG_FILE_NUMBER_OF_ELEMENTS + " " + str(len(list_of_unfiltered_genes_ids)) + "\n")
 
             for id in list_of_unfiltered_genes_ids:
                 file_with_ids.write("%s\n" % id)
@@ -314,9 +317,12 @@ class GeneHandlerBS(IGeneHandler):
 
             if list_of_filtered_genes_ids is None:
                 print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
-                raise Exception
+                list_of_filtered_genes_ids = []
 
             file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
+
+            file_with_ids.write(
+                Constants.MSG_FILE_NUMBER_OF_ELEMENTS + " " + str(len(list_of_filtered_genes_ids)) + "\n")
 
             for id_gene in list_of_filtered_genes_ids:
                 file_with_ids.write("%s\n" % id_gene)
