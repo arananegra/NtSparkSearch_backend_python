@@ -1,6 +1,8 @@
 import os
 import json
-from flask import Blueprint, request, Response, redirect, url_for, send_from_directory, jsonify
+import string
+import random
+from flask import Blueprint, request, Response, send_from_directory, send_file
 from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 from werkzeug.utils import secure_filename
 from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
@@ -25,7 +27,6 @@ def obtain_unfiltered():
 
 @GeneHandlerService_endpoints.route('/upload-excel', methods=['POST', 'GET'])
 def upload_excel_file_and_download_genes():
-
     try:
         email_receiver = request.args.getlist("email")
 
@@ -87,6 +88,44 @@ def upload_fasta_file():
 def uploaded_file(filename):
     return send_from_directory(Constants.UPLOAD_FOLDER,
                                filename)
+
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+@GeneHandlerService_endpoints.route('/download-fasta-unfiltered')
+def download_fasta_file_unfiltered():
+    random_string_name = id_generator()
+    gene_handler_BS.export_unfiltered_genes_collection_to_fasta(
+        Constants.OUTPUT_FOLDER + random_string_name)
+    return send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.FASTA_EXTENSION,
+                     mimetype='text/plain')
+
+
+@GeneHandlerService_endpoints.route('/download-fasta-filtered')
+def download_fasta_file_filtered():
+    random_string_name = id_generator()
+    gene_handler_BS.export_filtered_genes_collection_to_fasta(
+        Constants.OUTPUT_FOLDER + random_string_name)
+    return send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.FASTA_EXTENSION,
+                     mimetype='text/plain')
+
+
+@GeneHandlerService_endpoints.route('/download-id-unfiltered')
+def download_id_file_unfiltered():
+    random_string_name = id_generator()
+    gene_handler_BS.export_filtered_genes_collection_to_file_with_just_ids(
+        Constants.OUTPUT_FOLDER + random_string_name)
+    return send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION, mimetype='text/plain')
+
+
+@GeneHandlerService_endpoints.route('/download-id-filtered')
+def download_id_file_filtered():
+    random_string_name = id_generator()
+    gene_handler_BS.export_unfiltered_genes_collection_to_file_with_just_ids(
+        Constants.OUTPUT_FOLDER + random_string_name)
+    return send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION, mimetype='text/plain')
 
 
 @GeneHandlerService_endpoints.route('/delete-unfiltered', methods=['DELETE'])

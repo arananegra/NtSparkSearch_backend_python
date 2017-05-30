@@ -13,7 +13,6 @@ from pymongo import MongoClient
 
 
 class GeneHandlerBS(IGeneHandler):
-
     def get_dict_from_filtered_with_sequences(self) -> dict:
         try:
             dict_with_genes = {}
@@ -74,8 +73,8 @@ class GeneHandlerBS(IGeneHandler):
 
             if list_of_gene_objets is not None:
                 for gene_object in list_of_gene_objets:
-                        gene_id = gene_object.gene_id
-                        list_of_just_ids.append(gene_id)
+                    gene_id = gene_object.gene_id
+                    list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -263,7 +262,7 @@ class GeneHandlerBS(IGeneHandler):
                 print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
                 raise Exception
 
-            file_with_ids = open(file_name + '.txt', 'w')
+            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
 
             for id in list_of_unfiltered_genes_ids:
                 file_with_ids.write("%s\n" % id)
@@ -284,7 +283,7 @@ class GeneHandlerBS(IGeneHandler):
                 print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
                 raise Exception
 
-            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
+            SeqIO.write(list_of_seqrecords, fasta_name + "." + Constants.FASTA_EXTENSION, "fasta")
 
         except Exception as error:
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
@@ -298,7 +297,7 @@ class GeneHandlerBS(IGeneHandler):
                 print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
                 raise Exception
 
-            file_with_ids = open(file_name + '.txt', 'w')
+            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
 
             for id in list_of_filtered_genes_ids:
                 file_with_ids.write("%s\n" % id)
@@ -319,7 +318,7 @@ class GeneHandlerBS(IGeneHandler):
                 print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
                 raise Exception
 
-            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
+            SeqIO.write(list_of_seqrecords, fasta_name + "." + Constants.FASTA_EXTENSION, "fasta")
 
         except Exception as error:
             print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))

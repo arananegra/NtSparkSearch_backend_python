@@ -27,6 +27,14 @@ class Constants(object):
     #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
     INPUT_FOLDER = "input/"
 
+    # file names
+    FASTA_FILE_UNFILTERED = "unfiltered_sequences"
+    FASTA_FILE_FILTERED = "filtered_sequences"
+
+    # file names
+    IDS_FILE_UNFILTERED = "unfiltered_ids"
+    IDS_FILE_FILTERED = "filtered_ids"
+
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']
 
@@ -34,10 +42,11 @@ class Constants(object):
     MSG_WARNING_UNFILTERED_COLLECTION_EMPTY = "WARNING: The unfiltered collection is empty"
     MSG_WARNING_FILTERED_COLLECTION_EMPTY = "WARNING: The filtered collection is empty"
 
-    # Services constants
+    # Services extensions
     UPLOAD_FOLDER = OUTPUT_FOLDER
     EXCEL_EXTENSION = "xlsx"
     FASTA_EXTENSION = "fasta"
+    ID_EXTENSION = "txt"
 
     # Service responses
     OK = 200
