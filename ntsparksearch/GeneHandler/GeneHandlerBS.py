@@ -13,7 +13,149 @@ from pymongo import MongoClient
 
 
 class GeneHandlerBS(IGeneHandler):
-    def insert_in_collection_from_excel(self, file_path: str, sheet="0", column_name="gene_id") -> None:
+
+    def get_dict_from_filtered_with_sequences(self) -> dict:
+
+        try:
+            dict_with_genes = {}
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
+
+            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
+
+            for id_gene, sequence in deep_copy_dict_with_genes.items():
+                if sequence is None:
+                    del dict_with_genes[id_gene]
+
+            return dict_with_genes
+
+        except Exception as error:
+            print('Caught exception getting filtered sequences (to dict):' + repr(error))
+
+    def get_dict_from_unfiltered_with_sequences(self) -> dict:
+        dict_with_genes = None
+
+        try:
+
+            dict_with_genes = {}
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
+
+            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
+
+            if dict_with_genes is not None:
+
+                for id_gene, sequence in deep_copy_dict_with_genes.items():
+                    if sequence is None:
+                        del dict_with_genes[id_gene]
+
+            return dict_with_genes
+
+        except Exception as error:
+            print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
+
+    def get_list_of_ids_from_mongo_unfiltered(self) -> list:
+        list_of_just_ids = None
+
+        try:
+            list_of_just_ids = []
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
+
+            if list_of_gene_objets is not None:
+                for gene_object in list_of_gene_objets:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids.append(gene_id)
+
+            return list_of_just_ids
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list (unfiltered): ' + repr(error))
+
+    def get_list_of_ids_from_mongo_filtered(self) -> list:
+        list_of_just_ids = None
+
+        try:
+            list_of_just_ids = []
+
+            mongo_dao_retriever_filtered = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            list_of_gene_objets = mongo_dao_retriever_filtered.get_all_gene_objects_as_list()
+
+            for gene_object in list_of_gene_objets:
+                gene_id = gene_object.gene_id
+                list_of_just_ids.append(gene_id)
+
+            return list_of_just_ids
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))
+
+    def get_list_of_ids_from_mongo_unfiltered_without_sequence(self) -> list:
+        list_of_just_ids = None
+
+        try:
+            list_of_just_ids = []
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_gene_objects = mongo_dao_retriever.get_all_gene_objects_as_list()
+
+            if list_of_gene_objects is not None:
+
+                for gene_object in list_of_gene_objects:
+                    if gene_object.sequence is None:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids.append(gene_id)
+
+            return list_of_just_ids
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(
+                error))
+
+    def get_list_of_ids_from_mongo_unfiltered_with_sequence(self) -> list:
+        list_of_just_ids_of_genes_with_sequence = None
+
+        try:
+            list_of_just_ids_of_genes_with_sequence = []
+
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
+
+            if list_of_gene_objets is not None:
+
+                for gene_object in list_of_gene_objets:
+                    if gene_object.sequence is not None:
+                        gene_id = gene_object.gene_id
+                        list_of_just_ids_of_genes_with_sequence.append(gene_id)
+
+            return list_of_just_ids_of_genes_with_sequence
+
+        except Exception as error:
+            print('Caught exception when getting all ids from mongo as list with sequence (unfiltered): ' + repr(
+                error))
+
+    def insert_in_unfiltered_collection_from_excel(self, file_path: str, sheet="0", column_name="gene_id") -> None:
 
         try:
 
@@ -40,7 +182,7 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception when inserting all data from excel: ' + repr(error))
 
-    def insert_in_collection_from_fasta(self, file_path: str) -> None:
+    def insert_in_unfiltered_collection_from_fasta(self, file_path: str) -> None:
 
         try:
 
@@ -66,7 +208,7 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception when inserting all data from fasta: ' + repr(error))
 
-    def insert_in_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
+    def insert_in_unfiltered_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
 
         try:
 
@@ -89,6 +231,19 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception when inserting all data from list of ids: ' + repr(error))
 
+    def insert_filtered_dict_in_filtered_collection(self, filtered_dict: dict) -> None:
+
+        try:
+
+            mongo_dao_manager = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+
+            mongo_dao_manager.insert_gene_document_from_non_object_dict(filtered_dict)
+
+        except Exception as error:
+            print('Caught exception while inserting filtered sequences in mongo collection' + repr(error))
+
     def delete_gene_document_by_gene_id(self, gene_id: str) -> None:
         try:
             mongo_dao_retriever = GeneDAO(
@@ -109,7 +264,7 @@ class GeneHandlerBS(IGeneHandler):
 
         try:
 
-            list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo()
+            list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo_unfiltered()
 
             if list_of_unfiltered_genes_ids is None:
                 print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
@@ -142,103 +297,43 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
 
-    def get_dict_from_unfiltered_with_sequences(self) -> dict:
-        dict_with_genes = None
+    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
 
         try:
 
-            dict_with_genes = {}
+            gene_handlerBS = GeneHandlerBS()
+            list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
 
-            mongo_dao_retriever = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+            if list_of_filtered_genes_ids is None:
+                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
+                raise Exception
 
-            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
+            file_with_ids = open(file_name + '.txt', 'w')
 
-            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
-
-            if dict_with_genes is not None:
-
-                for id_gene, sequence in deep_copy_dict_with_genes.items():
-                    if sequence is None:
-                        del dict_with_genes[id_gene]
-
-            return dict_with_genes
+            for id in list_of_filtered_genes_ids:
+                file_with_ids.write("%s\n" % id)
 
         except Exception as error:
-            print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
+            print('Caught exception when exporting all ids to file from filtered collection: ' + repr(error))
 
-    def get_list_of_ids_from_mongo(self) -> list:
-        list_of_just_ids = None
+    def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:
-            list_of_just_ids = []
 
-            mongo_dao_retriever = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+            mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                                          Constants.MONGODB_DB_NAME,
+                                          Constants.MONGODB_COLLECTION_FILTERED)
 
-            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
+            list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
 
-            if list_of_gene_objets is not None:
-                for gene_object in list_of_gene_objets:
-                        gene_id = gene_object.gene_id
-                        list_of_just_ids.append(gene_id)
+            if list_of_seqrecords is None:
+                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
+                raise Exception
 
-            return list_of_just_ids
+            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
 
         except Exception as error:
-            print('Caught exception when getting all ids from mongo as list (unfiltered): ' + repr(error))
-
-    def get_list_of_ids_from_mongo_without_sequence(self) -> list:
-        list_of_just_ids = None
-
-        try:
-            list_of_just_ids = []
-
-            mongo_dao_retriever = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
-
-            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
-
-            if list_of_gene_objets is not None:
-
-                for gene_object in list_of_gene_objets:
-                    if gene_object.sequence is None:
-                        gene_id = gene_object.gene_id
-                        list_of_just_ids.append(gene_id)
-
-            return list_of_just_ids
-
-        except Exception as error:
-            print('Caught exception when getting all ids from mongo as list without sequence (unfiltered): ' + repr(
-                error))
-
-    def get_list_of_ids_from_mongo_with_sequence(self) -> list:
-        list_of_just_ids_of_genes_with_sequence = None
-
-        try:
-            list_of_just_ids_of_genes_with_sequence = []
-
-            mongo_dao_retriever = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
-
-            list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
-
-            if list_of_gene_objets is not None:
-
-                for gene_object in list_of_gene_objets:
-                    if gene_object.sequence is not None:
-                        gene_id = gene_object.gene_id
-                        list_of_just_ids_of_genes_with_sequence.append(gene_id)
-
-            return list_of_just_ids_of_genes_with_sequence
-
-        except Exception as error:
-            print('Caught exception when getting all ids from mongo as list with sequence (unfiltered): ' + repr(
-                error))
+            print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))
 
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
@@ -292,7 +387,7 @@ class GeneHandlerBS(IGeneHandler):
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
 
-            list_of_unfiltered_genes_from_mongo = self.get_list_of_ids_from_mongo()
+            list_of_unfiltered_genes_from_mongo = self.get_list_of_ids_from_mongo_unfiltered()
 
             if list_of_unfiltered_genes_from_mongo is None:
                 list_of_unfiltered_genes_from_mongo = []

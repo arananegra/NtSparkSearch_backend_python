@@ -13,27 +13,6 @@ from pyspark.sql import SparkSession
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
-    def get_dict_from_filtered_with_sequences(self) -> dict:
-
-        try:
-            dict_with_genes = {}
-
-            mongo_dao_retriever = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
-
-            dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
-
-            deep_copy_dict_with_genes = deepcopy(dict_with_genes)
-
-            for id_gene, sequence in deep_copy_dict_with_genes.items():
-                if sequence is None:
-                    del dict_with_genes[id_gene]
-
-            return dict_with_genes
-
-        except Exception as error:
-            print('Caught exception getting filtered sequences (to dict):' + repr(error))
 
     def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
 
@@ -48,11 +27,11 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 .config("spark.driver.maxResultSize", "3g") \
                 .config("spark.executor.memory", "3g").getOrCreate()
 
-            gene_handlerBS = GeneHandlerBS()
+            gene_handler_bs = GeneHandlerBS()
 
-            dict_to_filter = gene_handlerBS.get_dict_from_unfiltered_with_sequences()
+            dict_to_filter = gene_handler_bs.get_dict_from_unfiltered_with_sequences()
 
-            gene_handlerBS.delete_filtered_collection()
+            gene_handler_bs.delete_filtered_collection()
 
             sc = spark_session.sparkContext
             sc.setLogLevel("ERROR")
@@ -70,74 +49,3 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         except Exception as error:
             print('Caught exception trying to filter the collection:' + repr(error))
-
-    def insert_filtered_dict_in_filtered_collection(self, filtered_dict: dict) -> None:
-
-        try:
-
-            mongo_dao_manager = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
-
-            mongo_dao_manager.insert_gene_document_from_non_object_dict(filtered_dict)
-
-        except Exception as error:
-            print('Caught exception while inserting filtered sequences in mongo collection' + repr(error))
-
-    def get_list_of_ids_from_mongo_filtered(self) -> list:
-        list_of_just_ids = None
-
-        try:
-            list_of_just_ids = []
-
-            mongo_dao_retriever_filtered = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
-
-            list_of_gene_objets = mongo_dao_retriever_filtered.get_all_gene_objects_as_list()
-
-            for gene_object in list_of_gene_objets:
-                gene_id = gene_object.gene_id
-                list_of_just_ids.append(gene_id)
-
-            return list_of_just_ids
-
-        except Exception as error:
-            print('Caught exception when getting all ids from mongo as list (filtered): ' + repr(error))
-
-    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
-
-        try:
-
-            list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
-
-            if list_of_filtered_genes_ids is None:
-                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
-                raise Exception
-
-            file_with_ids = open(file_name + '.txt', 'w')
-
-            for id in list_of_filtered_genes_ids:
-                file_with_ids.write("%s\n" % id)
-
-        except Exception as error:
-            print('Caught exception when exporting all ids to file from filtered collection: ' + repr(error))
-
-    def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
-
-        try:
-
-            mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                                          Constants.MONGODB_DB_NAME,
-                                          Constants.MONGODB_COLLECTION_FILTERED)
-
-            list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
-
-            if list_of_seqrecords is None:
-                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
-                raise Exception
-
-            SeqIO.write(list_of_seqrecords, fasta_name + ".fasta", "fasta")
-
-        except Exception as error:
-            print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))

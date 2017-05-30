@@ -72,7 +72,7 @@ class App(object):
 
             if args.obtainUnfiltered:
                 retriever_BS = GeneHandlerBS()
-                list_of_genes = retriever_BS.get_list_of_ids_from_mongo()
+                list_of_genes = retriever_BS.get_list_of_ids_from_mongo_unfiltered()
 
                 if list_of_genes is None:
                     print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
@@ -126,11 +126,11 @@ class App(object):
 
             if args.downloadGenesFromExcel:
                 retriever_BS = GeneHandlerBS()
-                retriever_BS.insert_in_collection_from_excel(Constants.INPUT_FOLDER + args.downloadGenesFromExcel[0],
-                                                             args.downloadGenesFromExcel[1],
-                                                             args.downloadGenesFromExcel[2])
+                retriever_BS.insert_in_unfiltered_collection_from_excel(Constants.INPUT_FOLDER + args.downloadGenesFromExcel[0],
+                                                                        args.downloadGenesFromExcel[1],
+                                                                        args.downloadGenesFromExcel[2])
 
-                list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_without_sequence()
+                list_of_genes_without_sequence = retriever_BS.get_list_of_ids_from_mongo_unfiltered_without_sequence()
 
                 if list_of_genes_without_sequence is not None:
                     print(Constants.MSG_PROCESS_DOWNLOADING_GENES)
@@ -143,7 +143,7 @@ class App(object):
 
             if args.retrieveFromFasta:
                 retriever_BS = GeneHandlerBS()
-                retriever_BS.insert_in_collection_from_fasta(Constants.INPUT_FOLDER + args.retrieveFromFasta[0])
+                retriever_BS.insert_in_unfiltered_collection_from_fasta(Constants.INPUT_FOLDER + args.retrieveFromFasta[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.sparkSeqMatch:

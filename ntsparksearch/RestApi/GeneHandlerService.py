@@ -19,7 +19,7 @@ def allowed_file(filename, extension):
 
 @GeneHandlerService_endpoints.route('/unfiltered', methods=['GET'])
 def obtain_unfiltered():
-    list_of_genes = gene_handler_BS.get_list_of_ids_from_mongo()
+    list_of_genes = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered()
     return Response(json.dumps(list_of_genes), mimetype='application/json')
 
 
@@ -39,8 +39,8 @@ def upload_excel_file_and_download_genes():
             filename = secure_filename(file.filename)
             file.save(os.path.join(Constants.UPLOAD_FOLDER, filename))
 
-            gene_handler_BS.insert_in_collection_from_excel(Constants.UPLOAD_FOLDER + filename)
-            list_of_genes_without_sequence = gene_handler_BS.get_list_of_ids_from_mongo_without_sequence()
+            gene_handler_BS.insert_in_unfiltered_collection_from_excel(Constants.UPLOAD_FOLDER + filename)
+            list_of_genes_without_sequence = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered_without_sequence()
 
             if list_of_genes_without_sequence is not None:
                 if email_receiver is not None:
@@ -70,7 +70,7 @@ def upload_fasta_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(Constants.UPLOAD_FOLDER, filename))
 
-            gene_handler_BS.insert_in_collection_from_fasta(Constants.UPLOAD_FOLDER + filename)
+            gene_handler_BS.insert_in_unfiltered_collection_from_fasta(Constants.UPLOAD_FOLDER + filename)
             return Response(), Constants.POST_CREATED
     return '''
     <!doctype html>
