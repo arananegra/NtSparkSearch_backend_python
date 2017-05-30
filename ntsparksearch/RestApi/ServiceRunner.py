@@ -13,7 +13,6 @@ def create_app():
     rq.init_app(app)
     return app
 
-
 app = create_app()
 
 

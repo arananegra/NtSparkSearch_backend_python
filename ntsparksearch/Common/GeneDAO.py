@@ -44,7 +44,6 @@ class GeneDAO(object):
         collection_from_client_reference = self.get_collection()
 
         try:
-
             list_gene_records = []
 
             if (search_criteria.search_by_gene_id_criteria is not None):
@@ -170,11 +169,6 @@ class GeneDAO(object):
             collection_from_client_reference = self.get_collection()
             criteria = GeneSearcher()
             criteria.search_by_gene_id_criteria = gene_id
-
-            # !!!!!!!
-            # llevar esta condición a la bs --> es esa capa la que se tiene que encargar
-            # de hacer esas comprobaciones
-            # if self.search_gene_objects_and_return_as_list(criteria) is None:
             collection_from_client_reference.delete_one({Constants.GENE_ID: gene_id})
 
         except Exception as error:
@@ -229,7 +223,6 @@ class GeneDAO(object):
     def insert_gene_document_from_list_just_ids(self, list_of_gene_ids: list) -> None:
         collection_from_client_reference = None
         try:
-
             collection_from_client_reference = self.get_collection()
             list_of_geneDTOs_just_id = []
 
@@ -243,9 +236,7 @@ class GeneDAO(object):
             print('Caught exception at insert from list of just gene ids: ' + repr(error))
 
     def insert_gene_document_from_non_object_dict(self, dict_with_gene_raw_data: dict) -> None:
-
         try:
-
             for k, v in dict_with_gene_raw_data.items():
                 gene_object = GeneDTO()
 

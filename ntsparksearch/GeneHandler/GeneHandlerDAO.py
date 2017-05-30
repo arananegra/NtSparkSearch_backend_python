@@ -11,7 +11,6 @@ class GeneHandlerDAO(GeneDAO):
         self._file_path = file_path
 
     def get_list_of_genes_from_xlrd(self, sheet: str, column_name: str) -> list:
-
         try:
             excel = xlrd.open_workbook(self._file_path)
             sh = excel.sheet_by_index(int(sheet))
@@ -43,7 +42,6 @@ class GeneHandlerDAO(GeneDAO):
             print('Caught exception while reading from excel file: ' + repr(error))
 
     def get_list_of_gene_objects_from_multi_fasta(self) -> list:
-
         try:
             list_gene_records = []
 

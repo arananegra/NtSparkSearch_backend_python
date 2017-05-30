@@ -109,8 +109,8 @@ class App(object):
                 print(Constants.MSG_PROCESS_FINISHED)
 
             if args.exportFilteredId:
-                subsequence_matcher_BS = SubSequenceSparkMatcherBS()
-                subsequence_matcher_BS.export_filtered_genes_collection_to_file_with_just_ids(
+                retriever_BS = GeneHandlerBS()
+                retriever_BS.export_filtered_genes_collection_to_file_with_just_ids(
                     Constants.OUTPUT_FOLDER + args.exportFilteredId[0])
                 print(Constants.MSG_PROCESS_FINISHED)
 

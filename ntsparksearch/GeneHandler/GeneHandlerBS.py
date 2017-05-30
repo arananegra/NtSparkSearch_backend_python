@@ -15,7 +15,6 @@ from pymongo import MongoClient
 class GeneHandlerBS(IGeneHandler):
 
     def get_dict_from_filtered_with_sequences(self) -> dict:
-
         try:
             dict_with_genes = {}
 
@@ -40,7 +39,6 @@ class GeneHandlerBS(IGeneHandler):
         dict_with_genes = None
 
         try:
-
             dict_with_genes = {}
 
             mongo_dao_retriever = GeneDAO(
@@ -158,7 +156,6 @@ class GeneHandlerBS(IGeneHandler):
     def insert_in_unfiltered_collection_from_excel(self, file_path: str, sheet="0", column_name="gene_id") -> None:
 
         try:
-
             if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
@@ -185,7 +182,6 @@ class GeneHandlerBS(IGeneHandler):
     def insert_in_unfiltered_collection_from_fasta(self, file_path: str) -> None:
 
         try:
-
             if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
@@ -211,7 +207,6 @@ class GeneHandlerBS(IGeneHandler):
     def insert_in_unfiltered_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
 
         try:
-
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME,
@@ -234,7 +229,6 @@ class GeneHandlerBS(IGeneHandler):
     def insert_filtered_dict_in_filtered_collection(self, filtered_dict: dict) -> None:
 
         try:
-
             mongo_dao_manager = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
@@ -263,7 +257,6 @@ class GeneHandlerBS(IGeneHandler):
     def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
 
         try:
-
             list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo_unfiltered()
 
             if list_of_unfiltered_genes_ids is None:
@@ -281,7 +274,6 @@ class GeneHandlerBS(IGeneHandler):
     def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:
-
             mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                                           Constants.MONGODB_DB_NAME,
                                           Constants.MONGODB_COLLECTION_UNFILTERED)
@@ -300,8 +292,6 @@ class GeneHandlerBS(IGeneHandler):
     def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
 
         try:
-
-            gene_handlerBS = GeneHandlerBS()
             list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
 
             if list_of_filtered_genes_ids is None:
@@ -319,7 +309,6 @@ class GeneHandlerBS(IGeneHandler):
     def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:
-
             mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                                           Constants.MONGODB_DB_NAME,
                                           Constants.MONGODB_COLLECTION_FILTERED)
@@ -338,7 +327,6 @@ class GeneHandlerBS(IGeneHandler):
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
         try:
-
             if dict_of_genes is not None:
                 mongo_dao_retriever = GeneDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
@@ -356,7 +344,6 @@ class GeneHandlerBS(IGeneHandler):
     def delete_unfiltered_collection(self) -> None:
 
         try:
-
             mongo_dao_retriever_unfiltered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
@@ -369,7 +356,6 @@ class GeneHandlerBS(IGeneHandler):
     def delete_filtered_collection(self) -> None:
 
         try:
-
             mongo_dao_retriever_filtered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
                 Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
@@ -382,11 +368,6 @@ class GeneHandlerBS(IGeneHandler):
     def check_gene_id_list_existance_on_unfiltered_from_list(self, list_of_genes: list) -> list:
 
         try:
-
-            mongo_dao_retriever_unfiltered = GeneDAO(
-                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
-
             list_of_unfiltered_genes_from_mongo = self.get_list_of_ids_from_mongo_unfiltered()
 
             if list_of_unfiltered_genes_from_mongo is None:
@@ -404,7 +385,6 @@ class GeneHandlerBS(IGeneHandler):
             print('Caught exception at checking existence of genes from unfiltered collection ' + repr(error))
 
     def check_gene_id_list_existance_on_ncbi_from_list(self, list_of_genes: list) -> list:
-
         pbar = ProgressBar()
         Entrez.email = Constants.MAIL_SENDER
         list_of_available_genes = []
@@ -426,7 +406,6 @@ class GeneHandlerBS(IGeneHandler):
         return list_of_available_genes
 
     def download_sequences_from_list_as_dict_from_NCBI(self, list_of_genes: list) -> dict:
-
         pbar = ProgressBar()
         Entrez.email = Constants.MAIL_SENDER
         dict_id_and_sequences = {}
