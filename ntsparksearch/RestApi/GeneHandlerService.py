@@ -104,7 +104,7 @@ def download_fasta_file_unfiltered():
                                        mimetype='text/plain'))
 
     response.headers["Content-Disposition"] = "attachment; filename=" + \
-                                              Constants.OUTPUT_FOLDER + random_string_name \
+                                              random_string_name \
                                               + "." + Constants.FASTA_EXTENSION
     return response
 
@@ -119,28 +119,13 @@ def download_fasta_file_filtered():
                                        mimetype='text/plain'))
 
     response.headers["Content-Disposition"] = "attachment; filename=" + \
-                                              Constants.OUTPUT_FOLDER + random_string_name \
+                                              random_string_name \
                                               + "." + Constants.FASTA_EXTENSION
     return response
 
 
 @GeneHandlerService_endpoints.route('/download-id-unfiltered')
 def download_id_file_unfiltered():
-    random_string_name = id_generator()
-    gene_handler_BS.export_filtered_genes_collection_to_file_with_just_ids(Constants.OUTPUT_FOLDER
-                                                                           + random_string_name)
-
-    response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION,
-                                       mimetype='text/plain'))
-
-    response.headers["Content-Disposition"] = "attachment; filename=" + \
-                                              Constants.OUTPUT_FOLDER + random_string_name \
-                                              + "." + Constants.ID_EXTENSION
-    return response
-
-
-@GeneHandlerService_endpoints.route('/download-id-filtered')
-def download_id_file_filtered():
     random_string_name = id_generator()
     gene_handler_BS.export_unfiltered_genes_collection_to_file_with_just_ids(Constants.OUTPUT_FOLDER
                                                                              + random_string_name)
@@ -149,7 +134,22 @@ def download_id_file_filtered():
                                        mimetype='text/plain'))
 
     response.headers["Content-Disposition"] = "attachment; filename=" + \
-                                              Constants.OUTPUT_FOLDER + random_string_name \
+                                              random_string_name \
+                                              + "." + Constants.ID_EXTENSION
+    return response
+
+
+@GeneHandlerService_endpoints.route('/download-id-filtered')
+def download_id_file_filtered():
+    random_string_name = id_generator()
+    gene_handler_BS.export_filtered_genes_collection_to_file_with_just_ids(Constants.OUTPUT_FOLDER
+                                                                           + random_string_name)
+
+    response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION,
+                                       mimetype='text/plain'))
+
+    response.headers["Content-Disposition"] = "attachment; filename=" + \
+                                              random_string_name \
                                               + "." + Constants.ID_EXTENSION
     return response
 

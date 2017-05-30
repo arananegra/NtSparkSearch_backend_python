@@ -93,9 +93,10 @@ class GeneHandlerBS(IGeneHandler):
 
             list_of_gene_objets = mongo_dao_retriever_filtered.get_all_gene_objects_as_list()
 
-            for gene_object in list_of_gene_objets:
-                gene_id = gene_object.gene_id
-                list_of_just_ids.append(gene_id)
+            if list_of_gene_objets is not None:
+                for gene_object in list_of_gene_objets:
+                    gene_id = gene_object.gene_id
+                    list_of_just_ids.append(gene_id)
 
             return list_of_just_ids
 
@@ -253,23 +254,6 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception at delete operation: ' + repr(error))
 
-    def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
-
-        try:
-            list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo_unfiltered()
-
-            if list_of_unfiltered_genes_ids is None:
-                print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
-                raise Exception
-
-            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
-
-            for id in list_of_unfiltered_genes_ids:
-                file_with_ids.write("%s\n" % id)
-
-        except Exception as error:
-            print('Caught exception when exporting all ids to file from unfiltered collection: ' + repr(error))
-
     def export_unfiltered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:
@@ -288,23 +272,6 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception when exporting all data to fasta from unfiltered collection: ' + repr(error))
 
-    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
-
-        try:
-            list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
-
-            if list_of_filtered_genes_ids is None:
-                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
-                raise Exception
-
-            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
-
-            for id in list_of_filtered_genes_ids:
-                file_with_ids.write("%s\n" % id)
-
-        except Exception as error:
-            print('Caught exception when exporting all ids to file from filtered collection: ' + repr(error))
-
     def export_filtered_genes_collection_to_fasta(self, fasta_name: str) -> None:
 
         try:
@@ -322,6 +289,40 @@ class GeneHandlerBS(IGeneHandler):
 
         except Exception as error:
             print('Caught exception when exporting all data to fasta from filtered collection: ' + repr(error))
+
+    def export_unfiltered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+
+        try:
+            list_of_unfiltered_genes_ids = self.get_list_of_ids_from_mongo_unfiltered()
+
+            if list_of_unfiltered_genes_ids is None:
+                print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
+                raise Exception
+
+            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
+
+            for id in list_of_unfiltered_genes_ids:
+                file_with_ids.write("%s\n" % id)
+
+        except Exception as error:
+            print('Caught exception when exporting all ids to file from unfiltered collection: ' + repr(error))
+
+    def export_filtered_genes_collection_to_file_with_just_ids(self, file_name: str) -> None:
+
+        try:
+            list_of_filtered_genes_ids = self.get_list_of_ids_from_mongo_filtered()
+
+            if list_of_filtered_genes_ids is None:
+                print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
+                raise Exception
+
+            file_with_ids = open(file_name + '.' + Constants.ID_EXTENSION, 'w')
+
+            for id_gene in list_of_filtered_genes_ids:
+                file_with_ids.write("%s\n" % id_gene)
+
+        except Exception as error:
+            print('Caught exception when exporting all ids to file from filtered collection: ' + repr(error))
 
     def update_genes_from_dict(self, dict_of_genes: dict) -> None:
 
