@@ -265,7 +265,7 @@ class GeneHandlerBS(IGeneHandler):
 
             if list_of_seqrecords is None:
                 print(Constants.MSG_WARNING_UNFILTERED_COLLECTION_EMPTY)
-                raise Exception
+                list_of_seqrecords = []
 
             SeqIO.write(list_of_seqrecords, fasta_name + "." + Constants.FASTA_EXTENSION, "fasta")
 
@@ -283,7 +283,7 @@ class GeneHandlerBS(IGeneHandler):
 
             if list_of_seqrecords is None:
                 print(Constants.MSG_WARNING_FILTERED_COLLECTION_EMPTY)
-                raise Exception
+                list_of_seqrecords = []
 
             SeqIO.write(list_of_seqrecords, fasta_name + "." + Constants.FASTA_EXTENSION, "fasta")
 
