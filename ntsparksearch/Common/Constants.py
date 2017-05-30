@@ -35,7 +35,7 @@ class Constants(object):
     MSG_WARNING_FILTERED_COLLECTION_EMPTY = "WARNING: The filtered collection is empty"
 
     #File mssg
-    MSG_FILE_NUMBER_OF_ELEMENTS = "The number of item(s) in this file is"
+    MSG_FILE_NUMBER_OF_ELEMENTS = "The number of item(s) in this file is (are)"
 
     # Services extensions
     UPLOAD_FOLDER = OUTPUT_FOLDER
