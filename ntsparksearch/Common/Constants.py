@@ -23,9 +23,9 @@ class Constants(object):
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
-    OUTPUT_FOLDER = "output/"
+    OUTPUT_FOLDER = "/usr/spark-2.1.0/output/"
     #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
-    INPUT_FOLDER = "input/"
+    INPUT_FOLDER = "usr/spark-2.1.0/input/"
 
     # file names
     FASTA_FILE_UNFILTERED = "unfiltered_sequences"
