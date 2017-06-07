@@ -1,4 +1,5 @@
 from flask import Flask
+
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi.GeneHandlerService import GeneHandlerService_endpoints
 from ntsparksearch.RestApi.SubSequenceMatcherService import SubSequenceMatcherService_endpoints
@@ -12,6 +13,7 @@ def create_app():
     from ntsparksearch.RestApi.AsyncDownloader import rq
     rq.init_app(app)
     return app
+
 
 app = create_app()
 

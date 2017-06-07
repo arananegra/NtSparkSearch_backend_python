@@ -1,8 +1,9 @@
 import xlrd
-from ntsparksearch.Common.GeneDTO import GeneDTO
-from ntsparksearch.Common.GeneDAO import GeneDAO
-from pymongo import MongoClient
 from Bio.SeqIO import parse
+from pymongo import MongoClient
+
+from ntsparksearch.Common.GeneDAO import GeneDAO
+from ntsparksearch.Common.GeneDTO import GeneDTO
 
 
 class GeneHandlerDAO(GeneDAO):

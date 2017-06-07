@@ -1,11 +1,12 @@
-from ntsparksearch.Common.GeneDTO import GeneDTO, GeneSearcher
+from Bio.Alphabet import DNAAlphabet
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from pymongo import MongoClient
 from pymongo import TEXT as index_text
 from pymongo.collection import Collection
+
 from ntsparksearch.Common.Constants import Constants
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
-from Bio.Alphabet import DNAAlphabet
+from ntsparksearch.Common.GeneDTO import GeneDTO, GeneSearcher
 
 
 class GeneDAO(object):

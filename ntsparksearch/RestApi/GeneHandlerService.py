@@ -1,13 +1,15 @@
-import os
 import json
 import string
+
+import os
 import random
 from flask import Blueprint, request, Response, send_from_directory, send_file, make_response
-from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 from werkzeug.utils import secure_filename
-from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
+
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
+from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 
 GeneHandlerService_endpoints = Blueprint('GeneHandlerService', __name__)
 gene_handler_BS = GeneHandlerBS()

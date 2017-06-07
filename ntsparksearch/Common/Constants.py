@@ -6,7 +6,7 @@ class Constants(object):
     MONGODB_DB_NAME = 'bioSpark'
     # url in docker-compose
     MONGODB_HOST = 'database'
-    #MONGODB_HOST = 'localhost'
+    # MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
@@ -17,14 +17,14 @@ class Constants(object):
 
     # Queue collection field names
     REDIS_SERVER = "redis-server"
-    #REDIS_SERVER = "localhost"
+    # REDIS_SERVER = "localhost"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
     OUTPUT_FOLDER = "/usr/spark-2.1.0/output/"
-    #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
+    # OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
     INPUT_FOLDER = "usr/spark-2.1.0/input/"
 
     # Env variables
@@ -34,7 +34,7 @@ class Constants(object):
     MSG_WARNING_UNFILTERED_COLLECTION_EMPTY = "WARNING: The unfiltered collection is empty"
     MSG_WARNING_FILTERED_COLLECTION_EMPTY = "WARNING: The filtered collection is empty"
 
-    #File mssg
+    # File mssg
     MSG_FILE_NUMBER_OF_ELEMENTS = "The number of item(s) in this file is (are)"
 
     # Services extensions

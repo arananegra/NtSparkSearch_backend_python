@@ -1,15 +1,16 @@
-from ntsparksearch.GeneHandler.IGeneHandler import IGeneHandler
-from ntsparksearch.GeneHandler.GeneHandlerDAO import GeneHandlerDAO
-from ntsparksearch.Common.GeneDAO import GeneDAO
-from ntsparksearch.Common.GeneDTO import GeneSearcher
-from ntsparksearch.Common.GeneDTO import GeneDTO
-from ntsparksearch.Common.Constants import Constants
-from progressbar import ProgressBar
-from copy import deepcopy
 import os.path
 from Bio import Entrez
 from Bio import SeqIO
+from copy import deepcopy
+from progressbar import ProgressBar
 from pymongo import MongoClient
+
+from ntsparksearch.Common.Constants import Constants
+from ntsparksearch.Common.GeneDAO import GeneDAO
+from ntsparksearch.Common.GeneDTO import GeneDTO
+from ntsparksearch.Common.GeneDTO import GeneSearcher
+from ntsparksearch.GeneHandler.GeneHandlerDAO import GeneHandlerDAO
+from ntsparksearch.GeneHandler.IGeneHandler import IGeneHandler
 
 
 class GeneHandlerBS(IGeneHandler):

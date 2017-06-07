@@ -1,6 +1,7 @@
-from ntsparksearch.Common.Constants import Constants
 import redis
 from rq import Worker, Queue, Connection
+
+from ntsparksearch.Common.Constants import Constants
 
 listen = ['high', 'default', 'low']
 

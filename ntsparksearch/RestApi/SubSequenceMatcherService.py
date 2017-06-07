@@ -1,10 +1,12 @@
-from flask import Blueprint, Response, request
 import json
-from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
-from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
+
+from flask import Blueprint, Response, request
+
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
+from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequenceSparkMatcherBS
 
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
 

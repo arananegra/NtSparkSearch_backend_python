@@ -2,7 +2,6 @@ from abc import abstractmethod, ABCMeta
 
 
 class IGeneHandler(metaclass=ABCMeta):
-
     @abstractmethod
     def get_dict_from_filtered_with_sequences(self) -> dict:
         """
@@ -51,7 +50,6 @@ class IGeneHandler(metaclass=ABCMeta):
         :return: A list with the ids of the unfiltered genes whose sequence is NOT None
         """
 
-
     @abstractmethod
     def insert_in_unfiltered_collection_from_excel(self, file_path: str, sheet: str, column_name: str) -> None:
         """
@@ -69,6 +67,7 @@ class IGeneHandler(metaclass=ABCMeta):
         insert them in the ncbiunfiltered collection
         :param file_path: path of the fasta file
         """
+
     @abstractmethod
     def insert_in_unfiltered_collection_from_list_of_ids(self, list_of_gene_ids: list) -> None:
         """

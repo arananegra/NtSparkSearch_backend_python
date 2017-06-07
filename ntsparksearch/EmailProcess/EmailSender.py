@@ -1,5 +1,6 @@
-from ntsparksearch.Common.Constants import Constants
 import smtplib
+
+from ntsparksearch.Common.Constants import Constants
 
 
 class EmailSender(object):
