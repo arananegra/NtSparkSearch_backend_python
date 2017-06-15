@@ -1,19 +1,15 @@
-from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
-from ntsparksearch.Common.GeneDAO import GeneDAO
-from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
-from Bio import SeqUtils
-from Bio import SeqIO
-from ntsparksearch.Common.Constants import Constants
-from pymongo import MongoClient
-from copy import deepcopy
 import findspark
+from Bio import SeqUtils
+
+from ntsparksearch.Common.Constants import Constants
+from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
+from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
 
 findspark.init(Constants.SPARK_HOME)
 from pyspark.sql import SparkSession
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
-
     def filter_sequences_by_sequence_string_to_dict(self, sequence_to_filter: str) -> dict:
 
         def map_locator_Spark(x, subsequence):
@@ -23,7 +19,8 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             spark_session = SparkSession \
                 .builder \
                 .appName("ntsparksearch") \
-                .config("spark.driver.memory", "4g") \
+                .master("spark://172.16.239.10:7077") \
+                .config("spark.driver.memory", "3g") \
                 .config("spark.driver.maxResultSize", "3g") \
                 .config("spark.executor.memory", "3g").getOrCreate()
 
@@ -45,7 +42,10 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             dict_now_filtered = {gene_id: sequence for (gene_id, sequence) in list_of_list_of_genes_filtered}
 
-            return dict_now_filtered
-
         except Exception as error:
             print('Caught exception trying to filter the collection:' + repr(error))
+
+        finally:
+            spark_session.stop()
+
+        return dict_now_filtered
