@@ -63,7 +63,7 @@ class GeneDAO(object):
 
                 list_gene_records.append(single_gene_record)
 
-            if (len(list_gene_records) == 0):
+            if len(list_gene_records) == 0:
                 list_gene_records = None
 
             return list_gene_records

@@ -158,11 +158,15 @@ def download_id_file_filtered():
 
 @GeneHandlerService_endpoints.route('/delete-unfiltered', methods=['DELETE'])
 def delete_unfiltered_collection():
+    response = Response()
+    response.headers['Access-Control-Allow-Origin'] = '*'
     gene_handler_BS.delete_unfiltered_collection()
-    return Response(), Constants.OK
+    return response, Constants.OK
 
 
 @GeneHandlerService_endpoints.route('/delete-filtered', methods=['DELETE'])
 def delete_filtered_collection():
+    response = Response()
+    response.headers['Access-Control-Allow-Origin'] = '*'
     gene_handler_BS.delete_filtered_collection()
-    return Response(), Constants.OK
+    return response, Constants.OK
