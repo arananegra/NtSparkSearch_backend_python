@@ -30,7 +30,6 @@ json_data = json.dumps(data)
 @app.route("/")
 def hello():
     response = Response(json.dumps(data), mimetype='application/json')
-    response.headers['Access-Control-Allow-Origin'] = '*'
     return response, Constants.OK
 
 

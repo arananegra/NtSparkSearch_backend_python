@@ -105,6 +105,8 @@ def download_fasta_file_unfiltered():
     response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.FASTA_EXTENSION,
                                        mimetype='text/plain'))
 
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+
     response.headers["Content-Disposition"] = "attachment; filename=" + \
                                               random_string_name \
                                               + "." + Constants.FASTA_EXTENSION
@@ -119,6 +121,8 @@ def download_fasta_file_filtered():
 
     response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.FASTA_EXTENSION,
                                        mimetype='text/plain'))
+
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
 
     response.headers["Content-Disposition"] = "attachment; filename=" + \
                                               random_string_name \
@@ -135,6 +139,8 @@ def download_id_file_unfiltered():
     response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION,
                                        mimetype='text/plain'))
 
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+
     response.headers["Content-Disposition"] = "attachment; filename=" + \
                                               random_string_name \
                                               + "." + Constants.ID_EXTENSION
@@ -150,6 +156,8 @@ def download_id_file_filtered():
     response = make_response(send_file(Constants.OUTPUT_FOLDER + random_string_name + "." + Constants.ID_EXTENSION,
                                        mimetype='text/plain'))
 
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+
     response.headers["Content-Disposition"] = "attachment; filename=" + \
                                               random_string_name \
                                               + "." + Constants.ID_EXTENSION
@@ -158,15 +166,11 @@ def download_id_file_filtered():
 
 @GeneHandlerService_endpoints.route('/delete-unfiltered', methods=['DELETE'])
 def delete_unfiltered_collection():
-    response = Response()
-    response.headers['Access-Control-Allow-Origin'] = '*'
     gene_handler_BS.delete_unfiltered_collection()
-    return response, Constants.OK
+    return Response(), Constants.OK
 
 
 @GeneHandlerService_endpoints.route('/delete-filtered', methods=['DELETE'])
 def delete_filtered_collection():
-    response = Response()
-    response.headers['Access-Control-Allow-Origin'] = '*'
     gene_handler_BS.delete_filtered_collection()
-    return response, Constants.OK
+    return Response(), Constants.OK
