@@ -30,7 +30,7 @@ def obtain_unfiltered():
 @GeneHandlerService_endpoints.route('/upload-excel', methods=['POST'])
 def upload_excel_file_and_download_genes():
     try:
-        email_receiver = request.args.getlist("email")
+        email_receiver = request.args.getlist(Constants.EMAIL_SERVICE_PARAMETER_NAME_CONSTANT)
 
     except Exception:
         print("Warning: Email account not set")

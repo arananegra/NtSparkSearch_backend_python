@@ -18,7 +18,7 @@ email_manager = EmailSender()
 @SubSequenceMatcherService_endpoints.route('/sparkmatchall', methods=["GET"])
 def spark_matcher():
     try:
-        sequence_to_filter = request.args.get("sequence")
+        sequence_to_filter = request.args.get(Constants.SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT)
         dict_filtered_with_spark = subsequence_matcher_BS. \
             filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
         gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
@@ -41,8 +41,8 @@ def spark_matcher():
 @SubSequenceMatcherService_endpoints.route('/genes-checker', methods=["GET"])
 def genes_in_unfiltered_checker():
     try:
-        list_of_ids_from_request = request.args.getlist("geneIds")
-        sequence_to_filter = request.args.get("sequence")
+        list_of_ids_from_request = request.args.getlist(Constants.GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT)
+        sequence_to_filter = request.args.get(Constants.SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT)
 
         list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)
@@ -74,8 +74,8 @@ def genes_in_unfiltered_checker():
 @SubSequenceMatcherService_endpoints.route('/genes-downloader', methods=["GET"])
 def genes_downloader():
     try:
-        list_of_ids_from_request = request.args.getlist("geneIds")
-        email_receiver = request.args.getlist("email")
+        list_of_ids_from_request = request.args.getlist(Constants.GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT)
+        email_receiver = request.args.getlist(Constants.EMAIL_SERVICE_PARAMETER_NAME_CONSTANT)
 
         list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)

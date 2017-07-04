@@ -50,6 +50,11 @@ class Constants(object):
     OK_WAIT = 202
     POST_BAD_REQUEST = 202
 
+    # Service constants
+    EMAIL_SERVICE_PARAMETER_NAME_CONSTANT = "email"
+    GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT = "geneIds"
+    SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT = "sequence"
+
     # Mail messages
     MAIL_SENDER = "ntsparksearch@gmail.com"
     MAIL_HOST = 'smtp.gmail.com:587'
