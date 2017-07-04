@@ -17,21 +17,25 @@ email_manager = EmailSender()
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatchall', methods=["GET"])
 def spark_matcher():
-    sequence_to_filter = request.args.get("sequence")
-    dict_filtered_with_spark = subsequence_matcher_BS. \
-        filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
-    gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
-    dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
+    try:
+        sequence_to_filter = request.args.get("sequence")
+        dict_filtered_with_spark = subsequence_matcher_BS. \
+            filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
+        gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
+        dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
 
-    list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
+        list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
 
-    list_of_unfiltered_ids_from_mongo = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered()
+        list_of_unfiltered_ids_from_mongo = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered()
 
-    for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
-        if gene_unfiltered_id not in list_of_genes_pass_filter:
-            dict_filtered_with_ones[gene_unfiltered_id] = 0
+        for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
+            if gene_unfiltered_id not in list_of_genes_pass_filter:
+                dict_filtered_with_ones[gene_unfiltered_id] = 0
 
-    return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
+        return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
+
+    except Exception as ex:
+        print(ex)
 
 
 @SubSequenceMatcherService_endpoints.route('/genes-checker', methods=["GET"])
@@ -87,7 +91,6 @@ def genes_downloader():
             return Response(), Constants.OK_WAIT
 
         else:
-
             return Response(), Constants.SERVER_ERROR
 
     except Exception as ex:
