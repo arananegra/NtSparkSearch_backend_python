@@ -42,10 +42,9 @@ class GeneDAO(object):
 
         mongodb_find = None
 
-        collection_from_client_reference = self.get_collection()
-
         try:
             list_gene_records = []
+            collection_from_client_reference = self.get_collection()
 
             if (search_criteria.search_by_gene_id_criteria is not None):
                 mongodb_find = search_criteria.search_by_gene_id_criteria
@@ -76,9 +75,8 @@ class GeneDAO(object):
         list_of_seq_records_from_collection = None
         single_gene_record = None
 
-        collection_from_client_reference = self.get_collection()
-
         try:
+            collection_from_client_reference = self.get_collection()
             collection_cursor = collection_from_client_reference. \
                 find({})
 
@@ -111,9 +109,8 @@ class GeneDAO(object):
         list_gene_records = None
         single_gene_record = None
 
-        collection_from_client_reference = self.get_collection()
-
         try:
+            collection_from_client_reference = self.get_collection()
             collection_cursor = collection_from_client_reference. \
                 find({})
 
@@ -140,9 +137,8 @@ class GeneDAO(object):
         dict_gene_records = None
         single_gene_record = None
 
-        collection_from_client_reference = self.get_collection()
-
         try:
+            collection_from_client_reference = self.get_collection()
             collection_cursor = collection_from_client_reference. \
                 find({})
 
@@ -166,6 +162,7 @@ class GeneDAO(object):
 
     def delete_gene_document_by_gene_id(self, gene_id: str) -> None:
         collection_from_client_reference = None
+
         try:
             collection_from_client_reference = self.get_collection()
             criteria = GeneSearcher()
@@ -176,7 +173,6 @@ class GeneDAO(object):
             print('Caught exception at delete operation: ' + repr(error))
 
     def delete_collection(self) -> None:
-
         try:
             collection_from_client_reference = self.get_collection()
             collection_from_client_reference.delete_many({})
@@ -186,6 +182,7 @@ class GeneDAO(object):
 
     def update_gene_element_from_object(self, gene_record: GeneDTO, upsert: bool) -> None:
         collection_from_client_reference = None
+
         try:
             collection_from_client_reference = self.get_collection()
 
@@ -205,7 +202,6 @@ class GeneDAO(object):
     def insert_gene_document_from_object(self, gene_object: GeneDTO) -> None:
         collection_from_client_reference = None
         try:
-
             collection_from_client_reference = self.get_collection()
             collection_from_client_reference.insert_one(gene_object.__dict__)
 
@@ -222,9 +218,7 @@ class GeneDAO(object):
             print('Caught exception at insert from list operation: ' + repr(error))
 
     def insert_gene_document_from_list_just_ids(self, list_of_gene_ids: list) -> None:
-        collection_from_client_reference = None
         try:
-            collection_from_client_reference = self.get_collection()
             list_of_geneDTOs_just_id = []
 
             for id in list_of_gene_ids:

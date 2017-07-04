@@ -41,11 +41,10 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 collect()
 
             dict_now_filtered = {gene_id: sequence for (gene_id, sequence) in list_of_list_of_genes_filtered}
+            return dict_now_filtered
 
         except Exception as error:
             print('Caught exception trying to filter the collection:' + repr(error))
 
         finally:
             spark_session.stop()
-
-        return dict_now_filtered

@@ -22,7 +22,7 @@ class EmailSender(object):
         server.login(Constants.MAIL_USER, Constants.MAIL_PASS)
         server.sendmail(Constants.MAIL_SENDER, self._receivers, msg)
 
-    def send_email_download_initialize(self, list_of_genes_to_download: list):
+    def send_email_download_initialize(self, list_of_genes_to_download: list) -> None:
         string_of_gene_ids = "\n".join(list_of_genes_to_download)
 
         if list_of_genes_to_download is not None:
@@ -32,7 +32,7 @@ class EmailSender(object):
             except Exception as error:
                 print("error" + repr(error))
 
-    def send_email_download_finished(self, list_of_genes_to_download_finished: list):
+    def send_email_download_finished(self, list_of_genes_to_download_finished: list) -> None:
         string_of_gene_ids = "\n".join(list_of_genes_to_download_finished)
 
         if list_of_genes_to_download_finished is not None:
