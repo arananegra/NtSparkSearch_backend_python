@@ -20,9 +20,9 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
                 .builder \
                 .appName("ntsparksearch") \
                 .master("spark://172.16.239.10:7077") \
-                .config("spark.driver.memory", "512m") \
-                .config("spark.driver.maxResultSize", "512m") \
-                .config("spark.executor.memory", "512m").getOrCreate()
+                .config("spark.driver.memory", "1024m") \
+                .config("spark.driver.maxResultSize", "1024m") \
+                .config("spark.executor.memory", "1024m").getOrCreate()
 
             gene_handler_bs = GeneHandlerBS()
 
