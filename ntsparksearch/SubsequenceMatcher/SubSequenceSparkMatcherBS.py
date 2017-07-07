@@ -6,7 +6,8 @@ from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
 
 findspark.init(Constants.SPARK_HOME)
-from pyspark.sql import SparkSession
+#from pyspark.sql import SparkSession
+from pyspark import SparkContext, SparkConf
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
@@ -16,13 +17,14 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
 
         try:
-            spark_session = SparkSession \
-                .builder \
-                .appName("ntsparksearch") \
-                .master("spark://172.16.239.10:7077") \
-                .config("spark.driver.memory", "1024m") \
-                .config("spark.driver.maxResultSize", "1024m") \
-                .config("spark.executor.memory", "1024m").getOrCreate()
+            conf = SparkConf().setAppName("ntsparksearch").setMaster("spark://172.16.239.10:7077")
+            # spark_session = SparkSession \
+            #     .builder \
+            #     .appName("ntsparksearch") \
+            #     .master("spark://172.16.239.10:7077") \
+            #     .config("spark.driver.memory", "2024m") \
+            #     .config("spark.driver.maxResultSize", "2024m") \
+            #     .config("spark.executor.memory", "2024m").getOrCreate()
 
             gene_handler_bs = GeneHandlerBS()
 
@@ -30,7 +32,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             gene_handler_bs.delete_filtered_collection()
 
-            sc = spark_session.sparkContext
+            sc = SparkContext(conf=conf)
             sc.setLogLevel("ERROR")
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]
@@ -47,4 +49,4 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             print('Caught exception trying to filter the collection:' + repr(error))
 
         finally:
-            spark_session.stop()
+            sc.stop()
