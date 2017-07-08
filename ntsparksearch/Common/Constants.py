@@ -52,7 +52,7 @@ class Constants(object):
 
     # Service constants
     EMAIL_SERVICE_PARAMETER_NAME_CONSTANT = "email"
-    GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT = "geneIds"
+    GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT = "gene_id"
     SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT = "sequence"
 
     # Mail messages
