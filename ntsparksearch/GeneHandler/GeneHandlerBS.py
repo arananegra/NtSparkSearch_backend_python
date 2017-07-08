@@ -60,6 +60,32 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
+    def get_dict_of_genes_object_from_list_of_ids(self, list_of_ids_to_find: list) -> dict:
+        list_of_genes_from_list_of_ids_on_unfiltered = None
+        dict_from_list_of_ids = None
+        try:
+            list_of_genes_from_list_of_ids_on_unfiltered = []
+            mongo_dao_retriever = GeneDAO(
+                MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
+                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+
+            if list_of_ids_to_find is not None:
+                for id_in_list in list_of_ids_to_find:
+                    criteria = GeneSearcher()
+                    criteria.search_by_gene_id_criteria = id_in_list
+                    partial_list_of_genes = mongo_dao_retriever.search_gene_objects_and_return_as_list(criteria)
+                    if partial_list_of_genes is not None:
+                        list_of_genes_from_list_of_ids_on_unfiltered.extend(partial_list_of_genes)
+
+            dict_from_list_of_ids = {}
+            for gene_object in list_of_genes_from_list_of_ids_on_unfiltered:
+                dict_from_list_of_ids[gene_object.gene_id] = gene_object.sequence
+
+            return dict_from_list_of_ids
+
+        except Exception as error:
+            print('Caught exception when getting gene objects from list of ids (unfiltered): ' + repr(error))
+
     def get_list_of_ids_from_mongo_unfiltered(self) -> list:
         list_of_just_ids = None
 

@@ -14,27 +14,18 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
     def __init__(self):
         self._gene_handler_bs = GeneHandlerBS()
 
-    def filter_sequences_by_sequence_string_to_dict_from_custom_dict(self, sequence_to_filter: str,
-                                                                     dict_to_filter_from: dict) -> dict:
+    def filter_sequences_by_sequence_string_to_dict_from_custom_list_of_genes(self, sequence_to_filter: str,
+                                                                              list_of_ids_to_filter: list) -> dict:
 
         def map_locator_Spark(x, subsequence):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
 
         try:
             conf = SparkConf().setAppName("ntsparksearch").setMaster("local[8]")
-            # spark_session = SparkSession \
-            #     .builder \
-            #     .appName("ntsparksearch") \
-            #     .master("spark://172.16.239.10:7077") \
-            #     .config("spark.driver.memory", "2024m") \
-            #     .config("spark.driver.maxResultSize", "2024m") \
-            #     .config("spark.executor.memory", "2024m").getOrCreate()
 
             sc = SparkContext(conf=conf)
-            # sc.setLogLevel("ERROR")
-            # gene_handler_bs = GeneHandlerBS()
 
-            dict_to_filter = dict_to_filter_from
+            dict_to_filter = self._gene_handler_bs.get_dict_of_genes_object_from_list_of_ids(list_of_ids_to_filter)
             self._gene_handler_bs.delete_filtered_collection()
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]

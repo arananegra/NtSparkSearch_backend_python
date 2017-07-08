@@ -49,15 +49,14 @@ def genes_in_unfiltered_checker():
 
         if len(list_of_genes_not_in_unfiltered) == 0:
             dict_filtered_with_spark = subsequence_matcher_BS. \
-                filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
+                filter_sequences_by_sequence_string_to_dict_from_custom_list_of_genes(sequence_to_filter,
+                                                                                      list_of_ids_from_request)
             gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
             dict_filtered_with_ones = {x: 1 for x in dict_filtered_with_spark}
 
             list_of_genes_pass_filter = list(dict_filtered_with_ones.keys())
 
-            list_of_unfiltered_ids_from_mongo = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered()
-
-            for gene_unfiltered_id in list_of_unfiltered_ids_from_mongo:
+            for gene_unfiltered_id in list_of_ids_from_request:
                 if gene_unfiltered_id not in list_of_genes_pass_filter:
                     dict_filtered_with_ones[gene_unfiltered_id] = 0
 
