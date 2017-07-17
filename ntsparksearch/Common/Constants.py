@@ -46,6 +46,7 @@ class Constants(object):
     # Service responses
     OK = 200
     SERVER_ERROR = 500
+    BAD_REQUEST = 400
     POST_CREATED = 201
     OK_WAIT = 202
     POST_BAD_REQUEST = 202
