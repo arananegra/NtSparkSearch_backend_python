@@ -19,6 +19,9 @@ email_manager = EmailSender()
 def spark_matcher():
     try:
         sequence_to_filter = request.args.get(Constants.SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT)
+
+        if sequence_to_filter == "" or sequence_to_filter is None:
+            return Response(), Constants.BAD_REQUEST
         dict_filtered_with_spark = subsequence_matcher_BS. \
             filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
         gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
@@ -48,6 +51,9 @@ def genes_in_unfiltered_checker():
             list_of_ids_from_request)
 
         if len(list_of_genes_not_in_unfiltered) == 0:
+            if sequence_to_filter == "" or sequence_to_filter is None:
+                return Response(), Constants.BAD_REQUEST
+
             dict_filtered_with_spark = subsequence_matcher_BS. \
                 filter_sequences_by_sequence_string_to_dict_from_custom_list_of_genes(sequence_to_filter,
                                                                                       list_of_ids_from_request)
