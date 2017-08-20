@@ -34,6 +34,10 @@ app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 app.config['SECURITY_REGISTER_USER_TEMPLATE'] = 'security/register_user.html'
 app.config['SECURITY_RESET_PASSWORD_TEMPLATE'] = 'security/reset_password.html'
 app.config['SECURITY_CHANGE_PASSWORD_TEMPLATE'] = 'security/change_password.html'
+
+app.config['SECURITY_TRACKABLE'] = True
+app.config['WTF_CSRF_ENABLED'] = False
+
 app.config['MONGODB_DB'] = Constants.MONGODB_DB_NAME
 app.config['MONGODB_HOST'] = Constants.MONGODB_HOST
 app.config['MONGODB_PORT'] = Constants.MONGODB_PORT
@@ -55,6 +59,9 @@ class User(db.Document, UserMixin):
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     confirmed_at = db.DateTimeField()
+    current_login_at = db.DateTimeField()
+    current_login_ip = db.StringField(max_length=45)
+    login_count = db.IntField()
     roles = db.ListField(db.ReferenceField(Role), default=[])
 
 

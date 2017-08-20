@@ -1,7 +1,7 @@
 import json
 
 from flask import Response, render_template
-from flask_security import login_required
+from flask_security import login_required, auth_token_required
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi import app
@@ -14,7 +14,7 @@ json_data = json.dumps(data)
 
 
 @app.route("/")
-@login_required
+@auth_token_required
 def hello():
     response = Response(json.dumps(data), mimetype='application/json')
     return response, Constants.OK
