@@ -25,7 +25,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
             sc = SparkContext(conf=conf)
 
-            dict_to_filter = self._gene_handler_bs.get_dict_of_genes_object_from_list_of_ids(list_of_ids_to_filter)
+            dict_to_filter = self._gene_handler_bs.get_dict_of_genes_object_from_list_of_ids_with_sequences(list_of_ids_to_filter)
             self._gene_handler_bs.delete_filtered_collection()
 
             list_of_list_of_genes = [[k, v] for k, v in dict_to_filter.items()]
