@@ -60,7 +60,7 @@ class GeneHandlerBS(IGeneHandler):
         except Exception as error:
             print('Caught exception getting unfiltered sequences (to dict):' + repr(error))
 
-    def get_dict_of_genes_object_from_list_of_ids(self, list_of_ids_to_find: list) -> dict:
+    def get_dict_of_genes_object_from_list_of_ids_with_sequences(self, list_of_ids_to_find: list) -> dict:
         list_of_genes_from_list_of_ids_on_unfiltered = None
         dict_from_list_of_ids = None
         try:
@@ -79,7 +79,8 @@ class GeneHandlerBS(IGeneHandler):
 
             dict_from_list_of_ids = {}
             for gene_object in list_of_genes_from_list_of_ids_on_unfiltered:
-                dict_from_list_of_ids[gene_object.gene_id] = gene_object.sequence
+                if gene_object.sequence is not None:
+                    dict_from_list_of_ids[gene_object.gene_id] = gene_object.sequence
 
             return dict_from_list_of_ids
 

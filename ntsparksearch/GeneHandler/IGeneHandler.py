@@ -19,7 +19,7 @@ class IGeneHandler(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def get_dict_of_genes_object_from_list_of_ids(self, list_of_ids_to_find: list) -> dict:
+    def get_dict_of_genes_object_from_list_of_ids_with_sequences(self, list_of_ids_to_find: list) -> dict:
         """
         From the unfiltered collection, obtain the dictionary of objects that are contained into the parameter list.
         :param list_of_ids_to_find: list of ids to check on
