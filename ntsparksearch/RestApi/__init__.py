@@ -29,13 +29,12 @@ app.config['SECURITY_PASSWORD_HASH'] = 'sha256_crypt'
 app.config['SECURITY_PASSWORD_SALT'] = "wjfiwjfiwamcw3214awcq932"
 app.config['SECURITY_REGISTERABLE'] = True
 app.config['SECURITY_EMAIL_SENDER'] = "no-reply@localhost."
-app.config['SECURITY_CONFIRMABLE'] = True
 
 app.config['SECURITY_TRACKABLE'] = True
 app.config['WTF_CSRF_ENABLED'] = False
-app.config['SECURITY_TOKEN_MAX_AGE'] = 30
+app.config['SECURITY_TOKEN_MAX_AGE'] = 100000
 
-app.config['MONGODB_DB'] = Constants.MONGODB_DB_NAME
+app.config['MONGODB_DB'] = Constants.MONGODB_USERS_DB
 app.config['MONGODB_HOST'] = Constants.MONGODB_HOST
 app.config['MONGODB_PORT'] = Constants.MONGODB_PORT
 db = MongoEngine(app)

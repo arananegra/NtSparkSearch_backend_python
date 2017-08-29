@@ -3,7 +3,8 @@ import os
 
 class Constants(object):
     # Database parameters
-    MONGODB_DB_NAME = 'bioSpark'
+    MONGODB_USERS_DB = 'ntSparkUsersMeta'
+    MONGODB_DB_INITIAL = 'ntSparkGenes_'
     # url in docker-compose
     # MONGODB_HOST = 'database'
     MONGODB_HOST = 'localhost'

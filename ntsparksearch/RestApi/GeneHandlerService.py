@@ -4,6 +4,7 @@ import string
 import os
 import random
 from flask import Blueprint, request, Response, send_from_directory, send_file, make_response
+from flask_security import current_user, auth_token_required
 from werkzeug.utils import secure_filename
 
 from ntsparksearch.Common.Constants import Constants
@@ -12,7 +13,7 @@ from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.RestApi.AsyncDownloader import gene_downloader_async_from_list
 
 GeneHandlerService_endpoints = Blueprint('GeneHandlerService', __name__)
-gene_handler_BS = GeneHandlerBS()
+
 email_manager = EmailSender()
 
 
@@ -22,12 +23,15 @@ def allowed_file(filename, extension):
 
 
 @GeneHandlerService_endpoints.route('/unfiltered', methods=['GET'])
+@auth_token_required
 def obtain_unfiltered():
+    gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
     list_of_genes = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered()
     return Response(json.dumps(list_of_genes), mimetype='application/json')
 
 
 @GeneHandlerService_endpoints.route('/upload-excel', methods=['POST'])
+@auth_token_required
 def upload_excel_file_and_download_genes():
     try:
         email_receiver = request.args.getlist(Constants.EMAIL_SERVICE_PARAMETER_NAME_CONSTANT)
@@ -41,6 +45,7 @@ def upload_excel_file_and_download_genes():
         if file and allowed_file(file.filename, Constants.EXCEL_EXTENSION):
             filename = secure_filename(file.filename)
             file.save(os.path.join(Constants.UPLOAD_FOLDER, filename))
+            gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
 
             gene_handler_BS.insert_in_unfiltered_collection_from_excel(Constants.UPLOAD_FOLDER + filename)
             list_of_genes_without_sequence = gene_handler_BS.get_list_of_ids_from_mongo_unfiltered_without_sequence()
@@ -50,7 +55,7 @@ def upload_excel_file_and_download_genes():
                     email_manager.receivers = email_receiver
                     email_manager.send_email_download_initialize(list_of_genes_without_sequence)
 
-                gene_downloader_async_from_list.queue(list_of_genes_without_sequence, email_receiver)
+                gene_downloader_async_from_list.queue(list_of_genes_without_sequence, email_receiver, str(current_user.id))
 
             return Response(), Constants.OK_WAIT
     except Exception as ex:
@@ -58,8 +63,10 @@ def upload_excel_file_and_download_genes():
 
 
 @GeneHandlerService_endpoints.route('/upload-fasta', methods=['POST'])
+@auth_token_required
 def upload_fasta_file():
     try:
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         file = request.files['file']
         if file and allowed_file(file.filename, Constants.FASTA_EXTENSION):
             filename = secure_filename(file.filename)
@@ -72,6 +79,7 @@ def upload_fasta_file():
 
 
 @GeneHandlerService_endpoints.route('/uploads/<filename>')
+@auth_token_required
 def uploaded_file(filename):
     try:
         return send_from_directory(Constants.UPLOAD_FOLDER,
@@ -88,9 +96,11 @@ def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
 
 
 @GeneHandlerService_endpoints.route('/download-fasta-unfiltered')
+@auth_token_required
 def download_fasta_file_unfiltered():
     try:
         random_string_name = id_generator()
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.export_unfiltered_genes_collection_to_fasta(Constants.OUTPUT_FOLDER
                                                                     + random_string_name)
 
@@ -109,9 +119,11 @@ def download_fasta_file_unfiltered():
 
 
 @GeneHandlerService_endpoints.route('/download-fasta-filtered')
+@auth_token_required
 def download_fasta_file_filtered():
     try:
         random_string_name = id_generator()
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.export_filtered_genes_collection_to_fasta(Constants.OUTPUT_FOLDER
                                                                   + random_string_name)
 
@@ -130,9 +142,11 @@ def download_fasta_file_filtered():
 
 
 @GeneHandlerService_endpoints.route('/download-id-unfiltered')
+@auth_token_required
 def download_id_file_unfiltered():
     try:
         random_string_name = id_generator()
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.export_unfiltered_genes_collection_to_file_with_just_ids(Constants.OUTPUT_FOLDER
                                                                                  + random_string_name)
 
@@ -150,9 +164,11 @@ def download_id_file_unfiltered():
 
 
 @GeneHandlerService_endpoints.route('/download-id-filtered')
+@auth_token_required
 def download_id_file_filtered():
     try:
         random_string_name = id_generator()
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.export_filtered_genes_collection_to_file_with_just_ids(Constants.OUTPUT_FOLDER
                                                                                + random_string_name)
 
@@ -170,17 +186,22 @@ def download_id_file_filtered():
 
 
 @GeneHandlerService_endpoints.route('/delete-unfiltered', methods=['DELETE'])
+@auth_token_required
 def delete_unfiltered_collection():
     try:
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.delete_unfiltered_collection()
+
         return Response(), Constants.OK
     except Exception as ex:
         print(ex)
 
 
 @GeneHandlerService_endpoints.route('/delete-filtered', methods=['DELETE'])
+@auth_token_required
 def delete_filtered_collection():
     try:
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         gene_handler_BS.delete_filtered_collection()
         return Response(), Constants.OK
     except Exception as ex:

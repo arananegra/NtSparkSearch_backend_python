@@ -1,6 +1,7 @@
 import json
 
 from flask import Blueprint, Response, request
+from flask_security import current_user, auth_token_required
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
@@ -11,17 +12,20 @@ from ntsparksearch.SubsequenceMatcher.SubSequenceSparkMatcherBS import SubSequen
 SubSequenceMatcherService_endpoints = Blueprint('SubSequenceMatcherService', __name__)
 
 subsequence_matcher_BS = SubSequenceSparkMatcherBS()
-gene_handler_BS = GeneHandlerBS()
+
 email_manager = EmailSender()
 
 
 @SubSequenceMatcherService_endpoints.route('/sparkmatchall', methods=["GET"])
+@auth_token_required
 def spark_matcher():
     try:
         sequence_to_filter = request.args.get(Constants.SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT)
 
         if sequence_to_filter == "" or sequence_to_filter is None:
             return Response(), Constants.BAD_REQUEST
+
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         dict_filtered_with_spark = subsequence_matcher_BS. \
             filter_sequences_by_sequence_string_to_dict(sequence_to_filter)
         gene_handler_BS.insert_filtered_dict_in_filtered_collection(dict_filtered_with_spark)
@@ -42,10 +46,13 @@ def spark_matcher():
 
 
 @SubSequenceMatcherService_endpoints.route('/genes-checker', methods=["GET"])
+@auth_token_required
 def genes_in_unfiltered_checker():
     try:
         list_of_ids_from_request = request.args.getlist(Constants.GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT)
         sequence_to_filter = request.args.get(Constants.SEQUENCE_SERVICE_PARAMETER_NAME_CONSTANT)
+
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
 
         list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)
@@ -77,11 +84,13 @@ def genes_in_unfiltered_checker():
 
 
 @SubSequenceMatcherService_endpoints.route('/genes-downloader', methods=["GET"])
+@auth_token_required
 def genes_downloader():
     try:
         list_of_ids_from_request = request.args.getlist(Constants.GENE_ID_SERVICE_PARAMETER_NAME_CONSTANT)
         email_receiver = request.args.getlist(Constants.EMAIL_SERVICE_PARAMETER_NAME_CONSTANT)
 
+        gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
         list_of_genes_not_in_unfiltered = gene_handler_BS.check_gene_id_list_existance_on_unfiltered_from_list(
             list_of_ids_from_request)
 
@@ -91,7 +100,7 @@ def genes_downloader():
                 email_manager.receivers = email_receiver
                 email_manager.send_email_download_initialize(list_of_genes_not_in_unfiltered)
 
-            gene_downloader_async_from_list.queue(list_of_genes_not_in_unfiltered, email_receiver)
+            gene_downloader_async_from_list.queue(list_of_genes_not_in_unfiltered, email_receiver, str(current_user.id))
 
             return Response(), Constants.OK_WAIT
 

@@ -14,13 +14,16 @@ from ntsparksearch.GeneHandler.IGeneHandler import IGeneHandler
 
 
 class GeneHandlerBS(IGeneHandler):
+    def __init__(self, database_name: str):
+        self._database_name = database_name
+
     def get_dict_from_filtered_with_sequences(self) -> dict:
         try:
             dict_with_genes = {}
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_FILTERED)
 
             dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
 
@@ -43,7 +46,7 @@ class GeneHandlerBS(IGeneHandler):
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             dict_with_genes = mongo_dao_retriever.get_all_gene_objects_as_dict()
 
@@ -67,7 +70,7 @@ class GeneHandlerBS(IGeneHandler):
             list_of_genes_from_list_of_ids_on_unfiltered = []
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             if list_of_ids_to_find is not None:
                 for id_in_list in list_of_ids_to_find:
@@ -95,7 +98,7 @@ class GeneHandlerBS(IGeneHandler):
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
@@ -117,7 +120,7 @@ class GeneHandlerBS(IGeneHandler):
 
             mongo_dao_retriever_filtered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_FILTERED)
 
             list_of_gene_objets = mongo_dao_retriever_filtered.get_all_gene_objects_as_list()
 
@@ -139,7 +142,7 @@ class GeneHandlerBS(IGeneHandler):
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             list_of_gene_objects = mongo_dao_retriever.get_all_gene_objects_as_list()
 
@@ -164,7 +167,7 @@ class GeneHandlerBS(IGeneHandler):
 
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             list_of_gene_objets = mongo_dao_retriever.get_all_gene_objects_as_list()
 
@@ -187,7 +190,7 @@ class GeneHandlerBS(IGeneHandler):
             if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                    Constants.MONGODB_DB_NAME,
+                    self._database_name,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
                     file_path)
 
@@ -213,7 +216,7 @@ class GeneHandlerBS(IGeneHandler):
             if os.path.isfile(file_path) is True:
                 file_retriever_and_mongo_manager = GeneHandlerDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                    Constants.MONGODB_DB_NAME,
+                    self._database_name,
                     Constants.MONGODB_COLLECTION_UNFILTERED,
                     file_path)
 
@@ -237,7 +240,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME,
+                self._database_name,
                 Constants.MONGODB_COLLECTION_UNFILTERED)
 
             for single_id in list_of_gene_ids:
@@ -259,7 +262,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
             mongo_dao_manager = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_FILTERED)
 
             mongo_dao_manager.insert_gene_document_from_non_object_dict(filtered_dict)
 
@@ -270,7 +273,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
             mongo_dao_retriever = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME,
+                self._database_name,
                 Constants.MONGODB_COLLECTION_UNFILTERED)
 
             criteria = GeneSearcher()
@@ -286,7 +289,7 @@ class GeneHandlerBS(IGeneHandler):
 
         try:
             mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                                          Constants.MONGODB_DB_NAME,
+                                          self._database_name,
                                           Constants.MONGODB_COLLECTION_UNFILTERED)
 
             list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
@@ -304,7 +307,7 @@ class GeneHandlerBS(IGeneHandler):
 
         try:
             mongo_dao_retriever = GeneDAO(MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                                          Constants.MONGODB_DB_NAME,
+                                          self._database_name,
                                           Constants.MONGODB_COLLECTION_FILTERED)
 
             list_of_seqrecords = mongo_dao_retriever.get_list_of_seqrecords_from_collection()
@@ -364,7 +367,7 @@ class GeneHandlerBS(IGeneHandler):
             if dict_of_genes is not None:
                 mongo_dao_retriever = GeneDAO(
                     MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                    Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                    self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
                 for id_ncbi, sequence in dict_of_genes.items():
                     ncbi_object_to_update = GeneDTO()
@@ -380,7 +383,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
             mongo_dao_retriever_unfiltered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_UNFILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_UNFILTERED)
 
             mongo_dao_retriever_unfiltered.delete_collection()
 
@@ -392,7 +395,7 @@ class GeneHandlerBS(IGeneHandler):
         try:
             mongo_dao_retriever_filtered = GeneDAO(
                 MongoClient(Constants.MONGODB_HOST, Constants.MONGODB_PORT),
-                Constants.MONGODB_DB_NAME, Constants.MONGODB_COLLECTION_FILTERED)
+                self._database_name, Constants.MONGODB_COLLECTION_FILTERED)
 
             mongo_dao_retriever_filtered.delete_collection()
 
