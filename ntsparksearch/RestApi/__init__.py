@@ -32,7 +32,6 @@ app.config['SECURITY_EMAIL_SENDER'] = "no-reply@localhost."
 
 app.config['SECURITY_TRACKABLE'] = True
 app.config['WTF_CSRF_ENABLED'] = False
-app.config['SECURITY_TOKEN_MAX_AGE'] = 100000
 
 app.config['MONGODB_DB'] = Constants.MONGODB_USERS_DB
 app.config['MONGODB_HOST'] = Constants.MONGODB_HOST
