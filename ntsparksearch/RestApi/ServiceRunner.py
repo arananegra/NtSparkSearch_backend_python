@@ -1,6 +1,6 @@
 import json
 
-from flask import Response, render_template
+from flask import Response, render_template, redirect
 from flask_security import auth_token_required, current_user
 
 from ntsparksearch.Common.Constants import Constants
@@ -30,6 +30,11 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     return render_template('/security/register_user.html')
+
+
+@app.route('/redirect-to-frontend', methods=['GET'])
+def redirect_to_frontend():
+    return redirect("http://0.0.0.0:3002/")
 
 
 if __name__ == "__main__":

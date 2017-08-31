@@ -28,6 +28,8 @@ app.config.update(
 app.config['SECURITY_PASSWORD_HASH'] = 'sha256_crypt'
 app.config['SECURITY_PASSWORD_SALT'] = "wjfiwjfiwamcw3214awcq932"
 app.config['SECURITY_REGISTERABLE'] = True
+app.config['SECURITY_POST_CONFIRM_VIEW'] = "/redirect-to-frontend"
+app.config["SECURITY_CONFIRMABLE"] = True
 app.config['SECURITY_EMAIL_SENDER'] = "no-reply@localhost."
 
 app.config['SECURITY_TRACKABLE'] = True
