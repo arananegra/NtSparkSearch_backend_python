@@ -37,7 +37,7 @@ def register():
 
 @app.route('/redirect-to-frontend', methods=['GET'])
 def redirect_to_frontend():
-    return redirect("http://0.0.0.0:3002/")
+    return redirect("http://0.0.0.0:1313/")
 
 
 if __name__ == "__main__":
