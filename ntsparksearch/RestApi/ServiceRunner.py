@@ -2,9 +2,13 @@ import json
 
 from flask import Response, render_template, redirect
 from flask_security import auth_token_required, current_user
+from gevent import monkey
+from gevent.wsgi import WSGIServer
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi import app
+
+monkey.patch_all()
 
 data = {"user2_proximity": 3, "Wifi_1": -80, "Wifi_2": -40, "Wifi_3": -40,
         "thermostat": 18, "light": 0, "hour_of_day": 0, "user3_proximity": 3,
@@ -38,5 +42,9 @@ def redirect_to_frontend():
 
 
 if __name__ == "__main__":
-    app.run(use_reloader=False,
-            threaded=True, host='0.0.0.0')
+    # app.run(use_reloader=False,
+    #         threaded=True, host='0.0.0.0')
+    WSGIServer((
+        "0.0.0.0",  # str(HOST)
+        5000,  # int(PORT)
+    ), app.wsgi_app).serve_forever()
