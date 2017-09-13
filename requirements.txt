@@ -8,4 +8,6 @@ rq == 0.6.0
 redis == 2.10.5
 Flask-RQ2 == 17.0
 Flask-Cors == 3.0.2
+Flask-Security == 3.0.0
+mongoengine == 0.13.0
 gevent == 1.2.2
