@@ -6,8 +6,8 @@ class Constants(object):
     MONGODB_USERS_DB = 'ntSparkUsersMeta'
     MONGODB_DB_INITIAL = 'ntSparkGenes_'
     # url in docker-compose
-    # MONGODB_HOST = 'database'
-    MONGODB_HOST = 'localhost'
+    MONGODB_HOST = 'database'
+    #MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
@@ -17,8 +17,8 @@ class Constants(object):
     SEQUENCE = "_sequence"
 
     # Queue collection field names
-    # REDIS_SERVER = "redis-server"
-    REDIS_SERVER = "localhost"
+    REDIS_SERVER = "redis-server"
+    #REDIS_SERVER = "localhost"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"

@@ -3,7 +3,6 @@ import json
 from flask import Response, render_template, redirect
 from flask_security import auth_token_required, current_user
 from gevent import monkey
-from gevent.wsgi import WSGIServer
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi import app
@@ -42,9 +41,9 @@ def redirect_to_frontend():
 
 
 if __name__ == "__main__":
-    # app.run(use_reloader=False,
-    #         threaded=True, host='0.0.0.0')
-    WSGIServer((
-        "0.0.0.0",  # str(HOST)
-        5000,  # int(PORT)
-    ), app.wsgi_app).serve_forever()
+    app.run(use_reloader=False,
+            threaded=True, host='0.0.0.0')
+    # WSGIServer((
+    #     "0.0.0.0",  # str(HOST)
+    #     5000,  # int(PORT)
+    # ), app.wsgi_app).serve_forever()
