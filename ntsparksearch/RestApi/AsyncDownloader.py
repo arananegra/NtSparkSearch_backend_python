@@ -1,5 +1,4 @@
 from flask_rq2 import RQ
-from flask_security import current_user
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.EmailProcess.EmailSender import EmailSender
