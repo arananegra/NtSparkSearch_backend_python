@@ -1,3 +1,4 @@
+pyspark == 2.2.0.post0
 pymongo == 3.4.0
 biopython == 1.68
 progressbar2 == 3.11

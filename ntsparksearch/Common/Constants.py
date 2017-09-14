@@ -6,9 +6,9 @@ class Constants(object):
     MONGODB_USERS_DB = 'ntSparkUsersMeta'
     MONGODB_DB_INITIAL = 'ntSparkGenes_'
     # url in docker-compose
-    MONGODB_HOST = 'localhost'
+    MONGODB_HOST = 'database'
     #MONGODB_HOST = 'localhost'
-    MONGODB_PORT = 8082
+    MONGODB_PORT = 27017
     MONGODB_COLLECTION_FILTERED = 'filteredGenes'
     MONGODB_COLLECTION_UNFILTERED = 'unfilteredGenes'
 
@@ -17,16 +17,16 @@ class Constants(object):
     SEQUENCE = "_sequence"
 
     # Queue collection field names
-    #REDIS_SERVER = "redis-server"
-    REDIS_SERVER = "localhost"
+    REDIS_SERVER = "redis-server"
+    #REDIS_SERVER = "localhost"
 
     # indexes
     GENE_ID_INDEX = "_gene_id_text"
 
     # file paths
-    #OUTPUT_FOLDER = "/usr/spark-2.1.0/output/"
-    OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
-    INPUT_FOLDER = "usr/spark-2.1.0/input/"
+    OUTPUT_FOLDER = "/usr/spark-2.2.0/output/"
+    #OUTPUT_FOLDER = "/Users/alvarogomez/Desktop/uploads/"
+    INPUT_FOLDER = "usr/spark-2.2.0/input/"
 
     # Env variables
     SPARK_HOME = os.environ['SPARK_HOME']

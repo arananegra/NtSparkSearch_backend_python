@@ -1,14 +1,12 @@
-import findspark
 from Bio import SeqUtils
 from flask_security import current_user
+# findspark.init(Constants.SPARK_HOME)
+# from pyspark.sql import SparkSession
+from pyspark import SparkContext, SparkConf
 
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.GeneHandler.GeneHandlerBS import GeneHandlerBS
 from ntsparksearch.SubsequenceMatcher.ISubSequenceSparkMatcher import ISubSequenceSparkMatcher
-
-findspark.init(Constants.SPARK_HOME)
-# from pyspark.sql import SparkSession
-from pyspark import SparkContext, SparkConf
 
 
 class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
