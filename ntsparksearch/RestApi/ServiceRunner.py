@@ -7,7 +7,7 @@ from gevent import monkey
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi import app
 
-monkey.patch_all()
+#monkey.patch_all()
 
 data = {"user2_proximity": 3, "Wifi_1": -80, "Wifi_2": -40, "Wifi_3": -40,
         "thermostat": 18, "light": 0, "hour_of_day": 0, "user3_proximity": 3,
