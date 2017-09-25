@@ -5,11 +5,14 @@ from flask_mongoengine import MongoEngine
 from flask_security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin
 
+from flask_twisted import Twisted
+
 from ntsparksearch.Common.Constants import Constants
 from ntsparksearch.RestApi.GeneHandlerService import GeneHandlerService_endpoints
 from ntsparksearch.RestApi.SubSequenceMatcherService import SubSequenceMatcherService_endpoints
 
 app = Flask(__name__)
+twisted = Twisted(app)
 app.register_blueprint(GeneHandlerService_endpoints, url_prefix='/genehandler')
 app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
 app.config['RQ_REDIS_URL'] = 'redis://' + Constants.REDIS_SERVER + ':6379'

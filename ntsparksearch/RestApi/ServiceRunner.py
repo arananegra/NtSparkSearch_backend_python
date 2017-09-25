@@ -17,7 +17,6 @@ json_data = json.dumps(data)
 
 
 @app.route("/")
-@auth_token_required
 def hello():
     print("CORREO sacado a partir del token " + current_user.email)
     print("TOKEN sacado a partir del token " + current_user.get_auth_token())

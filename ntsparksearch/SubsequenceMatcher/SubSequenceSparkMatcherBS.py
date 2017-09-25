@@ -18,7 +18,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
 
         try:
             gene_handler_BS = GeneHandlerBS(Constants.MONGODB_DB_INITIAL + str(current_user.id))
-            conf = SparkConf().setAppName("ntsparksearch").setMaster("spark://172.16.239.10:7077")
+            conf = SparkConf().setAppName(str(current_user.id)).setMaster("spark://172.16.239.10:7077")
 
             sc = SparkContext(conf=conf)
 
@@ -48,7 +48,7 @@ class SubSequenceSparkMatcherBS(ISubSequenceSparkMatcher):
             return len(SeqUtils.nt_search(x[1], subsequence)) > 1
 
         try:
-            conf = SparkConf().setAppName("ntsparksearch").setMaster("spark://172.16.239.10:7077")
+            conf = SparkConf().setAppName(str(current_user.id)).setMaster("spark://172.16.239.10:7077")
             # spark_session = SparkSession \
             #     .builder \
             #     .appName("ntsparksearch") \
