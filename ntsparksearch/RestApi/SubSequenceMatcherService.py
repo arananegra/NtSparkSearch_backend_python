@@ -74,9 +74,6 @@ def genes_in_unfiltered_checker():
                     if gene_unfiltered_id not in list_of_genes_pass_filter:
                         dict_filtered_with_ones[gene_unfiltered_id] = 0
 
-            if dict_filtered_with_ones is None:
-                dict_filtered_with_ones = "hola capullo"
-
             return Response(json.dumps(dict_filtered_with_ones), mimetype='application/json'), Constants.OK
 
         else:

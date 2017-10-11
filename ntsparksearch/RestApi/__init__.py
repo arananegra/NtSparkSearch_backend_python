@@ -1,10 +1,10 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from flask_mail import Mail
 from flask_mongoengine import MongoEngine
 from flask_security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin
-
 from flask_twisted import Twisted
 
 from ntsparksearch.Common.Constants import Constants
@@ -17,7 +17,7 @@ app.register_blueprint(GeneHandlerService_endpoints, url_prefix='/genehandler')
 app.register_blueprint(SubSequenceMatcherService_endpoints, url_prefix='/genefilter')
 app.config['RQ_REDIS_URL'] = 'redis://' + Constants.REDIS_SERVER + ':6379'
 app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = 'super-secret'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 app.config.update(
     MAIL_SERVER='smtp.gmail.com',
@@ -29,7 +29,7 @@ app.config.update(
     DEFAULT_MAIL_SENDER='ntsparksearch@gmail.com')
 
 app.config['SECURITY_PASSWORD_HASH'] = 'sha256_crypt'
-app.config['SECURITY_PASSWORD_SALT'] = "wjfiwjfiwamcw3214awcq932"
+app.config['SECURITY_PASSWORD_SALT'] = os.environ['SECURITY_PASSWORD_SALT']
 app.config['SECURITY_REGISTERABLE'] = True
 app.config['SECURITY_POST_CONFIRM_VIEW'] = "/redirect-to-frontend"
 app.config["SECURITY_CONFIRMABLE"] = True
